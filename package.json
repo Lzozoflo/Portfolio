@@ -1,0 +1,8 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "workspaces": ["apps/backend", "apps/frontend", "packages/shared"],
+  "scripts": {
+    "dev": "docker compose up"
+  }
+}

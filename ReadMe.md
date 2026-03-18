@@ -112,10 +112,6 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam corporis
     </summary>
 
 
-- [Generateur de grid][tag_ressource_grid]
-- [how to use react-icons][tag_ressource_reacticone]
-- [transition by claude][tag_ressource_claude_transition]
-
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam corporis
  quas eligendi, voluptatem provident nisi est blanditiis dolorem nostrum 
  laboriosam commodi temporibus officia ad quis ipsa nesciunt veritatis 
@@ -134,16 +130,15 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam corporis
 
 <br>
 
-
-
-<!-- <details id="norme">
+ 
+<details id="norme">
     <summary>
         <h2>ℕorme</h2>
     </summary>
 
-- [📐 ℕaming ℂonvention](./Naming_Convention.md) 
+- [📐 ℕaming ℂonvention](./.Markdown/Naming_Convention.md) 
 
-</details> -->
+</details>
 
 
 
@@ -152,6 +147,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam corporis
         <h2 id="rst">📁 ℝepository Structure Tree</h2>
     </summary>
 
+- [📐 ℕaming ℂonvention](./.Markdown/Repository_Structure.md) 
 
 
 
