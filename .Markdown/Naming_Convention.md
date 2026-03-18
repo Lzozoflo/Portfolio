@@ -144,12 +144,10 @@ Example:
 
 <br>
 
-<details id="rules">
+<details id="js_convention">
     <summary>
-        <h2>ℝules</h2>
+        <h2>⚙️ 𝕁s ℂonvention</h2>
     </summary>
-</details>
-<h2 id="js_convention">⚙️ 𝕁s ℂonvention</h2>
 
 Variables: camelCase  
 Functions: camelCase  
@@ -166,6 +164,7 @@ class UserService {}
 
 - [🗓 𝕊ummary](#summary)
 
+</details>
 
 <br>
 
