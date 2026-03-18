@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.back.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src"]
+}

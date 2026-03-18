@@ -1,0 +1,25 @@
+# docker-compose.dev.yml
+services:
+  backend:
+    build:
+      target: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./apps/backend/src:/app/apps/backend/src
+      - ./packages/shared/src:/app/packages/shared/src
+
+  frontend:
+    build:
+      target: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./apps/frontend/src:/app/apps/frontend/src
+      - ./packages/shared/src:/app/packages/shared/src
+
+  nginx:
+    volumes:
+      - ./infra/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"

@@ -1,7 +1,60 @@
+.PHONY: all dev prod down prune volumes rmi clean fclean re logs logst logs_last logs-%
 
-.PHONY: all secrets creat compose down prune volumes rmi clean fclean re logs logst logs_last logs-% logs% 
+# ─── Environnement ────────────────────────────────────────────────────────────
 
-SERVICES = \
+# Usage : make dev | make prod | ENV=prod make all
+ENV ?= dev
+ 
+# ─── Targets principales ──────────────────────────────────────────────────────
+ 
+all:
+	@$(MAKE) $(ENV)
+
+
+dev:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
+
+
+prod:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+# ─── Docker ───────────────────────────────────────────────────────────────────
+
+down:
+	docker compose down -v
+
+
+prune:
+	docker system prune -af --volumes
+
+
+volumes:
+	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
+
+
+rmi:
+	docker container rm -f $$(docker ps -aq) 2>/dev/null || true
+	docker rmi -f $$(docker images -q) 2>/dev/null || true
+
+
+clean: down
+	$(MAKE) prune
+	$(MAKE) rmi
+
+
+fclean: clean
+	docker volume prune -f
+	docker network prune -f
+	$(MAKE) volumes
+
+
+re: fclean
+	$(MAKE) $(ENV)
+
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+
+# SERVICES = \
 # 	mysql \
 # 	myadmin \
 # 	gateway \
@@ -13,56 +66,6 @@ SERVICES = \
 # 	morpion \
 # 	pong3d
 
-all:	secrets creat compose
-
-secrets:
-	@mkdir -p ./conf/secrets
-	openssl rand -hex 2 > ./conf/secrets/data_pswd
-	openssl rand -hex 2 > ./conf/secrets/cle_pswd
-	openssl rand -hex 2 > ./conf/secrets/cle_chat
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./conf/secrets/nginx.key -out ./conf/secrets/nginx.crt -subj "/CN=Florent-cretin.fr"
-
-creat:
-	mkdir -p vol/db/data
- 	chown root:root vol/db/data
-	chmod 755 vol/db/data
-	chmod +x ./conf/myadmin/conf.sh
-	chmod +x ./conf/db/conf.sh
-
-
-# docker
-
-compose:
-	docker compose up -d
-
-down:
-	docker compose down -v
-
-prune:
-	docker system prune -af --volumes
-
-volumes:
-	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
-	rm -rf vol
-
-rmi:
-	docker container rm -f $$(docker ps -aq) 2>/dev/null || true
-	docker rmi -f $$(docker images -q) 2>/dev/null || true
-
-clean:	down
-	$(MAKE) prune
-	$(MAKE) rmi
-
-fclean: clean
-	docker volume prune -f
-	docker network prune -f
-	rm -r ./conf/secrets
-	$(MAKE) volumes
-
-re: fclean all
-
-
-# all logs
 logs:
 	docker compose logs -f
 

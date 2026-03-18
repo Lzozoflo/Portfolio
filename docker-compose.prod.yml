@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      target: production
+    environment:
+      NODE_ENV: production
+    restart: always
+
+  frontend:
+    build:
+      target: production
+    environment:
+      NODE_ENV: production
+    restart: always
+
+  nginx:
+    volumes:
+      - ./infra/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+      - "8443:443"
+    restart: always
