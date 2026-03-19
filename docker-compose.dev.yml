@@ -6,8 +6,11 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - ./apps/backend/src:/app/apps/backend/src
+      - ./apps/backend:/app/apps/backend
       - ./packages/shared/src:/app/packages/shared/src
+    ports:
+      - "5432:5432"
+      # - "5555:5555"
 
   frontend:
     build:
@@ -15,7 +18,7 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - ./apps/frontend/src:/app/apps/frontend/src
+      - ./apps/frontend:/app/apps/frontend
       - ./packages/shared/src:/app/packages/shared/src
 
   nginx:

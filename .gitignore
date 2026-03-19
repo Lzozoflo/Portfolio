@@ -2,6 +2,7 @@
 !.env.example
 *node_modules*
 *secret*
+.Markdown/context/*
 
 *error*
 *flo*

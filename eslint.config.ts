@@ -6,52 +6,49 @@ import importPlugin from 'eslint-plugin-import-x'
 import prettier from 'eslint-plugin-prettier/recommended'
 
 export default tseslint.config(
-  
+
+  // ─── Fichiers ignorés ─────────────────────────────────────────────────────
+  {
+    ignores: ['**/dist/**', '**/node_modules/**', '**/generated/**', 'eslint.config.ts','**/vite.config.ts'],
+  },
+
+
   // ─── Base JS ──────────────────────────────────────────────────────────────
   js.configs.recommended,
 
-  // ─── TypeScript ───────────────────────────────────────────────────────────
-  ...tseslint.configs.recommendedTypeChecked,
+
+  // ─── TypeScript avec type-checking (exclut les fichiers de config) ────────
   {
+    files: ['apps/**/*.ts', 'apps/**/*.tsx', 'packages/**/*.ts'],
+    extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ['*.config.ts', 'eslint.config.ts'],
-        },
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  },
-
-  // ─── Règles communes back + front ─────────────────────────────────────────
-  {
-    files: ['apps/**/*.ts', 'apps/**/*.tsx', 'packages/**/*.ts'],
     plugins: {
       'import-x': importPlugin,
     },
     rules: {
-      // ── Naming conventions (selon NAMING_CONVENTION.md) ──────────────────
+
+      // ── Naming conventions ────────────────────────────────────────────────
       '@typescript-eslint/naming-convention': [
         'error',
-        // camelCase — variables et fonctions
         {
           selector: ['variable', 'function', 'parameter'],
           format: ['camelCase'],
-          leadingUnderscore: 'allow', // _unused autorisé
+          leadingUnderscore: 'allow',
         },
-        // PascalCase — classes, interfaces, types, enums
         {
           selector: ['class', 'interface', 'typeAlias', 'enum'],
           format: ['PascalCase'],
         },
-        // UPPER_SNAKE_CASE — constantes
         {
           selector: 'variable',
           modifiers: ['const'],
           format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
-          // camelCase aussi autorisé pour les const non-primitives (ex: const userService = new UserService())
         },
-        // PascalCase — membres d'enum
         {
           selector: 'enumMember',
           format: ['PascalCase', 'UPPER_CASE'],
@@ -72,9 +69,18 @@ export default tseslint.config(
           'newlines-between': 'always',
           alphabetize: { order: 'asc' },
         },
-      ],
-      'import-x/no-duplicates': 'error',
-    },
+    ],
+    'import-x/no-duplicates': 'error',
+    'no-multiple-empty-lines': ['error', { max: 4, maxEOF: 1 }],
+    // max: 2 → autorise jusqu'à 2 lignes vides consécutives
+    // maxEOF: 1 → max 1 ligne vide en fin de fichier
+},
+  },
+
+  // ─── TypeScript sans type-checking (fichiers de config) ───────────────────
+  {
+    files: ['*.config.ts', 'apps/*/vite.config.ts'],
+    extends: [...tseslint.configs.recommended],
   },
 
   // ─── Règles React (frontend uniquement) ───────────────────────────────────
@@ -88,10 +94,8 @@ export default tseslint.config(
       react: { version: 'detect' },
     },
     rules: {
-      ...reactPlugin.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off', // React 17+ — import automatique
-      'react/prop-types': 'off',         // remplacé par TypeScript
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
     },
   },
 

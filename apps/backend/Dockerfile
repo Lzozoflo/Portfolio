@@ -13,6 +13,9 @@ RUN npm ci
 COPY packages/shared ./packages/shared
 COPY apps/backend ./apps/backend
 
+# Générer le client Prisma
+RUN cd apps/backend && npx prisma generate
+
 
 # ─── Stage development ────────────────────────────────────────────────────────
 FROM base AS development
@@ -20,7 +23,7 @@ FROM base AS development
 WORKDIR /app/apps/backend
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
 
 
 # ─── Stage builder ────────────────────────────────────────────────────────────

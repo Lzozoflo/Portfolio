@@ -1,4 +1,5 @@
 .PHONY: all dev prod down prune volumes rmi clean fclean re logs logst logs_last logs-%
+include .env
 
 # ─── Environnement ────────────────────────────────────────────────────────────
 
@@ -14,6 +15,8 @@ all:
 dev:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
 
+studio:
+	cd apps/backend && DATABASE_URL=$(DATABASE_URL_STUDIO) npx prisma studio --port 5555 --browser none
 
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
