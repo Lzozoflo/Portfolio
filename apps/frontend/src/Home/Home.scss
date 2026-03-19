@@ -1,0 +1,7 @@
+@use 'STYLE/mixin' as mix;
+@use 'STYLE/_variable' as *;
+
+.Home-root {
+    display: flex;
+    @include mix.full();
+}

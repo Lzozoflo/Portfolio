@@ -1,4 +1,5 @@
 /* extern */
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 
@@ -10,12 +11,27 @@ import 'STYLE/index.scss'
 
 
 /* Components */
-
+import Home from './Home/Home'
+import ErrorRedir from './ErrorRedir/ErrorRedir'
 
 export default function App() {
+
+    // useEffect(() => {
+    // }, []);
+
     return (
-        <div className={`App-root`}>
-            <h1>Hello World!</h1>
-        </div>
-    )
-}
+        <BrowserRouter>
+            <Routes>
+
+
+                {/* Home */}
+                <Route path={`/`}                       element={<Home />} />
+
+                {/* bad path */}
+                <Route path={`/*`}                      element={<ErrorRedir/>} />
+
+
+            </Routes>
+        </BrowserRouter>
+    );
+};

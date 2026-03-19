@@ -4,8 +4,3 @@
 @use 'variable';
 
 @use "mixin" as mix;
-
-.App-root {
-    display: flex;
-    @include mix.full();
-}

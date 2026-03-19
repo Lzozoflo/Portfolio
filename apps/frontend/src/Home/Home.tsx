@@ -6,11 +6,15 @@ import { useEffect, useState } from "react";
 
 
 /* Css */
-// import '.scss'
+import './Home.scss'
 
 /* Components */
 
 
 export default function Home() {
-
+    return (
+        <div className={`Home-root`}>
+            <h1>Hello World</h1>
+        </div>
+    )
 }
