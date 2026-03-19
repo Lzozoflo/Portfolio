@@ -18,6 +18,15 @@ model User {
   @@map("users")
 }
 
+model test {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  prout     String   
+  caca      String   
+  password  String
+
+}
 enum Role {
   USER
   ADMIN

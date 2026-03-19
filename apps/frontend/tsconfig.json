@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.front.json",
-  "include": ["src"]
+  "include": ["src", "main.tsx"]
 }

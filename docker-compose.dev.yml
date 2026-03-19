@@ -8,9 +8,10 @@ services:
     volumes:
       - ./apps/backend:/app/apps/backend
       - ./packages/shared/src:/app/packages/shared/src
+      
+  postgres:
     ports:
       - "5432:5432"
-      # - "5555:5555"
 
   frontend:
     build:

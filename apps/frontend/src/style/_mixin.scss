@@ -1,0 +1,45 @@
+
+@use "STYLE/_variable" as *;
+
+@mixin full {
+    height: $root_height;
+    width: $root_width;
+}
+@mixin fullh { height: $root_height; }
+@mixin fullw { width: $root_width; }
+
+@mixin colortext($varcolor : rgb(10, 201, 240)){
+    p, a, input, h1, h2, h3, h4, h5, h6, button, span , li {
+        color: $varcolor;
+    }
+}
+
+
+// @mixin cursor($type)
+// {
+// 	@if $type == "pointer" {
+// 		cursor: url(".png") 5 5, pointer;
+// 	}
+// 	@else if $type == "grab" {
+// 		cursor: url(".png") 5 5, grab;
+// 	}
+// 	@else if $type == "text" {
+// 		cursor: url(".png") 5 5, text;
+// 	}
+// 	@else {
+// 		cursor: url(".png") 5 5, auto;
+// 	}
+// }
+
+
+@mixin icone {
+    transition: all 0.2s;
+	//  @include cursor("pointer");
+
+    &:hover {
+        scale: 1.05;
+    }
+    &:active{
+        scale: 1.10;
+    }
+}
