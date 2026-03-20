@@ -19,7 +19,8 @@ studio:
 	npx prisma studio --port 5555 --browser none --url "$(DATABASE_URL)"
 
 modeldb:
-	docker exec -it backend npx prisma migrate dev --name nom_du_changement
+	docker exec -it backend npx prisma migrate dev 
+#--name nom_du_changement
 
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d

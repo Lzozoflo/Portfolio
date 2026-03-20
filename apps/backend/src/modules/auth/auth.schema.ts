@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const RegisterSchema = z.object({
-    email: z.string().email(),
     username: z.string().min(3).max(32).regex(/^\w+$/, 'Alphanumeric and underscores only'),
+    email: z.string().email(),
     password: z
         .string()
         .min(8)

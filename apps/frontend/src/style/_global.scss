@@ -1,6 +1,14 @@
 @use "STYLE/_variable" as *;
 @use "STYLE/_mixin" as mix;
 
+:root{
+	background-color: #000000;
+	font-size: 16px;
+	@media (width <= 1000px) {font-size: 13px;}
+	@media (width <= 750px) {font-size: 10px;}
+	@media (width <= 500px) {font-size: 7px;}
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,14 +23,18 @@ body, #root {
     width: 100vw;
 }
 
-p, a, input, h1, h2, h3, h4, h5, h6, button, span, li, label strong, input, textarea{
-	font-size: 1.15rem;
-	font-family: inter, roboto;
-	font-weight: 700;
-	letter-spacing: 0.75px;
+p, a, input, h1, h2, h3, h4, h5, h6, button, span, li, label, strong, input, textarea{
 	color: inherit;
+	font-weight: 700;
+	font-size: 1.5rem;
+	font-family: "Times New Roman";
+	letter-spacing: 1px;
 	text-decoration: none;
+	border: none;
+	// background: inherit;
 }
+
+
 
 
 
@@ -33,23 +45,4 @@ p, a, input, h1, h2, h3, h4, h5, h6, button, span, li, label strong, input, text
 	justify-content: center;
     align-items: center;
     text-align: center;
-}
-
-:root{
-	font-size: 50px;
-}
-@media (width <= 1000px) {
-	:root{
-		font-size: 13px;
-	}
-}
-@media (width <= 750px) {
-	:root{
-		font-size: 10px;
-	}
-}
-@media (width <= 500px) {
-	:root{
-		font-size: 7px;
-	}
 }

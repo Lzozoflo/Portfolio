@@ -8,6 +8,13 @@
 @mixin fullh { height: $root_height; }
 @mixin fullw { width: $root_width; }
 
+@mixin center {
+    display: flex;
+	justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 @mixin colortext($varcolor : rgb(10, 201, 240)){
     p, a, input, h1, h2, h3, h4, h5, h6, button, span , li {
         color: $varcolor;

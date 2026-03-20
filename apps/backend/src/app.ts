@@ -19,14 +19,14 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.json());
 
 // ─── Routes publiques ────────────────────────────────────────────────────────
-app.get('/api/health', ((_req: Request, res: Response) =>
-    res.json({ ok: true })) as RequestHandler);
+app.get('/api/health', ((_req: Request, res: Response) =>{
+    res.json({ ok: true }); console.log("Called api/health")}) as RequestHandler);
 
 app.use('/api/auth', authRouter);
 
 // ─── Routes protégées ────────────────────────────────────────────────────────
-app.use('/api', authMiddleware);
-app.use('/api/users', usersRouter);
-app.use('/api/posts', postsRouter);
+// app.use('/api', authMiddleware);
+// app.use('/api/users', usersRouter);
+// app.use('/api/posts', postsRouter);
 
 app.listen(PORT, () => console.log(`Backend listening on port ${PORT}`));
