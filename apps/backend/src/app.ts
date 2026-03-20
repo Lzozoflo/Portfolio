@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import type { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { Request, Response, RequestHandler } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 

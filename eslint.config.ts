@@ -34,25 +34,39 @@ export default tseslint.config(
 
       // ── Naming conventions ────────────────────────────────────────────────
       '@typescript-eslint/naming-convention': [
-        'error',
-        {
-          selector: ['variable', 'function', 'parameter'],
-          format: ['camelCase'],
-          leadingUnderscore: 'allow',
-        },
-        {
-          selector: ['class', 'interface', 'typeAlias', 'enum'],
-          format: ['PascalCase'],
-        },
-        {
-          selector: 'variable',
-          modifiers: ['const'],
-          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
-        },
-        {
-          selector: 'enumMember',
-          format: ['PascalCase', 'UPPER_CASE'],
-        },
+          'error',
+
+          // variables + paramètres → camelCase
+          {
+            selector: ['variable', 'parameter'],
+            format: ['camelCase'],
+            leadingUnderscore: 'allow',
+          },
+
+          // fonctions → camelCase + PascalCase (React components)
+          {
+            selector: 'function',
+            format: ['camelCase', 'PascalCase'],
+          },
+
+          // types → PascalCase
+          {
+            selector: ['class', 'interface', 'typeAlias', 'enum'],
+            format: ['PascalCase'],
+          },
+
+          // constantes
+          {
+            selector: 'variable',
+            modifiers: ['const'],
+            format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+          },
+
+          // enum members
+          {
+            selector: 'enumMember',
+            format: ['PascalCase', 'UPPER_CASE'],
+          },
       ],
 
       // ── TypeScript ────────────────────────────────────────────────────────

@@ -1,20 +1,17 @@
 /* extern */
-import { useEffect, useState } from "react";
-
+// import { useEffect, useState } from 'react';
 
 /* back */
 
-
 /* Css */
-import './Home.scss'
+import './Home.scss';
 
 /* Components */
-
 
 export default function Home() {
     return (
         <div className={`Home-root`}>
             <h1>Hello World</h1>
         </div>
-    )
+    );
 }

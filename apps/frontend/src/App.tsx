@@ -1,21 +1,18 @@
 /* extern */
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
-
+// import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /* back */
 
-
 /* Css */
-import 'STYLE/index.scss'
-
+import 'STYLE/index.scss';
 
 /* Components */
-import Home from './Home/Home'
-import ErrorRedir from './ErrorRedir/ErrorRedir'
+import ErrorRedir from './Route/ErrorRedir/ErrorRedir';
+import Home from './Route/Home/Home';
+import Auth from './Route/Auth/Auth';
 
 export default function App() {
-
     // useEffect(() => {
     // }, []);
 
@@ -23,15 +20,12 @@ export default function App() {
         <BrowserRouter>
             <Routes>
 
-
-                {/* Home */}
-                <Route path={`/`}                       element={<Home />} />
+                <Route path={`/`} element={<Home />} />
+                <Route path={`/auth`} element={<Auth />} />
 
                 {/* bad path */}
-                <Route path={`/*`}                      element={<ErrorRedir/>} />
-
-
+                <Route path={`/*`} element={<ErrorRedir />} />
             </Routes>
         </BrowserRouter>
     );
-};
+}

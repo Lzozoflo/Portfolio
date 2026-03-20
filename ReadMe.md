@@ -17,14 +17,10 @@
 [tag_icon_react]: https://skillicons.dev/icons?i=react
 
 
-# ℙroject
-
-
+# ℙortFolio
 
 
 <br>
-
-
 
 
 <details id="summary">
@@ -56,13 +52,9 @@
         <h2>𝔻escription</h2>
     </summary>
 
+Initialement conçu comme un laboratoire d'expérimentation rapide, ce projet visait à maîtriser l'écosystème <strong>Backend</strong> et <strong>DevOps</strong> pour dépasser les simples appels API depuis le Frontend. L'objectif était d'intégrer des concepts avancés de conteneurisation, notamment l'optimisation des images via le <strong>Multi-stage build</strong> (FROM... AS...) et la gestion d'environnements distincts avec des fichiers <strong>docker-compose</strong> spécifiques pour le développement et la production.
 
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam corporis
- quas eligendi, voluptatem provident nisi est blanditiis dolorem nostrum 
- laboriosam commodi temporibus officia ad quis ipsa nesciunt veritatis 
- laudantium hic.
-
+Sous la pression d'un événement de recrutement, cette phase d'apprentissage s'est transformée en un défi de réalisation de deux semaines. Le résultat est un <strong>portfolio technique complet</strong>, démontrant une capacité à architecturer, dockeriser et déployer une application robuste dans un délai extrêmement court.
 
 
 - [🗓 𝕊ummary](#summary)
