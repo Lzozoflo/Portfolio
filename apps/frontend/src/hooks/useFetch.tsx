@@ -9,24 +9,21 @@ export default async function useFetch({url, type_request}: UseFetchProps){
     try {
 
         const response = await fetch(url, type_request);
-        console.log("useFetch(2) after fetch response:", response);
+        console.log("useFetch(2:",url,") after fetch response:", response);
 
         const repjson = await response.json();
         if (response.status >= 400){
-            console.log("useFetch(3) response.status >= 400:\n", repjson.error)
+            console.log("useFetch(3:",url,") response.status >= 400...",repjson.status)
+            console.log("  repjson.error:", repjson?.error)
+            console.log("  repjson.details:", repjson?.details)
             return null;
         }
 
-        if (repjson.success) {
-            console.log("useFetch(4) success repjson:", repjson);
-            return repjson;
-        } else {
-            console.log("useFetch(5) error back repjson:", repjson);
-            return repjson
-        }
-        
+        console.log("useFetch(4:",url,") success repjson:", repjson);
+        return repjson;
+
     }catch(error){
-        console.log("useFetch(6) error front :", error);
+        console.log("useFetch(5:",url,") error front :", error);
         return null;
     }
 }

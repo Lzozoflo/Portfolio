@@ -25,8 +25,8 @@ app.get('/api/health', ((_req: Request, res: Response) =>{
 app.use('/api/auth', authRouter);
 
 // ─── Routes protégées ────────────────────────────────────────────────────────
-// app.use('/api', authMiddleware);
-// app.use('/api/users', usersRouter);
-// app.use('/api/posts', postsRouter);
+app.use('/api', authMiddleware);
+app.use('/api/users', usersRouter);
+app.use('/api/posts', postsRouter);
 
 app.listen(PORT, () => console.log(`Backend listening on port ${PORT}`));

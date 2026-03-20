@@ -1,5 +1,5 @@
 /* extern */
-import { SetStateAction, useEffect, useState } from "react";
+// import { SetStateAction, useEffect, useState } from "react";
 
 
 /* back */
@@ -16,20 +16,19 @@ import useFetch from "FRONT/hooks/useFetch";
 
 export default function Login({ setPage }: AuthChildrenProps) {
 
-    const login_submit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    const loginSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 
 		event.preventDefault();
         const form = event.target;
 
         const data = {
-            // username: form.username.value.trim(),
             email: form.email.value.trim(),
             password: form.password.value.trim(),
             // host: window.location.host
         };
 
         if (!data.email || !data.password) {
-            console.log("login_submit(1) Veuillez remplir tous les champs", "danger");
+            console.log("loginSubmit(1) Veuillez remplir tous les champs", "danger");
             return;
         }
 
@@ -61,7 +60,7 @@ export default function Login({ setPage }: AuthChildrenProps) {
     return (
         <div className={`Login-root`}>
 
-            <form className={`Form-root`} onSubmit={login_submit}>
+            <form className={`Form-root`} onSubmit={loginSubmit}>
 
                 <label htmlFor={`email`}>Email</label>
                 <input id={`email`} type={`text`}/>
@@ -70,7 +69,7 @@ export default function Login({ setPage }: AuthChildrenProps) {
                 <input id={`password`} type={`password`}/>
                 
                 <input type={`submit`} value={`Login`}/>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}>Ce Login</button>
+                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}>Go To Register</button>
 
             </form>
 

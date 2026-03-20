@@ -26,7 +26,7 @@ export const Background: React.FC = () => {
         resizeCanvas();
 
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｦｱｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ';
-        const fontSize = 6;
+        const fontSize = 16;
         let columns = Math.floor(canvas.width / fontSize);
         let drops: number[] = Array.from({ length: columns }, () => Math.random() * -250);
 
