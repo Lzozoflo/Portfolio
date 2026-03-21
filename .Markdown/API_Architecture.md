@@ -132,15 +132,15 @@ export type XxxDto = z.infer<typeof XxxSchema>;
 export const xxxController = {
     getAll: async (req: AuthRequest, res: Response, next: NextFunction) => {
         const data = await xxxTable.findAll();
-        res.locals.data = data;        // ✅ toujours res.locals.data
-        next();                        // ✅ toujours next()
+        res.locals.data = data;        // 👍 toujours res.locals.data
+        next();                        // 👍 toujours next()
     },
 
     create: async (req: AuthRequest, res: Response, next: NextFunction) => {
         const existing = await xxxTable.findByX(req.body.x);
-        if (existing) throw new ApiError('Already exists', 409);   // ✅ ApiError
+        if (existing) throw new ApiError('Already exists', 409);   // 👍 ApiError
         const item = await xxxTable.create(req.body);
-        res.status(201);               // ✅ 201 explicite pour les créations
+        res.status(201);               // 👍 201 explicite pour les créations
         res.locals.data = item;
         next();
     },
@@ -148,11 +148,11 @@ export const xxxController = {
 ```
 
 **Règles strictes :**
-- ❌ Jamais `res.json()` ou `res.send()` dans le controller
-- ❌ Jamais `res.status(xxx).json(...)` manuel
-- ✅ Données dans `res.locals.data`
-- ✅ Erreurs via `throw new ApiError(message, status)`
-- ✅ `res.status(201)` explicite pour les créations uniquement
+- 👎 Jamais `res.json()` ou `res.send()` dans le controller
+- 👎 Jamais `res.status(xxx).json(...)` manuel
+- 👍 Données dans `res.locals.data`
+- 👍 Erreurs via `throw new ApiError(message, status)`
+- 👍 `res.status(201)` explicite pour les créations uniquement
 
 ---
 
