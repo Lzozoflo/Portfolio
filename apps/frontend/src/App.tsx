@@ -8,8 +8,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'STYLE/index.scss';
 
 /* Components */
+// import { Background } from './Route/Background/Background';
 import Auth from './Route/Auth/Auth';
-import { Background } from './Route/Background/Background';
 import ErrorRedir from './Route/ErrorRedir/ErrorRedir';
 import Home from './Route/Home/Home';
 
