@@ -4,7 +4,11 @@ import path from 'path'
 
 export default defineConfig({
     plugins: [react()],
-    server: { host: '0.0.0.0', port: 5173 },
+    server: {
+        host: '127.0.0.1',  // permet l’accès depuis d’autres machines
+        port: 5173,       // ton port
+        // allowedHosts: ['fcretin.ddns.net']  // autorise ton DDNS
+    },
     resolve: {
         alias: {
             'COMP':  path.resolve(__dirname, './src/Component'),
