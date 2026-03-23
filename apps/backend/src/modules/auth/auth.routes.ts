@@ -5,9 +5,9 @@ import { validate } from '../../middlewares/validate.middleware';
 
 import { authController } from './auth.controller';
 import { RegisterSchema, LoginSchema } from './auth.schema';
-import { errorHandler } from '../../middlewares/error_handler.middleware';
+import { asyncCatcher } from '../../middlewares/async_catcher.middleware';
 
 export const authRouter = Router();
-authRouter.post('/register', validate(RegisterSchema), errorHandler(authController.register));
-authRouter.post('/login', validate(LoginSchema), errorHandler(authController.login));
-authRouter.get('/me', authMiddleware, errorHandler(authController.me));
+authRouter.post('/register', validate(RegisterSchema), asyncCatcher(authController.register));
+authRouter.post('/login', validate(LoginSchema), asyncCatcher(authController.login));
+authRouter.get('/me', authMiddleware, asyncCatcher(authController.me));

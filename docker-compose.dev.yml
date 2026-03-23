@@ -25,7 +25,7 @@ services:
   nginx:
     volumes:
       - ./infra/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - ./infra/certs:/etc/nginx/certs:ro
+      # - ./infra/certs:/etc/nginx/certs:ro
     ports:
       - "8080:80"
       - "8443:443"

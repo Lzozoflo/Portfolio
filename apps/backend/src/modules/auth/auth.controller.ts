@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../../lib/prisma';
+
 import type { Response , NextFunction } from 'express';
 import type { AuthRequest } from '../../middlewares/auth.middleware';
 import { ApiError } from '../../utils/api_error'; 
@@ -75,3 +76,4 @@ export const authController = {
         next();
     }
 };
+

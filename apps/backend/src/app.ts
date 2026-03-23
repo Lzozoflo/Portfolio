@@ -9,9 +9,8 @@ import { autoFormatter } from './middlewares/auto_formatter.middleware';
 import { errorHandler } from './middlewares/error_handler.middleware';
 
 import { authRouter } from './modules/auth/auth.routes';
-import { postsRouter } from './modules/posts/post.routes';
-import { usersRouter } from './modules/users/user.routes';
-import { ApiError } from './utils/api_error';
+// import { postsRouter } from './modules/posts/post.routes';
+// import { usersRouter } from './modules/users/user.routes';
 
 const app = express();
 const PORT = 3000;
@@ -30,8 +29,8 @@ app.use('/api/auth', authRouter);
 
 // ─── Routes protégées ────────────────────────────────────────────────────────
 app.use('/api', authMiddleware);
-app.use('/api/users', usersRouter);
-app.use('/api/posts', postsRouter);
+// app.use('/api/users', usersRouter);
+// app.use('/api/posts', postsRouter);
 
 // ─── Middleware final ────────────────────────────────────────────────────────
 

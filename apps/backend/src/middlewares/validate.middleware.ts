@@ -7,13 +7,13 @@ export const validate = (schema: ZodSchema) => {
         const result = schema.safeParse(req.body);
 
         if (!result.success) {
-            const validationError = new ApiError(
-                'Validation failed', 
-                400, 
-                // result.error.flatten() // On passe les détails ici
-            );
             
-            return next(validationError); 
+            return next(new ApiError(
+                    'Validation failed', 
+                    400, 
+                    // result.error.flatten() // On passe les détails ici
+                )
+            ); 
         }
 
         req.body = result.data; 

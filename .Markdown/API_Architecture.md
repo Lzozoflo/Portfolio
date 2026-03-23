@@ -178,7 +178,7 @@ xxxRouter.delete('/:id', asyncCatcher(xxxController.delete));
 
 ### asyncCatcher — Capture des erreurs async
 ```ts
-// src/lib/async_catcher.ts
+// src/middleware/async_catcher.middlewars.ts
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 export const asyncCatcher = (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>): RequestHandler =>
@@ -229,18 +229,18 @@ Placé **en dernier** dans `app.ts`, après toutes les routes :
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 app.use(autoFormatter);              // ← toujours en dernier
-app.use(errorHandler);               // ← error handler après
+app.use(asyncCatcher);               // ← error handler après
 ```
 
 ---
 
-### errorHandler — Gestion globale des erreurs
+### asyncCatcher — Gestion globale des erreurs
 ```ts
 // src/middlewares/error_handler.middleware.ts
 import type { Request, Response, NextFunction } from 'express';
-import { ApiError } from '../lib/api_error';
+import { ApiError } from '../utils/api_error';
 
-export const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+export const asyncCatcher = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof ApiError) {
         res.status(err.status).json({ error: err.message });
         return;
@@ -275,5 +275,5 @@ Nginx → app.ts → middlewares globaux
                                       │
                               autoFormatter → res.json({ data })
                                       │
-                              errorHandler  → res.json({ error })
+                              asyncCatcher  → res.json({ error })
 ```

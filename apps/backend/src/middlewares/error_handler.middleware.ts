@@ -1,19 +1,13 @@
-import { type Request, type Response, type NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import { ApiError } from '../utils/api_error';
 
-export const errorHandler = (fn: (req: Request, res: Response, next: NextFunction) => void ) => 
-    (req: Request, res: Response, next: NextFunction) => {
-    return Promise.resolve(fn(req, res, next)).catch(next);
+export const errorHandler = ( err: unknown, req: Request,res: Response, next: NextFunction ): void => {
+    
+    // console.error("errorHandler: ",err);
+    if (err instanceof ApiError) {
+        res.status(err.status).json({ error: err.message });
+        return;
+    }
+    console.error("not ApiError");
+    res.status(500).json({ error: 'Internal server error' });
 };
-
-// /**
-//  * @openapi
-//  * /users/{id}:
-//  * get:
-//  * description: Récupère un utilisateur par son ID
-//  * parameters:
-//  * - name: id
-//  * in: path
-//  * required: true
-//  * schema:
-//  * type: integer
-//  */
