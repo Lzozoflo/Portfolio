@@ -22,8 +22,8 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.json());
 
 // ─── Routes publiques ────────────────────────────────────────────────────────
-app.get('/api/health', ((req: Request, res: Response) =>{
-    res.json({ ok: true }); console.log("Called api/health")}) as RequestHandler);
+
+app.get('/api/health', ((req: Request, res: Response) =>{console.log("Called api/health"); res.json({ ok: true });}) as RequestHandler);
 
 app.use('/api/auth', authRouter);
 

@@ -20,7 +20,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={`/`} element={<Home />} />
+                <Route path={`/tmp`} element={<Home />} />
                 <Route path={`/auth`} element={<Auth />} />
 
                 {/* bad path */}

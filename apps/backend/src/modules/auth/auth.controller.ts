@@ -35,7 +35,6 @@ export const authController = {
 
         const token = signToken({ sub: user.id, email: user.email, role: user.role });
 
-        // On stocke et on passe au formateur
         res.status(201);
         res.locals.data = { user, token };
         next();
@@ -55,6 +54,7 @@ export const authController = {
 
         const token = signToken({ sub: user.id, email: user.email, role: user.role });
         
+        res.status(200);
         res.locals.data = {
             user: { id: user.id, email: user.email, username: user.username, role: user.role },
             token
