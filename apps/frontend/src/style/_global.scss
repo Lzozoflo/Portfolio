@@ -25,9 +25,10 @@ body, #root {
 
 p, a, input, h1, h2, h3, h4, h5, h6, button, span, li, label, strong, input, textarea{
 	color: white;
-	font-weight: 700;
+	font-weight: 400;
 	font-size: 1.5rem;
-	font-family: "Times New Roman";
+	font-family: 'Press Start 2P', cursive; /* cursive est le fallback recommandé par Google */
+		// font-family: "Times New Roman";
 	letter-spacing: 1px;
 	text-decoration: none;
 	border: none;
