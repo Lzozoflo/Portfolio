@@ -7,7 +7,7 @@ type SetupStep = 'loading' | 'scan' | 'confirm' | 'done' | 'error';
 
 interface SetupPayload {
     qrCode: string;
-    secret: string;
+    accesKey: string;
 }
 
 export default function TwoFactorSetup({ setPage }: AuthChildrenProps) {
@@ -122,9 +122,9 @@ export default function TwoFactorSetup({ setPage }: AuthChildrenProps) {
     // ─── ERROR ────────────────────────────────────────────────────────────────
     if (step === 'error') return (
         <div className={`Script-Auth-root`}>
-            <p>Impossible de démarrer la 2FA.</p>
+            <p>Erreur dans la 2FA.</p>
             <p>Êtes-vous connecté ?</p>
-            <button onClick={() => setPage(authStep.PAGE_LOGIN)}>
+            <button onClick={() => window.location.reload()}>
                 Réessayer
             </button>
         </div>
@@ -133,33 +133,33 @@ export default function TwoFactorSetup({ setPage }: AuthChildrenProps) {
     // ─── SCAN ─────────────────────────────────────────────────────────────────
     if (step === 'scan') return (
         <div className={`Script-Auth-root`}>
-                <div className={`Script-Auth-header`}>
-                    <h2>Activer la 2FA</h2>
-                    <p>Scannez ce QR code avec Google Authenticator, Authy ou toute app TOTP.</p>
+            <div className={`Script-Auth-header`}>
+                <h2>Activer la 2FA</h2>
+                <p>Scannez ce QR code avec Google Authenticator, Authy ou toute app TOTP.</p>
+            </div>
+
+            <img src={payload!.qrCode} alt="QR code 2FA" />
+
+            <div>
+
+                <p>Saisie manuelle :</p>
+                <div style={{ display: "flex",  alignItems: "center",
+                    justifyContent: "space-between", gap: "10px", width: "100%"
+                }}>
+                    <code style={{ flex: 1, wordBreak: "break-all" }}>
+                        {secretVisible ? payload!.accesKey : '••••••••••••••••••••••••••••••••'}
+                    </code>
+                    <button style={{ border: "none", background: "none",boxShadow:"none", cursor: "pointer", flexShrink: 0 }}
+                        onClick={() => setSecretVisible(v => !v)}>
+                        {secretVisible ? '🙈' : '👁'}
+                    </button>
                 </div>
 
-                <img src={payload!.qrCode} alt="QR code 2FA" />
+            </div>
 
-                <div>
-
-                    <p>Saisie manuelle :</p>
-                    <div style={{ display: "flex",  alignItems: "center",
-                        justifyContent: "space-between", gap: "10px", width: "100%"
-                    }}>
-                        <code style={{ flex: 1, wordBreak: "break-all" }}>
-                            {secretVisible ? payload!.secret : '••••••••••••••••••••••••••••••••'}
-                        </code>
-                        <button style={{ border: "none", background: "none",boxShadow:"none", cursor: "pointer", flexShrink: 0 }}
-                            onClick={() => setSecretVisible(v => !v)}>
-                            {secretVisible ? '🙈' : '👁'}
-                        </button>
-                    </div>
-
-                </div>
-
-                <button onClick={() => setStep('confirm')}>
-                    J'ai scanné → Continuer
-                </button>
+            <button onClick={() => setStep('confirm')}>
+                J'ai scanné → Continuer
+            </button>
         </div>
     );
 
@@ -187,9 +187,8 @@ export default function TwoFactorSetup({ setPage }: AuthChildrenProps) {
             {error && <p>{error}</p>}
 
             <button onClick={() => handleVerify()}
-                disabled={loading || digits.some(d => !d)}
-            >
-                {loading ? <span className="TwoFactorSetup-spinner" /> : 'Activer la 2FA'}
+                disabled={loading || digits.some(d => !d)} >
+                {loading ? <span className={`TwoFactorSetup-spinner`} /> : 'Activer la 2FA'}
             </button>
 
             <button onClick={() => setStep('scan')} disabled={loading}>

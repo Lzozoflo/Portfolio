@@ -28,7 +28,7 @@ export const authController = {
 
         const hashed = await bcrypt.hash(password, SALT_ROUNDS);
         const user = await prisma.user.create({
-            data: { email, username, password: hashed/*, TwoFactorEnable: true*/ },
+            data: { email, username, password: hashed },
             select: { id: true, email: true, username: true, role: true }
         });
         const token = signToken({ sub: user.id, email: user.email, role: user.role });
@@ -46,13 +46,14 @@ export const authController = {
         const user = await prisma.user.findUnique({ where: { email } });
         console.log("user:", user)
 
-        if (!user ||!(await bcrypt.compare(password, user.password))) {
-            console.log("error ?")
-            return next(new ApiError('Invalid credentials', 401));
+        if (!user) {
+            return next(new ApiError('Invalid email', 401));
         }
 
-        console.log("before user")
-        // si 2FA est activée on ne donne pas le token JWT tout de suite
+        if (user && !(await bcrypt.compare(password, user.password))) {
+            return next(new ApiError('Invalid password', 401));
+        }
+
         if (user.twoFactorEnabled) {
             res.status(200);
             res.locals.data = {
@@ -63,7 +64,6 @@ export const authController = {
             return next();
         }
 
-        // Si pas de 2FA login normal
         const token = signToken({ sub: user.id, email: user.email, role: user.role });
         res.status(200);
         res.locals.data = {
@@ -82,13 +82,13 @@ export const authController = {
             return next(new ApiError('User or 2FA secret not found', 404));
         }
 
-        // Vérification avec otplib v13
         const result = await verify({ token: code, secret: user.twoFactorSecret });
         if (!result.valid) {
             return next(new ApiError('Code 2FA invalide', 401));
         }
 
         const token = signToken({ sub: user.id, email: user.email, role: user.role });
+
         res.status(200);
         res.locals.data = {
             user: { id: user.id, email: user.email, username: user.username, role: user.role },
@@ -103,17 +103,17 @@ export const authController = {
 
         if (!user) return next(new ApiError('User not found', 404));
 
-        const secret = generateSecret();
-        const uri = generateURI({ secret, label: user.email, issuer: 'PortfolioApp' });
+        const accesKey = generateSecret();
+        const uri = generateURI({ secret: accesKey, label: user.email, issuer: 'PortfolioApp' });
         const qrCodeDataUrl = await QRCode.toDataURL(uri);
 
         await prisma.user.update({
             where: { id: user.id },
-            data: { twoFactorSecret: secret }
+            data: { twoFactorSecret: accesKey }
         });
 
         res.status(200);
-        res.locals.data = { qrCode: qrCodeDataUrl, secret };
+        res.locals.data = { qrCode: qrCodeDataUrl, accesKey };
         next();
     },
 

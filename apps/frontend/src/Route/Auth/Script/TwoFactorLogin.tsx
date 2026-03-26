@@ -94,57 +94,38 @@ export default function TwoFactorLogin({ setPage, userId }: TwoFactorLoginProps)
     };
 
     return (
-        <div className="TwoFactorLogin-root">
-            <div className="TwoFactorLogin-card">
+        <div className={`Script-Auth-root`}>
 
-                <div className="TwoFactorLogin-header">
-                    <div className="TwoFactorLogin-icon">⬡</div>
-                    <h2 className="TwoFactorLogin-title">Vérification 2FA</h2>
-                    <p className="TwoFactorLogin-subtitle">
-                        Entrez le code à 6 chiffres de votre application d'authentification
-                    </p>
-                </div>
-
-                <div
-                    className={`TwoFactorLogin-digits${shake ? ' TwoFactorLogin-digits--shake' : ''}`}
-                    onPaste={handlePaste}
-                >
-                    {digits.map((digit, i) => (
-                        <input
-                            key={i}
-                            ref={el => { inputsRef.current[i] = el; }}
-                            className={`TwoFactorLogin-digit${digit ? ' TwoFactorLogin-digit--filled' : ''}`}
-                            type="text"
-                            inputMode="numeric"
-                            maxLength={1}
-                            value={digit}
-                            onChange={e => handleChange(i, e.target.value)}
-                            onKeyDown={e => handleKeyDown(i, e)}
-                            disabled={loading}
-                            autoComplete="off"
-                        />
-                    ))}
-                </div>
-
-                {error && <p className="TwoFactorLogin-error">{error}</p>}
-
-                <button
-                    className={`TwoFactorLogin-btn${loading ? ' TwoFactorLogin-btn--loading' : ''}`}
-                    onClick={() => handleSubmit()}
-                    disabled={loading || digits.some(d => !d)}
-                >
-                    {loading ? <span className="TwoFactorLogin-spinner" /> : 'Confirmer'}
-                </button>
-
-                <button
-                    className="TwoFactorLogin-back"
-                    onClick={() => setPage(authStep.PAGE_LOGIN)}
-                    disabled={loading}
-                >
-                    ← Retour à la connexion
-                </button>
-
+            <div className={`TwoFactorLogin-header`}>
+                <h2>Vérification 2FA</h2>
+                <p>Entrez le code à 6 chiffres de votre application d'authentification</p>
             </div>
+
+            <div onPaste={handlePaste}>
+                {digits.map((digit, i) => (
+                    <input key={i} ref={el => { inputsRef.current[i] = el; }}
+                        className={`TwoFactorSetup-digit`}
+                        type={`text`} inputMode={`numeric`} maxLength={1}
+                        value={digit} disabled={loading}
+                        onChange={e => handleChange(i, e.target.value)}
+                        onKeyDown={e => handleKeyDown(i, e)}
+                        autoComplete={`off`}
+                    />
+                ))}
+            </div>
+
+            {error && <p>{error}</p>}
+
+            <button onClick={() => handleSubmit()}
+                disabled={loading || digits.some(d => !d)} >
+                {loading ? <span className={`TwoFactorLogin-spinner`} /> : 'Confirmer'}
+            </button>
+
+            <button onClick={() => setPage(authStep.PAGE_LOGIN)}
+                disabled={loading} >
+                ← Retour à la connexion
+            </button>
+            
         </div>
     );
 }

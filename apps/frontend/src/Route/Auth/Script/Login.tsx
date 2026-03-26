@@ -62,9 +62,6 @@ export default function Login({ setPage, onRequires2FA }: LoginProps) {
 
         setLoading(false);
 
-
-
-        // 2FA requis
         if (repjson?.requires2FA && repjson?.userId) {
             onRequires2FA(repjson.userId);
             return;
@@ -76,6 +73,11 @@ export default function Login({ setPage, onRequires2FA }: LoginProps) {
         }
 
         setError('Réponse inattendue du serveur');
+
+        if (repjson?.error)
+            setError(repjson?.error);
+        if (repjson?.error === "Validation failed")
+            setError("Verifier votre Mail ou Password 🤷")
     };
 
     return (
