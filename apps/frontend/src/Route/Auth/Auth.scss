@@ -8,29 +8,84 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    .Form-root{
+    .Script-Auth-root{
 
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 1rem;
 
         padding: 15px;
         border-radius: 20px;
         background-color: rgba(64, 64, 64, 0.8);
 
+        p,label,h2{
+            color: rgba(0, 255, 70, 0.7);
+        }
+
         input, button {
             border-radius: 20px;
             padding: 8px;
             background-color: rgba(128, 128, 128, 0.7);
+            color: rgba(0, 255, 70, 0.7);
+            &::placeholder { color: rgba(0, 255, 70, 0.2); }
             &:hover{
                 box-shadow: 0px 5px 11px 0px rgba(255, 0, 0, 0.7);
             }
         }
-    
         input[type="submit"], button {
             background-color: rgba(160, 9, 9, 0.7);
         }
+        .Form-root{
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            
+            .Form-field{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap:0.5rem;
+                .eyes-on-off {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    &:has(.Form-pw-toggle:hover) input {
+                        box-shadow: 0px 5px 11px 0px rgba(255, 0, 0, 0.7);
+                    }
+                    .pw-toggle {
+                        position: absolute;
+                        right: 0.7rem;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        padding: 0;
+                        font-size: 0.9rem;
+                        transition: color 0.15s;
+                        &:hover{box-shadow: none;}
+                    }
+                }
+            }
+        }
+
+        .TwoFactorSetup-digit {
+            width: 48px;
+            height: 60px;
+            font-size: 1.6rem;
+            text-align: center;
+            &:disabled { opacity: 0.4; cursor: not-allowed; }
+        }
+        .redir-log-reg, .Script-Auth-header{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
     }
 }
+

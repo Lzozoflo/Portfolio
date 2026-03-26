@@ -1,38 +1,53 @@
 /* extern */
-// import { SetStateAction, useEffect, useState } from "react";
+import { useState } from 'react';
 
 
 /* back */
 
 
 /* Css */
-// import 'Login.scss'
 
 /* Components */
-import { authStep, AuthChildrenProps } from "FRONT/Route/Auth/Auth"
-import useFetch from "FRONT/hooks/useFetch";
+import { authStep } from '../Auth';
+import type { AuthChildrenProps } from '../Auth';
+import useFetch from 'HOOKS/useFetch';
 
 /* Interface */
 
-export default function Login({ setPage }: AuthChildrenProps) {
+interface LoginProps extends AuthChildrenProps {
+    onRequires2FA: (userId: string) => void;
+}
 
-    const loginSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+interface LoginForm {
+    email: string;
+    password: string;
+}
 
-		event.preventDefault();
-        const form = event.target;
 
-        const data = {
-            email: form.email.value.trim(),
-            password: form.password.value.trim(),
-            // host: window.location.host
-        };
 
-        if (!data.email || !data.password) {
-            console.log("loginSubmit(1) Veuillez remplir tous les champs", "danger");
+export default function Login({ setPage, onRequires2FA }: LoginProps) {
+    const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [pwVisible, setPwVisible] = useState<boolean>(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setError('');
+    };
+
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+        
+        e.preventDefault();
+        if (!form.email || !form.password) {
+            setError('Veuillez remplir tous les champs');
             return;
         }
 
-        const api_url = `/api/auth/login`;
+        setLoading(true);
+        setError('');
+
+        const api_url = '/api/auth/login';
         
         console.log(`${api_url}:`, api_url);
 
@@ -41,38 +56,81 @@ export default function Login({ setPage }: AuthChildrenProps) {
             type_request: {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            }
+                body: JSON.stringify(form),
+            },
         });
-        if (!repjson)
-            return
-        
-        console.log('oui', repjson);
 
-        // sessionStorage.setItem('type', "success");
-        // sessionStorage.setItem('message', "Connexion réussie");
-        // sessionStorage.setItem('token', repjson.token);
-        // sessionStorage.setItem('username', repjson.username);
+        setLoading(false);
 
+
+
+        // 2FA requis
+        if (repjson?.requires2FA && repjson?.userId) {
+            onRequires2FA(repjson.userId);
+            return;
+        }
+
+        if (repjson?.token) {
+            localStorage.setItem('token', repjson.token);
+            return;
+        }
+
+        setError('Réponse inattendue du serveur');
     };
 
-
     return (
-        <div className={`Login-root`}>
+        <div className={`Script-Auth-root`}>
 
-            <form className={`Form-root`} onSubmit={loginSubmit}>
+            <h2>Connexion</h2>
 
-                <label htmlFor={`email`}>Email</label>
-                <input id={`email`} type={`text`}/>
-                
-                <label htmlFor={`password`}>Password</label>
-                <input id={`password`} type={`password`}/>
-                
-                <input type={`submit`} value={`Login`}/>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}>Go To Register</button>
+            <form className={`Form-root`}  onSubmit={handleSubmit} noValidate>
+
+                <div className={`Form-field`}>
+
+                    <label htmlFor={`login-email`}>Email</label>
+                    <input id={`login-email`} type={`email`} name={`email`}
+                        value={form.email}
+                        onChange={handleChange}
+                        placeholder={`you@example.com`}
+                        disabled={loading}
+                    />
+
+                </div>
+
+                <div className={`Form-field`}>
+
+                    <label htmlFor={`login-password`}>Mot de passe</label>
+                    <div className={`eyes-on-off`}>
+
+                        <input id={`login-password`}
+                            type={pwVisible ? 'text' : 'password'} name={`password`}
+                            value={form.password}
+                            onChange={handleChange}
+                            placeholder={`••••••••`}
+                            disabled={loading}/>
+
+                        <button type={`button`}
+                            className={`pw-toggle`}
+                            onClick={() => setPwVisible(v => !v)}
+                            tabIndex={-1}>
+                            {pwVisible ? '🙈' : '👁'}
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {error && <p className={`Login-error`} >{error}</p>}
+                <input type={`submit`} value={`Se connecter`} disabled={loading}/> 
 
             </form>
-
+            <div className={`redir-log-reg`}>
+                <p>Pas de compte ?</p>
+                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}
+                    disabled={loading}>
+                    S'inscrire
+                </button>
+            </div>
         </div>
-    )
+    );
 }

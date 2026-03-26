@@ -13,10 +13,8 @@ export default async function useFetch({url, type_request}: UseFetchProps){
 
         const repjson = await response.json();
         if (response.status >= 400){
-            console.log("useFetch(3:",url,") response.status >= 400...",repjson.status)
-            console.log("  repjson.error:", repjson?.error)
-            console.log("  repjson.details:", repjson?.details)
-            return null;
+            console.log("useFetch(3:",url,") response.status >= 400...",response.status)
+            console.log("  repjson", repjson)
         }
 
         console.log("useFetch(4:",url,") success repjson:", repjson);

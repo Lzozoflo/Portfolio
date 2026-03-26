@@ -1,5 +1,5 @@
 /* extern */
-// import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 
 /* back */
@@ -14,25 +14,36 @@ import useFetch from "FRONT/hooks/useFetch";
 
 /* Interface */
 
+interface LoginForm {
+    username: string;
+    email: string;
+    password: string;
+}
+
 export default function Register({ setPage }: AuthChildrenProps) {
 
+    const [form, setForm] = useState<LoginForm>({ username:'', email: '', password: '' });
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [pwVisible, setPwVisible] = useState<boolean>(false);
 
-    const registerSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 
-        event.preventDefault();
-        const form = event.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setError('');
+    };
 
-        const data = {
-            username: form.username.value.trim(),
-            email: form.email.value.trim(),
-            password: form.password.value.trim(),
-            // host: window.location.host
-        };
+    const registerSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 
-        if (!data.username || !data.email || !data.password) {
-            console.log("registerSubmit(1) Veuillez remplir tous les champs", "danger");
+        e.preventDefault();
+
+        if (!form.username || !form.email || !form.password) {
+            setError("Veuillez remplir tous les champs");
             return;
         }
+
+        setLoading(true);
+        setError('');
 
         const api_url = `/api/auth/register`;
         
@@ -43,36 +54,89 @@ export default function Register({ setPage }: AuthChildrenProps) {
             type_request: {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(form)
             }
         });
-        if (!repjson)
-            return
-        
+
+        setLoading(false);
+        if (!repjson || repjson.error) {
+            setError(repjson?.error ?? 'Email ou mot de passe invalide');
+            return;
+        }
+
         console.log('oui', repjson);
+
+        if (repjson.token) {
+            localStorage.setItem('token', repjson.token);
+            setPage(authStep.PAGE_2FA_SETUP);
+            return;
+        }
+
+        setError('Réponse inattendue du serveur');
 
     };
 
 
 
     return (
-        <div className={`Register-root`}>
-
+        <div className={`Script-Auth-root`}>
+            <h2>Inscription</h2>
             <form className={`Form-root`} onSubmit={registerSubmit}>
 
-                <label htmlFor={`username`}>Username</label>
-                <input id={`username`} type={`text`}/>
+                <label htmlFor={`register-username`}>Username</label>
+                <input id={`register-username`} 
+                        type={`text`} name={`username`}
+                        value={form.username}
+                        onChange={handleChange}
+                        placeholder={`XxXDarkSasukeXxX`}
+                        disabled={loading}/>
                 
-                <label htmlFor={`email`}>Email</label>
-                <input id={`email`} type={`email`}/>
+                <label htmlFor={`register-email`}>Email</label>
+                <input id={`register-email`} 
+                    type={`email`} name={`email`}
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder={`you@example.com`}
+                    disabled={loading}
+                />
 
-                <label htmlFor={`password`}>Password</label>
-                <input id={`password`} type={`password`}/>
-                
-                <input type={`submit`} value={`Register`}/>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_LOGIN)}}>Go To Login</button>
+
+                <div className={`Form-field`}>
+
+                    <label htmlFor={`register-password`}>Mot de passe</label>
+                    <div className={`eyes-on-off`}>
+
+                        <input id={`register-password`}
+                            type={pwVisible ? 'text' : 'password'} name={`password`}
+                            value={form.password}
+                            onChange={handleChange}
+                            placeholder={`••••••••`}
+                            disabled={loading}
+                        />
+
+                        <button type={`button`}
+                            className={`pw-toggle`}
+                            onClick={() => setPwVisible(v => !v)}
+                            tabIndex={-1}>
+                            {pwVisible ? '🙈' : '👁'}
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {error && <p className={`Login-error`} >{error}</p>}
+                <input type={`submit`} value={`Register`}/>  
                 
             </form>
+            
+            <div className={`redir-log-reg`}>
+                <p >Deja un compte ?</p>
+                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_LOGIN)}}
+                    disabled={loading}>
+                    Se connecter
+                </button>
+            </div>
 
         </div>
     )

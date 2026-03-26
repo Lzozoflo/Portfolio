@@ -53,8 +53,8 @@ export const Background: React.FC = () => {
 
         window.addEventListener('resize', () => {
             resizeCanvas();
-        //     columns = Math.floor(canvas.width / fontSize);
-        //     drops = Array.from({ length: columns }, () => Math.random() * -250);
+            // columns = Math.floor(canvas.width / fontSize);
+            // drops = Array.from({ length: columns }, () => Math.random() * -250);
         });
 
         return () => {

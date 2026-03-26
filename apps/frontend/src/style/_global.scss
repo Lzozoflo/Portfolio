@@ -46,3 +46,36 @@ p, a, input, h1, h2, h3, h4, h5, h6, button, span, li, label, strong, input, tex
     align-items: center;
     text-align: center;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 255, 70, 0.2);
+    border-top-color: #00ff46;
+    border-radius: 50%;
+    animation: tf-spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+
+@keyframes tf-spin {
+    to { transform: rotate(360deg); }
+}
