@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import './Inviter.scss'
 
 /* Components */
+import Hr from 'COMP/Hr/Hr'
 
 /* Interface */
 //interface InviterProps {
@@ -19,7 +20,39 @@ import './Inviter.scss'
 export default function Inviter() {
     return (
         <div className={`Inviter-root`}>
-            <h1>Hi im </h1>
+            <Hr>
+                <ul className={`explorateur`}>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                        <ul>
+                            <li>qwerqwerqwerqwerqwerqewr</li>
+                            <li>qwerqwerqwerqwerqwerqewr</li>
+                            <li>qwerqwerqwerqwerqwerqewr</li>
+                            <li>qwerqwerqwerqwerqwerqewr</li>
+                            <li>qwerqwerqwerqwerqwerqewr</li>
+                        </ul>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                    <li>qwerqwerqwerqwerqwerqewr</li>
+                </ul>
+
+                <div>
+                    
+                    <div className={`nav-bar`}>
+
+                    </div>
+
+                    <div className={`display-file`}>
+            
+                        <h1>Hi im </h1>
+
+                    </div>
+
+                </div>
+            </Hr>
         </div>
     )
 }

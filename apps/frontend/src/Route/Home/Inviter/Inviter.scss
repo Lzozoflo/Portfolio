@@ -8,4 +8,20 @@
     justify-content: center;
     align-items: center;
     @include mix.text(black);
+
+    .explorateur,.explorateur ul {
+        list-style-type: none;
+        padding-left: 20px;
+        margin: 0;
+    }
+
+    .nav-bar{
+
+    }
+
+    .display-file{
+        
+    }
+
+
 }
