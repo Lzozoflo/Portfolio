@@ -3,7 +3,10 @@
 
 .Admin-root{
    @include mix.full();
-   @include mix.center();
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    @include mix.text(rgb(0, 255, 0));
 
 }

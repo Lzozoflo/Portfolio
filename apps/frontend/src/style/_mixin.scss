@@ -15,9 +15,18 @@
     text-align: center;
 }
 
-@mixin colortext($varcolor : rgb(10, 201, 240)){
-    p, a, input, h1, h2, h3, h4, h5, h6, button, span , li {
+@mixin text($varcolor : rgb(128, 128, 128)){
+
+    p, span, strong, a, button, li, label, input, textarea, h1, h2, h3, h4, h5, h6{
         color: $varcolor;
+        font-weight: 400;
+        font-family: 'Press Start 2P', cursive;
+        letter-spacing: 1px;
+        text-decoration: none;
+        border: none;
+    }
+    p, span, strong, a, button, li, label, input, textarea{
+        font-size: 1.3rem;
     }
 }
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 
 /* Css */
-// import 'Admin.scss'
+import './Admin.scss'
 
 /* Components */
 

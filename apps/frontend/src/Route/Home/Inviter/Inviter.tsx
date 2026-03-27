@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 
 /* Css */
-// import 'Inviter.scss'
+import './Inviter.scss'
 
 /* Components */
 
@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 export default function Inviter() {
     return (
         <div className={`Inviter-root`}>
-            <h1>Hello World</h1>
+            <h1>Hi im </h1>
         </div>
     )
 }

@@ -3,9 +3,9 @@
 
 .Inviter-root{
     @include mix.full();
-    background: url(MEDIA/bg.png) repeat;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    @include mix.text(black);
 }

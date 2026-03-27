@@ -1,26 +1,3 @@
-// .BackgroundHomeInit-root {
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     width: 100vw;
-//     height: 100vh;
-//     display: flex;
-//     z-index: -1;
-//     .bg-static {
-//         background: url(MEDIA/bg.png) repeat;
-//         width: 50%;
-//         height: 100%;
-//     }
-    
-//     .bg-matrix {
-//         width: 50%;
-//         height: 100%;
-//         position: relative;
-//         overflow: hidden;
-//     }
-// }
-/* BackgroundHomeInit.scss */
-
 .BackgroundHomeInit-root {
     position: fixed;
     top: 0;
@@ -29,16 +6,14 @@
     height: 100vh;
     display: flex;
     z-index: -1;
-    background-color: #000; /* Fond noir par sécurité derrière */
-    overflow: hidden; /* Empêche tout scroll pendant l'anim */
+    background-color: #000;
+    overflow: hidden;
 
     .bg-static, .bg-matrix {
         height: 100%;
         position: relative;
-        overflow: hidden; /* Important pour masquer le contenu qui dépasse pendant l'anim */
+        overflow: hidden;
         
-        // --- C'est ICI que l'animation magique se passe ---
-        // On anime la width, avec une courbe d'accélération fluide.
         transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
@@ -63,14 +38,9 @@
     }
 
 
-    // --- Styles spécifiques au contenu ---
     .bg-static {
         background: url(MEDIA/bg.png) repeat;
         background-position: center; /* Pour que le motif glisse de manière esthétique */
     }
     
-    .bg-matrix {
-        // La div parent doit être relative, mais le canvas sera fixed.
-        // C'est le comportement souhaité ici car le canvas prend tout l'écran.
-    }
 }
