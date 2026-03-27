@@ -1,0 +1,21 @@
+.BackgroundHomeInit-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    z-index: -1;
+    .bg-static {
+        background: url(MEDIA/bg.png) repeat;
+        width: 50%;
+        height: 100%;
+    }
+    
+    .bg-matrix {
+        width: 50%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+}
