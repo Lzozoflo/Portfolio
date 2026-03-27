@@ -39,7 +39,7 @@ export default function Inviter() {
                     <li>qwerqwerqwerqwerqwerqewr</li>
                 </ul>
 
-                <div>
+                <div className={`display`}>
                     
                     <div className={`nav-bar`}>
 
@@ -47,7 +47,7 @@ export default function Inviter() {
 
                     <div className={`display-file`}>
             
-                        <h1>Hi im </h1>
+                        <h1>Hi im Florent Cretin</h1>
 
                     </div>
 
