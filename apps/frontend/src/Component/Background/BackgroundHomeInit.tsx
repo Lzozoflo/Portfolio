@@ -1,30 +1,18 @@
-/* extern */
-import { useEffect, useState } from "react";
-
-
-/* back */
-
-
-/* Css */
-
+/* BackgroundHomeInit.tsx */
 import './BackgroundHomeInit.scss'
-
-/* Components */
 import { Background } from "./Background";
 
-/* Interface */
-//interface BackgroundHomeInitProps {
-//    children: ReactNode;
-//    className?: string;
-//}
+interface BackgroundHomeInitProps {
+    focus?: 'left' | 'right' | 'both';
+}
 
-export default function BackgroundHomeInit() {
+export default function BackgroundHomeInit({ focus = 'both' }: BackgroundHomeInitProps) {
     return (
-        <div className={`BackgroundHomeInit-root`}>
+        <div className={`BackgroundHomeInit-root focus-${focus}`}>
             <div className="bg-static" />
             <div className="bg-matrix">
-                <Background/>
+                <Background />
             </div>
         </div>
-    )
+    );
 }

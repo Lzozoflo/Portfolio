@@ -1,48 +1,57 @@
 @use 'STYLE/mixin' as mix;
 @use 'STYLE/_variable' as *;
 
-.Home-init-root {
+// ─── INIT ──────────────────────────────────────────────────────────────
+.Home-root {
     @include mix.full();
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .Home-init-card{
-        width: 50%;
-        padding: 2rem;
+    .Home-content{
+        @include mix.full();
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 1rem;
-        background-color: rgba(0, 0, 0, 0.200);
-        border: solid saddlebrown 2px;
-        header{
-            width: 100%;
 
+        .Home-init-card{
+            width: 50%;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-
             gap: 1rem;
-        }
-        .Home-init-change-mode{
-            padding: 1rem;
-            width: 100%;
+            background-color: rgba(0, 0, 0, 0.200);
+            border: solid saddlebrown 2px;
+            header{
+                width: 100%;
 
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
 
-            button {
-                padding: 0.5rem;
-                background: inherit;
-                border: solid saddlebrown 2px;
-                background-color: rgba(0, 0, 0, 0.250);
-                &:hover{
-                    border: solid white 2px;
+                gap: 1rem;
+            }
+            .Home-init-change-mode{
+                padding: 1rem;
+                width: 100%;
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+
+                button {
+                    padding: 0.5rem;
+                    background: inherit;
+                    border: solid saddlebrown 2px;
+                    background-color: rgba(0, 0, 0, 0.250);
+                    &:hover{
+                        border: solid white 2px;
+                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 /* extern */
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 /* back */
 
@@ -7,96 +7,51 @@ import { useEffect, useState } from 'react';
 import './Home.scss';
 
 /* Components */
+import { Background } from 'COMP/Background/Background';
 import BackgroundHomeInit  from 'COMP/Background/BackgroundHomeInit';
+import Admin from './Admin/Admin';
+import Inviter from './Inviter/Inviter';
+
+
+/* Interface */
+type UserMode = 'init' | 'inviter' | 'admin';
 
 export default function Home() {
+    const [mode, setMode] = useState<UserMode>('init');
 
-    const [mode , setMode] = useState<string>('init');
+    // On détermine le focus du fond en fonction du mode
+    const getFocus = (): 'both' | 'left' | 'right' => {
+        if (mode === 'inviter') return 'left';
+        if (mode === 'admin') return 'right';
+        return 'both';
+    };
 
-    if (mode === 'init') {
+    return (
+        <div className="Home-root">
+            <BackgroundHomeInit focus={getFocus()} />
 
-        return (
-            <div className={`Home-init-root`}>
-                <BackgroundHomeInit/>
-                <div className={`Home-init-card`}>
-                    <header>
-                        <h1>Bienvenu sur mon site..</h1>
-                        <p>je vous invite a choisir un mode pour vous deplacer sur le site</p>
-                    </header>
-                    
-                    <div className={`Home-init-change-mode`}>
-                        <button onClick={() => {setMode('inviter')} }>inviter</button>
-                        <button onClick={() => {setMode('admin')} }>admin</button>
+            <main className="Home-content">
+
+{/* ─── INIT ────────────────────────────────────────────────────────────── */}
+
+                {mode === 'init' && (
+                    <div className="Home-init-card">
+                        <header>
+                            <h1>Bienvenu sur mon site..</h1>
+                            <p>Choisissez un mode pour continuer</p>
+                        </header>
+                        <div className="Home-init-change-mode">
+                            <button onClick={() => setMode('inviter')}>inviter</button>
+                            <button onClick={() => setMode('admin')}>admin</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-        );
-    }
-//     if (mode === "inviter") {
-
-//         return (
-//             <div className={`Home-root`}>
-
-//                 {/* frontend
-
-//                 React
-//                 JavaScript/TypeScript
-//                 Scss
-
-
-//                 backend
-
-//                 Node.js
-//                 Express.js
-
-//                 database
-
-//                 MySQL
-//                 sequalize
-
-//                 PostgreSQL
-//                 Prisma
-
-//                 tools
-//                 man zshmisc
-//                 Shell
-//                 Git
-//                 Docker */}
-//             </div>
-//         );
-//     }
-
-//     if (mode === "admin") {
-
-//         return (
-//             <div className={`Home-root`}>
-
-//                 {/* frontend
-
-//                 React
-//                 JavaScript/TypeScript
-//                 Scss
-
-
-//                 backend
-
-//                 Node.js
-//                 Express.js
-
-//                 database
-
-//                 MySQL
-//                 sequalize
-
-//                 PostgreSQL
-//                 Prisma
-
-//                 tools
-//                 man zshmisc
-//                 Shell
-//                 Git
-//                 Docker */}
-//             </div>
-//         );
-//     }
+                )}
+{/* ─── INVITER ────────────────────────────────────────────────────────────── */}
+                {mode === 'inviter' && <Inviter />}                
+{/* ─── ADMIN ────────────────────────────────────────────────────────────── */}
+                {mode === 'admin' && <Admin />}
+                
+            </main>
+        </div>
+    );
 }
