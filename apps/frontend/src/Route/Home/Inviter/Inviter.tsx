@@ -24,7 +24,7 @@ export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefin
 
     return (
         <div className={`Inviter-root`}>
-            <Hr>
+            <Hr initial={335} min2={230}>
                 <div className={`Explorateur-root`}>
                     {fileSystem && <Explorateur dir={fileSystem} pwd={`/user/`}/>}
                     {!fileSystem && (
