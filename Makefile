@@ -58,7 +58,16 @@ fclean: clean
 re: fclean
 	$(MAKE) $(ENV)
 
+reprod: fclean
+	rm infra/certbot/conf/* -rf
 
+	$(MAKE) prod
+
+	sudo chown -R $(USER):$(USER) infra/certbot
+
+	docker compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d fcretin.ddns.net --email votre-email@exemple.com --agree-tos --no-eff-email
+
+	docker compose exec nginx nginx -s reload
 # ─── Logs ─────────────────────────────────────────────────────────────────────
 
 # SERVICES = \

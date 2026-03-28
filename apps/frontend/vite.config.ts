@@ -5,7 +5,8 @@ import path from 'path'
 export default defineConfig({
     plugins: [react()],
     server: {
-        host: '127.0.0.1',
+        // host: '127.0.0.1',
+        host: '192.168.1.15',
         port: 5173,
         // host: '0.0.0.0', allowedHosts: ['fcretin.ddns.net']  // autorise ton DDNS
     },
