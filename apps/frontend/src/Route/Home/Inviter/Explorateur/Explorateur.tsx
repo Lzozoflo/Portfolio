@@ -38,26 +38,9 @@ export default function Explorateur({ dir, pwd }: { dir: FileNode | undefined , 
                     openFolders={openFolders}
                     toggle={toggle}
                     node={node}
+                    depth={1}
                 />
             ))}
         </ul>
     );
-
 }
-
-
-// <li key={`${pwd}${node.name}`}>
-//     {node.type === "folder" ? (
-//         <>
-//             <span onClick={() => toggle(`${pwd}${node.name}`)} style={{ cursor: "pointer" }}>
-//                 {openFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}
-//             </span>
-//             {node.children?.map((dir) => {
-//                 <Explorateur dir={dir} pwd={`${pwd}${node.name}`}>
-
-//             })}
-//         </>
-//     ) : (
-//         <span>📄 {node.name}</span>
-//     )}
-// </li>

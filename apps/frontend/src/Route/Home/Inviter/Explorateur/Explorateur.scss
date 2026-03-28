@@ -7,11 +7,11 @@
     flex-direction: column;
     
     list-style-type: none;
-    padding-left: 20px;
     margin: 0;
-    gap:5px;
+    gap:0.3rem;
+    padding: 0.2rem;
     li{
-        padding: 2px;
-        background-color: rgba(167, 167, 167, 0.2)
+        padding: 0.2rem;
+    border: 1px solid black;
     }
 }

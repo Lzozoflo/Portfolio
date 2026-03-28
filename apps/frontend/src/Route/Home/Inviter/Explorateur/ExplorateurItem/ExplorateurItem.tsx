@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 
 /* Css */
-// import './ExplorateurItem.scss'
+import './ExplorateurItem.scss'
 
 /* Components */
 
@@ -14,43 +14,47 @@ import { useEffect, useState } from "react";
 import { FileNode } from "FRONT/Route/Home/Home";
 
 interface ExplorateurItemProps {
-    node: FileNode | undefined;
-    pwd : string;
-    toggle: (id: string)=> void ;
     openFolders: { [key: string]: boolean };
+    toggle: (id: string)=> void ;
+    node: FileNode | undefined;
+    pwd: string;
+    depth: number;
 }
 
-export default function ExplorateurItem({ node, pwd, toggle, openFolders }: ExplorateurItemProps) {
+export default function ExplorateurItem({ openFolders ,toggle, node, pwd, depth }: ExplorateurItemProps) {
     
     return (
-        <li>
+        <li className={`ExplorateurItem-comp`} >
             {node ? ( node?.type === "folder" ? (
-                    <>
-                        <span onClick={() => toggle(`${pwd}${node.name}`)} style={{ cursor: "pointer" }}>
+                <>
+                    <div onClick={() => toggle(`${pwd}${node.name}`)} style={{ paddingLeft: `${depth * 10}px` }}>
+                        <span style={{ cursor: "pointer" }}>
                             {openFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}
                         </span>
-                        {openFolders[`${pwd}${node.name}`] && (
-                            <ul>
-                                {node?.children?.map((nodechildren) => (
-                                    <ExplorateurItem 
+                    </div>
+                    {openFolders[`${pwd}${node.name}`] && (
+                        <ul>
+                            {node?.children?.map((nodechildren) => (
+                                <ExplorateurItem 
                                     key={`${pwd}${nodechildren.name}`} 
                                     pwd={`${pwd}${nodechildren.name}`}
                                     openFolders={openFolders}
-                                    toggle={toggle}
                                     node={nodechildren}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </>
+                                    depth={depth + 1}
+                                    toggle={toggle}
+                                />
+                            ))}
+                        </ul>
+                    )}
+                </>
 
-                ) : (
-
+            ) : (
+                <div style={{ paddingLeft: `${depth * 10}px` }}>
                     <span>📄 {node.name}</span>
-                )) : (
-                    <span>wtf c'est pas normal si y'a ce display</span> 
-                )
-            }
+                </div>
+            )) : (
+                <span>wtf c'est pas normal si y'a ce display</span> 
+            )}
         </li>
     )
 }
