@@ -34,6 +34,9 @@ RUN npm run build
 # ─── Stage production ─────────────────────────────────────────────────────────
 FROM nginx:alpine AS production
 
+# On copie notre config spécifique
+COPY apps/frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
 COPY --from=builder /app/apps/frontend/dist /usr/share/nginx/html
 
 EXPOSE 80

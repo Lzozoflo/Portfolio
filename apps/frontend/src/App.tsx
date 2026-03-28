@@ -14,9 +14,7 @@ import ErrorRedir from './Route/ErrorRedir/ErrorRedir';
 import Home from './Route/Home/Home';
 
 export default function App() {
-    // useEffect(() => {
-    // }, []);
-
+    
     return (
         <BrowserRouter>
             <Routes>

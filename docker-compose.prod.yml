@@ -19,9 +19,11 @@ services:
       - ./infra/certbot/conf:/etc/letsencrypt:ro
       - ./infra/certbot/www:/var/www/certbot:ro
     ports:
-      - "8080:80"   # 80
-      - "8443:443"  # 443
+      - "80:80"     # Indispensable pour Certbot
+      - "9443:443"  # Votre port externe vers le HTTPS interne
     restart: always
+
+
 
   certbot:
     image: certbot/certbot
@@ -30,6 +32,7 @@ services:
       - ./infra/certbot/www:/var/www/certbot
     entrypoint: >
       sh -c "trap exit TERM; while :; do
-        certbot renew --quiet;
+        certbot renew --webroot --webroot-path=/var/www/certbot --quiet;
         sleep 12h & wait $!;
       done"
+
