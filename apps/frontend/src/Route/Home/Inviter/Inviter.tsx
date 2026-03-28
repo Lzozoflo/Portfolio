@@ -22,14 +22,11 @@ import { FileNode } from "FRONT/Route/Home/Home";
 
 export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefined }) {
 
-
-
-
     return (
         <div className={`Inviter-root`}>
             <Hr>
                 <div className={`Explorateur-root`}>
-                    {fileSystem && <Explorateur dir={fileSystem}/>}
+                    {fileSystem && <Explorateur dir={fileSystem} pwd={`/user/`}/>}
                     {!fileSystem && (
                         <div className={`Explorateur-undefined`}>
                             <p>⚠️ /user/ ⚠️</p>

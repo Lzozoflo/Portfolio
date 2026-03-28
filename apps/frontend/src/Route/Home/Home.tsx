@@ -16,10 +16,10 @@ import Inviter from './Inviter/Inviter';
 /* Interface */
 type UserMode = 'init' | 'inviter' | 'admin';
 export type FileNode = {
-  name: string;
-  type: "file" | "folder";
-  data?: string,
-  children?: FileNode[];
+    name: string;
+    type: "file" | "folder";
+    data?: string,
+    children?: FileNode[] | undefined;
 };
 
 const initfilesystem : FileNode[] = [
@@ -115,9 +115,16 @@ const initfilesystem : FileNode[] = [
                                 data: "on utilise comme ca:..."
                             },
                             {
-                                name: "ReadMe.md",
-                                type: "file",
-                                data: "on utilise comme ca:..."
+                                name: "bg/",
+                                type: "folder",
+                                children: [
+                                    {
+                                        name: "ReadMe.md",
+                                        type: "file",
+                                        data: "on utilise comme ca:..."
+                                    },
+                                ]
+                                
                             },
                         ]
                     },

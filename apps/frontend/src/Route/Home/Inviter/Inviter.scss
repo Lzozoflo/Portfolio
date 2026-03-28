@@ -11,13 +11,13 @@
 
     .Explorateur-root {
         @include mix.full();
-        li{
+        li{ font-size: 0.7rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .Explorateur-undefined{
-            p{font-size: 0.7rem;}
+            p, li {font-size: 0.7rem;}
             @include mix.full();
             display: flex;
             flex-direction: column;

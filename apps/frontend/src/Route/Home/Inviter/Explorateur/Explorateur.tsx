@@ -1,54 +1,63 @@
 /* extern */
-import { useEffect, useState } from "react";
-
-
-/* back */
-
+import { useState } from "react";
 
 /* Css */
-import './Explorateur.scss'
+import "./Explorateur.scss";
+
 
 /* Components */
-
+import ExplorateurItem from "./ExplorateurItem/ExplorateurItem";
 
 /* Interface */
 import { FileNode } from "FRONT/Route/Home/Home";
+// export type FileNode = {
+//     name: string;
+//     type: "file" | "folder";
+//     data?: string,
+//     children?: FileNode[];
+// };
 
-//interface ExplorateurProps {
-//    children: ReactNode;
-//    className?: string;
-//}
+export default function Explorateur({ dir, pwd }: { dir: FileNode | undefined , pwd : string}) {
 
-export default function Explorateur({ dir }:{ dir: FileNode | undefined}) {
+    // state pour gérer plusieurs dossiers
+    const [openFolders, setOpenFolders] = useState<{ [key: string]: boolean }>({});
 
+    function toggle(id: string) {
+        setOpenFolders(prev => ({
+            ...prev,
+            [id]: !prev[id],
+        }));
+    };
 
-    return (
-        <ul className={`Explorateur-Comp`}>
-            <li>📁 dossier
-                <ul>
-                    <li>📁 dossier
-                        {/* <ul>
-                            <li>📄 file</li>
-                            <li>📄 file</li>
-                            <li>📄 file</li>
-                            <li>📄 file</li>
-                            <li>📄 file</li>
-                            </ul> */}
-                    </li>
-                    <li>📁 dossier</li>
-                    <li>📄 file</li>
-                    <li>📄 file</li>
-                    <li>📄 file</li>
-                </ul>
-            </li>
-            <li>📄 ceci_est_un_long_test_pour_voir_ce_que_ca_donne</li>
-            <li>📄 ceci_est_un_long_test_pour_voir_ce_que_ca_donne</li>
-            <li>📄 ceci-est-un-long-test-pour-voir-ce-que-ca_donne</li>
-            <li>📄 ceci est un long test pour voir ce que ca_donne</li>
-            <li>📄 file</li>
-            <li>📄 file</li>
-            <li>📄 file</li>
+    return(
+        <ul className="Explorateur-Comp">
+            {dir?.children?.map((node) => (
+                <ExplorateurItem 
+                    key={`${pwd}${node.name}`} 
+                    pwd={`${pwd}${node.name}`}
+                    openFolders={openFolders}
+                    toggle={toggle}
+                    node={node}
+                />
+            ))}
         </ul>
-    )
+    );
 
 }
+
+
+// <li key={`${pwd}${node.name}`}>
+//     {node.type === "folder" ? (
+//         <>
+//             <span onClick={() => toggle(`${pwd}${node.name}`)} style={{ cursor: "pointer" }}>
+//                 {openFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}
+//             </span>
+//             {node.children?.map((dir) => {
+//                 <Explorateur dir={dir} pwd={`${pwd}${node.name}`}>
+
+//             })}
+//         </>
+//     ) : (
+//         <span>📄 {node.name}</span>
+//     )}
+// </li>
