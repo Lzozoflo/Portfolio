@@ -8,12 +8,23 @@
     justify-content: center;
     align-items: center;
     @include mix.text(black);
-    .explorateur{@include mix.full();}
 
-    .explorateur,.explorateur ul {
-        list-style-type: none;
-        padding-left: 20px;
-        margin: 0;
+    .Explorateur-root {
+        @include mix.full();
+        li{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .Explorateur-undefined{
+            p{font-size: 0.7rem;}
+            @include mix.full();
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+        }
     }
 
     .display{

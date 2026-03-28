@@ -4,10 +4,6 @@
 // ─── INIT ──────────────────────────────────────────────────────────────
 .Home-root {
     @include mix.full();
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     .Home-content{
         @include mix.full();
         display: flex;
@@ -18,11 +14,13 @@
         .Home-init-card{
             width: 50%;
             padding: 2rem;
+
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 1rem;
+            
             background-color: rgba(0, 0, 0, 0.200);
             border: solid saddlebrown 2px;
             header{
