@@ -1,5 +1,5 @@
 /* extern */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /* Css */
 import './Home.scss';
@@ -13,10 +13,6 @@ import Inviter from './Inviter/Inviter';
 import { useFilesystem } from 'HOOKS/useFilesystem';
 
 /* Types */
-// Re-export de FileNode depuis @portfolio/shared.
-// Cela préserve la compatibilité des imports existants :
-//   import { FileNode } from 'FRONT/Route/Home/Home'
-// fonctionnera encore sans rien changer dans les composants enfants.
 export type { FileNode } from '@portfolio/shared';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -55,20 +51,15 @@ function hasUser(tree: FileNode[]): FileNode | undefined {
 // ─────────────────────────────────────────────────────────────────────────────
 // Composant
 // ─────────────────────────────────────────────────────────────────────────────
+import { Idmain } from 'FRONT/hooks/useIndexedDB';
 
 export default function Home() {
+    
+    
+    Idmain();
+
     const [mode, setMode] = useState<UserMode>('init');
 
-    // ── Système de fichiers ──────────────────────────────────────────────────
-    //
-    // useFilesystem() gère :
-    //   - L'ouverture de IndexedDB
-    //   - Le seed des données initiales (1er chargement uniquement)
-    //   - La reconstruction de l'arbre FileNode[] après chaque opération
-    //   - Les opérations CRUD (ls, cat, mkdir, touch, write, rm) pour le terminal
-    //
-    // On ne consomme ici que `tree`, `loading`, et `error`.
-    // Les opérations CRUD seront passées à <Admin> quand le terminal sera implémenté.
     const { tree, loading, error } = useFilesystem();
 
     // Focus du background selon le mode actif
