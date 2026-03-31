@@ -22,6 +22,8 @@ import { FileNode } from "FRONT/Route/Home/Home";
 
 export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefined }) {
 
+    console.log("Inviter:",fileSystem);
+    
     return (
         <div className={`Inviter-root`}>
             <Hr>

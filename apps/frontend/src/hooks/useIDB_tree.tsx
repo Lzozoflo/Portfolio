@@ -34,11 +34,8 @@ import type { IDBNode, FileNode } from '@portfolio/shared';
 //     updatedAt: number;      // Date.now() — mis à jour à chaque write()
 // };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SECTION 1 — CONSTANTES
-// ─────────────────────────────────────────────────────────────────────────────
 
-const DB_NAME = 'test';             // Nom de la base IDB (visible dans DevTools → Application → IndexedDB)
+const DB_NAME = 'IDB_tree';         // Nom de la base IDB (visible dans DevTools → Application → IndexedDB)
 const DB_VERSION = 1;               // Version du schéma. Incrémenter quand on modifie le schéma IDB.
 const STORE_NAME = 'tree';          // Nom de l'ObjectStore (≈ table SQL)
 const INDEX_PARENT = 'by_parent';   // Nom de l'index sur parentPath (permet ls() en O(1))
@@ -238,7 +235,7 @@ function buildTree(nodes: IDBNode[]): FileNode[] {
     for (const n of nodes) {
         const node = map.get(n.path)!; // Garanti présent (on vient de set)
 
-        if (n.parentPath === '') {
+        if (n.parentPath === '/home/') {
             // Pas de parent → c'est un nœud racine (ex: "/")
             roots.push(node);
         } else {
@@ -248,7 +245,7 @@ function buildTree(nodes: IDBNode[]): FileNode[] {
             }
         }
     }
-
+    console.log('buildTree' ,roots);
     return roots;
 }
 
@@ -271,7 +268,7 @@ async function removeRecursive(db: IDBDatabase, path: string): Promise<void> {
 
 // ── Core ────────────────────────────────────────────────────────────────
 
-export function Idmain(){
+export function useIDB_tree(){
 
     // Instance de la base IDB (null jusqu'à ce qu'elle soit ouverte)
     const [db, setDb] = useState<IDBDatabase | null>(null);
@@ -284,26 +281,45 @@ export function Idmain(){
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    (async () => {
-        try {
-            const database = await openDatabase();
-            const fetchedGithubRepo = await fetchGithubRepo();
-            console.log("fetchedGithubRepo: ",fetchedGithubRepo);
+    // ── Initialisation au montage ────────────────────────────────────────────
 
-            await Promise.all(fetchedGithubRepo.map((node) => putNode(database, node)));
+    useEffect(() => {
 
-            const allNodes = await getAllNodes(database);
-            if (allNodes.length === 0) return
+        let cancelled = false;
 
-            setDb(database);
-            setTree(buildTree(allNodes));
-            setLoading(false);
+        (async () => {
+            try {
+                const database = await openDatabase();
+                if (cancelled) return;
 
-        } catch (err) {
-            console.log('use indexedDB failed:', err)
-        }
-    })();
+                const fetchedGithubRepo = await fetchGithubRepo();
+                if (cancelled) return;
 
+                console.log("fetchedGithubRepo: ",fetchedGithubRepo);
+                if (cancelled) return;
+
+                await Promise.all(fetchedGithubRepo.map((node) => putNode(database, node)));
+                if (cancelled) return;
+
+                const allNodes = await getAllNodes(database);
+                if (cancelled || allNodes.length === 0) return
+
+                setDb(database);
+                setTree(buildTree(allNodes));
+                setLoading(false);
+
+            } catch (err) {
+                if (!cancelled) {
+                    setError(err instanceof Error ? err.message : 'Erreur IndexedDB inconnue');
+                    setLoading(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []); // [] = exécuté une seule fois au montage
 
     // ── refresh ──────────────────────────────────────────────────────────────
     //

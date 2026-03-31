@@ -43,7 +43,9 @@ import type { FileNode } from '@portfolio/shared';
 function hasUser(tree: FileNode[]): FileNode | undefined {
     // tree[0] = nœud racine "/"
     // tree[0].children = enfants directs de la racine
-    return tree[0]?.children?.find(
+
+    console.log("hasUser:",tree);
+    return tree?.find(
         (node) => node.name === 'user/' && node.type === 'folder'
     );
 }
@@ -51,16 +53,13 @@ function hasUser(tree: FileNode[]): FileNode | undefined {
 // ─────────────────────────────────────────────────────────────────────────────
 // Composant
 // ─────────────────────────────────────────────────────────────────────────────
-import { Idmain } from 'FRONT/hooks/useIndexedDB';
+import { useIDB_tree } from 'FRONT/hooks/useIDB_tree';
 
 export default function Home() {
-    
-    
-    Idmain();
 
     const [mode, setMode] = useState<UserMode>('init');
 
-    const { tree, loading, error } = useFilesystem();
+    const { tree, loading, error } = useIDB_tree();
 
     // Focus du background selon le mode actif
     const getFocus = (): 'both' | 'left' | 'right' => {
