@@ -13,8 +13,9 @@ import Hr from 'COMP/Hr/Hr'
 import Explorateur from "./Explorateur/Explorateur";
 
 
-/* Interface */
-import { FileNode } from "FRONT/Route/Home/Home";
+/* Types */
+import type { FileNode } from '@portfolio/shared';
+
 //interface InviterProps {
 //    children: ReactNode;
 //    className?: string;
@@ -22,13 +23,12 @@ import { FileNode } from "FRONT/Route/Home/Home";
 
 export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefined }) {
 
-    console.log("Inviter:",fileSystem);
     
     return (
         <div className={`Inviter-root`}>
             <Hr initial={335} min2={230}>
                 <div className={`Explorateur-root`}>
-                    {fileSystem && <Explorateur dir={fileSystem} pwd={`/user/`}/>}
+                    {fileSystem && <Explorateur dir={fileSystem} pwd={`/home/user/`}/>}
                     {!fileSystem && (
                         <div className={`Explorateur-undefined`}>
                             <p>⚠️ /user/ ⚠️</p>
@@ -38,10 +38,12 @@ export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefin
                     )}
                 </div>
 
+        {/* ─── <Hr> vertical </Hr> ───────────────────────────────────────────────── */}
+
                 <div className={`display`}>
                     
                     <div className={`nav-bar`}>
-                        {/* click sur un des file dans l'explorateur mets un onglet ici et ouvre dans le display-file */}
+
                     </div>
 
                     <div className={`display-file`}>

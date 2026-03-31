@@ -13,6 +13,7 @@
         @include mix.full();
         padding: 1rem;
         background-color: rgb(58, 58, 58);
+        @include mix.text(white);
         li{ 
             font-size: 0.7rem;
             white-space: nowrap;

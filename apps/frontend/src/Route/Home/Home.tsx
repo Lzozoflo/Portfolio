@@ -10,50 +10,21 @@ import Admin from './Admin/Admin';
 import Inviter from './Inviter/Inviter';
 
 /* Hooks */
-import { useFilesystem } from 'HOOKS/useFilesystem';
+import { useIDB_tree } from 'FRONT/hooks/useIDB_tree';
 
 /* Types */
-export type { FileNode } from '@portfolio/shared';
+import type { FileNode } from '@portfolio/shared';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Types locaux
-// ─────────────────────────────────────────────────────────────────────────────
 
 type UserMode = 'init' | 'inviter' | 'admin';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Utilitaires
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * hasUser — Trouve le nœud /user/ dans l'arbre reconstruit.
- *
- * L'arbre retourné par useFilesystem ressemble à :
- *   [
- *     { name: "/", type: "folder", children: [
- *         { name: "user/", type: "folder", children: [...] },
- *         ...
- *     ]}
- *   ]
- *
- * On cherche dans les enfants de la racine ("/") le dossier nommé "user/".
- */
-import type { FileNode } from '@portfolio/shared';
 
 function hasUser(tree: FileNode[]): FileNode | undefined {
-    // tree[0] = nœud racine "/"
-    // tree[0].children = enfants directs de la racine
-
-    console.log("hasUser:",tree);
+    // console.log("hasUser:",tree);
     return tree?.find(
         (node) => node.name === 'user/' && node.type === 'folder'
     );
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Composant
-// ─────────────────────────────────────────────────────────────────────────────
-import { useIDB_tree } from 'FRONT/hooks/useIDB_tree';
 
 export default function Home() {
 
