@@ -11,7 +11,9 @@
 
     .Explorateur-root {
         @include mix.full();
-        padding: 1rem;
+        display: flex;
+        flex-direction: column;        
+        padding: 0.5rem;
         background-color: rgb(58, 58, 58);
         @include mix.text(white);
         li{ 
@@ -29,6 +31,7 @@
             align-items: center;
             
         }
+        .btc-reset{color: black; padding: 0.5rem;}
     }
 
     .display{

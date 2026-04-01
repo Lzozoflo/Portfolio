@@ -1,10 +1,14 @@
 @use 'STYLE/mixin' as mix;
 @use 'STYLE/_variable' as *;
 
-
+.Explorateur-Comp  {
+    @include mix.full();
+}
 .Explorateur-Comp ,.Explorateur-Comp  ul {
+    @include mix.full();
     display: flex;
     flex-direction: column;
+    justify-content: start;
     
     list-style-type: none;
     margin: 0;
@@ -12,6 +16,6 @@
     padding: 0.2rem;
     li{
         padding: 0.2rem;
-    border: 1px solid black;
+        border: 1px solid black;
     }
 }

@@ -28,7 +28,6 @@ export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | un
         <div className={`Inviter-root`}>
             <Hr initial={335} min2={230}>
                 <div className={`Explorateur-root`}>
-                    <button onClick={crud.resetDatabase}>reset</button>
                     {fileSystem && <Explorateur dir={fileSystem} pwd={`/home/user/`}/>}
                     {!fileSystem && (
                         <div className={`Explorateur-undefined`}>
@@ -37,6 +36,7 @@ export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | un
                             <p>directory /user/ was not defined</p>
                         </div>
                     )}
+                    <button className={`btc-reset`} onClick={crud.resetDatabase}>reset</button>
                 </div>
 
         {/* ─── <Hr> vertical </Hr> ───────────────────────────────────────────────── */}
