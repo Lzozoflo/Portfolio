@@ -15,7 +15,6 @@
 export type FileNode = {
     name: string;                    // "ReadMe.md" ou "user/"
     type: 'file' | 'folder';
-    data?: string;                   // contenu texte (si type === "file")
     children?: FileNode[];           // sous-noeuds (si type === "folder")
 };
 

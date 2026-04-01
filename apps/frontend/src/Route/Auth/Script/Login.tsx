@@ -12,7 +12,7 @@ import { authStep } from '../Auth';
 import type { AuthChildrenProps } from '../Auth';
 import useFetch from 'HOOKS/useFetch';
 
-/* Interface */
+/* Types */
 
 interface LoginProps extends AuthChildrenProps {
     onRequires2FA: (userId: string) => void;

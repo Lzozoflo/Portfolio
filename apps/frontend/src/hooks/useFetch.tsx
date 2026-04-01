@@ -1,4 +1,4 @@
-/* Interface */
+/* Types */
 interface UseFetchProps {
    url: string;
    type_request: RequestInit;

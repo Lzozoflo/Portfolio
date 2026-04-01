@@ -226,7 +226,6 @@ function buildTree(nodes: IDBNode[]): FileNode[] {
         map.set(n.path, {
             name: n.name,
             type: n.type,
-            data: n.data,
             children: n.type === 'folder' ? [] : undefined
         });
     }

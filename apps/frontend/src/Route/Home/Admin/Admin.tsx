@@ -10,7 +10,7 @@ import './Admin.scss'
 
 /* Components */
 
-/* Interface */
+/* Types */
 //interface AdminProps {
 //    children: ReactNode;
 //    className?: string;

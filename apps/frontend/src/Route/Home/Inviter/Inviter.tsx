@@ -23,12 +23,16 @@ import type { FileNode } from '@portfolio/shared';
 
 export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | undefined , crud: any }) {
 
-    
+    function handelscreen(pwd: string) {
+        console.log("handelscreen: ",pwd);
+        
+    }
+
     return (
         <div className={`Inviter-root`}>
             <Hr initial={335} min2={230}>
                 <div className={`Explorateur-root`}>
-                    {fileSystem && <Explorateur dir={fileSystem} pwd={`/home/user/`}/>}
+                    {fileSystem && <Explorateur dir={fileSystem} pwd={`/home/user/`} displayOnScreen={handelscreen}/>}
                     {!fileSystem && (
                         <div className={`Explorateur-undefined`}>
                             <p>⚠️ /user/ ⚠️</p>

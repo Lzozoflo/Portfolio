@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 /* Components */
 
-/* Interface */
+/* Types */
 //interface NavProps {
 //    children: ReactNode;
 //    className?: string;

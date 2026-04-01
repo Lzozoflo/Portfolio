@@ -12,7 +12,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { authStep, AuthChildrenProps } from "FRONT/Route/Auth/Auth"
 import useFetch from "FRONT/hooks/useFetch";
 
-/* Interface */
+/* Types */
 
 interface LoginForm {
     username: string;
