@@ -30,7 +30,7 @@ export default function Home() {
 
     const [mode, setMode] = useState<UserMode>('init');
 
-    const { tree, loading, error } = useIDB_tree();
+    const { tree, loading, error, ...crud } = useIDB_tree();
 
     // Focus du background selon le mode actif
     const getFocus = (): 'both' | 'left' | 'right' => {
@@ -47,7 +47,7 @@ export default function Home() {
 
             <main className='Home-content'>
 
-                {/* ─── INIT ───────────────────────────────────────────────── */}
+{/* ─── INIT ───────────────────────────────────────────────── */}
                 {mode === 'init' && (
                     <div className='Home-init-card'>
                         <header>
@@ -61,33 +61,29 @@ export default function Home() {
                     </div>
                 )}
 
-                {/* ─── INVITER ────────────────────────────────────────────── */}
+{/* ─── INVITER ────────────────────────────────────────────── */}
                 {mode === 'inviter' && (
                     <>
-                        {/* IDB en cours de chargement (typiquement < 50ms) */}
                         {loading && (
                             <div style={{ color: 'lime', fontFamily: 'monospace' }}>
                                 Chargement du filesystem...
                             </div>
                         )}
 
-                        {/* Erreur IDB (navigateur sans support, quota dépassé, etc.) */}
                         {error && (
                             <div style={{ color: 'red', fontFamily: 'monospace' }}>
                                 Erreur filesystem : {error}
                             </div>
                         )}
 
-                        {/* Rendu normal — on passe le nœud /user/ à Inviter */}
-                        {/* L'interface de <Inviter> est INCHANGÉE : fileSystem?: FileNode */}
                         {!loading && !error && (
-                            <Inviter fileSystem={hasUser(tree)} />
+                            <Inviter fileSystem={hasUser(tree)} crud={crud}/>
                         )}
                     </>
                 )}
 
-                {/* ─── ADMIN ──────────────────────────────────────────────── */}
-                {/* TODO: passer les opérations du hook (ls, cat, mkdir, ...) à Admin */}
+
+{/* ─── ADMIN ──────────────────────────────────────────────── */}
                 {mode === 'admin' && <Admin />}
 
             </main>

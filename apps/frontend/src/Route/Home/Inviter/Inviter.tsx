@@ -21,13 +21,14 @@ import type { FileNode } from '@portfolio/shared';
 //    className?: string;
 //}
 
-export default function Inviter({ fileSystem }: { fileSystem: FileNode | undefined }) {
+export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | undefined , crud: any }) {
 
     
     return (
         <div className={`Inviter-root`}>
             <Hr initial={335} min2={230}>
                 <div className={`Explorateur-root`}>
+                    <button onClick={crud.resetDatabase}>reset</button>
                     {fileSystem && <Explorateur dir={fileSystem} pwd={`/home/user/`}/>}
                     {!fileSystem && (
                         <div className={`Explorateur-undefined`}>

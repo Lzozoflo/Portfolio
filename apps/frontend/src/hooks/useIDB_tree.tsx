@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import type { IDBNode, FileNode } from '@portfolio/shared';
 
 // type IDBNode = {
@@ -264,6 +265,7 @@ async function removeRecursive(db: IDBDatabase, path: string): Promise<void> {
     await deleteNode(db, path);
 }
 
+
 // ── Utilitaire ────────────────────────────────────────────────────────────────
 
 // ── Core ────────────────────────────────────────────────────────────────
@@ -292,6 +294,15 @@ export function useIDB_tree(){
                 const database = await openDatabase();
                 if (cancelled) return;
 
+                if (await countNodes(database) !== 0){
+                    const allNodes = await getAllNodes(database);
+                    if (cancelled || allNodes.length === 0) return;
+
+                    setDb(database);
+                    setTree(buildTree(allNodes));
+                    setLoading(false);
+                    return;
+                }
                 const fetchedGithubRepo = await fetchGithubRepo();
                 if (cancelled) return;
 
@@ -320,6 +331,24 @@ export function useIDB_tree(){
             cancelled = true;
         };
     }, []); // [] = exécuté une seule fois au montage
+
+
+    const resetDatabase = useCallback(async () => {
+        const request = indexedDB.deleteDatabase(DB_NAME);
+
+        request.onsuccess = () => {
+            console.log("Base de données IndexedDB supprimée avec succès");
+            window.location.reload(); 
+        };
+
+        request.onerror = () => {
+            console.error("Erreur lors de la suppression de la base de données");
+        };
+
+        request.onblocked = () => {
+            alert("Suppression bloquée : Veuillez fermer les autres onglets ouverts.");
+        };
+    }, []);
 
     // ── refresh ──────────────────────────────────────────────────────────────
     //
@@ -478,12 +507,13 @@ export function useIDB_tree(){
         error,      // string | null — message d'erreur si IDB échoue
 
         // ── CRUD (pour le terminal principalement) ──
-        ls,     // (folderPath) → IDBNode[]        liste les enfants
-        cat,    // (filePath)   → IDBNode | undefined  lit un fichier
-        mkdir,  // (parentPath, name) → void       crée un dossier
-        touch,  // (parentPath, name) → void       crée un fichier vide
-        write,  // (filePath, data)   → void       écrit dans un fichier
-        rm,     // (path)            → void       supprime (récursif)
+        ls,             // (folderPath)         → IDBNode[]             liste les enfants
+        cat,            // (filePath)           → IDBNode | undefined   lit un fichier
+        mkdir,          // (parentPath, name)   → void                  crée un dossier
+        touch,          // (parentPath, name)   → void                  crée un fichier vide
+        write,          // (filePath, data)     → void                  écrit dans un fichier
+        rm,             // (path)               → void                  supprime (récursif)
+        resetDatabase,  // (void)               → void                  supprime la databases et refresh la page
     };
 
 }
