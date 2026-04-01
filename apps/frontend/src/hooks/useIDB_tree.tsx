@@ -99,7 +99,7 @@ async function fetchGithubRepo(): Promise<IDBNode[]> {
             
             const parentPath = pathParts.length === 0 ? '/' : '/' + pathParts.join('/') + '/';
             
-            const content = item.type === 'blob' && item.content ? await convert64(item.url) : null;
+            const content = item.type === 'blob' ? await convert64(item) : null;
 
             return {
                 path: fullPath,
@@ -292,11 +292,11 @@ export function useIDB_tree(){
             try {
                 const database = await openDatabase();
                 if (cancelled) return;
-
+                
                 if (await countNodes(database) !== 0){
                     const allNodes = await getAllNodes(database);
                     if (cancelled || allNodes.length === 0) return;
-
+                    
                     setDb(database);
                     setTree(buildTree(allNodes));
                     setLoading(false);
@@ -375,23 +375,6 @@ export function useIDB_tree(){
         },
         [db]
     );
-
-    // ── cat ──────────────────────────────────────────────────────────────────
-    //
-    // Lit un fichier par son chemin absolu.
-    // Retourne undefined si le fichier n'existe pas.
-    //
-    // Exemple :
-    //   const file = await cat('/user/ReadMe.md');
-    //   console.log(file?.data); // "# Bienvenue..."
-    const cat = useCallback(
-        async (filePath: string): Promise<IDBNode | undefined> => {
-            if (!db) return undefined;
-            return getNode(db, filePath);
-        },
-        [db]
-    );
-
 
 
     // ── mkdir ─────────────────────────────────────────────────────────────────
@@ -479,6 +462,22 @@ export function useIDB_tree(){
             await refresh();
         },
         [db, refresh]
+    );
+
+    // ── cat ──────────────────────────────────────────────────────────────────
+    //
+    // Lit un fichier par son chemin absolu.
+    // Retourne undefined si le fichier n'existe pas.
+    //
+    // Exemple :
+    //   const file = await cat('/user/ReadMe.md');
+    //   console.log(file?.data); // "# Bienvenue..."
+    const cat = useCallback(
+        async (filePath: string): Promise<IDBNode | undefined> => {
+            if (!db) return undefined;
+            return getNode(db, filePath);
+        },
+        [db]
     );
 
     // ── rm ────────────────────────────────────────────────────────────────────

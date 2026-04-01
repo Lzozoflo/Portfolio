@@ -11,7 +11,7 @@ import './ExplorateurItem.scss'
 /* Components */
 
 /* Types */
-import { FileNode } from "FRONT/Route/Home/Home";
+import type { FileNode } from '@portfolio/shared';
 
 interface ExplorateurItemProps {
     openFolders: { [key: string]: boolean };

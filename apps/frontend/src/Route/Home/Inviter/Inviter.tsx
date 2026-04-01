@@ -14,7 +14,7 @@ import Explorateur from "./Explorateur/Explorateur";
 
 
 /* Types */
-import type { FileNode } from '@portfolio/shared';
+import type { FileNode, IDBNode } from '@portfolio/shared';
 
 //interface InviterProps {
 //    children: ReactNode;
@@ -23,9 +23,13 @@ import type { FileNode } from '@portfolio/shared';
 
 export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | undefined , crud: any }) {
 
-    function handelscreen(pwd: string) {
-        console.log("handelscreen: ",pwd);
-        
+    const [fileToDisplay, setFileToDisplay] = useState<IDBNode | undefined>(undefined);
+
+    async function handelscreen(pwd: string) {
+        // console.log("handelscreen: ",pwd);
+        const resCrudCat = await crud.cat(pwd); 
+        console.log("resCrudCat:",resCrudCat);
+        setFileToDisplay(resCrudCat);
     }
 
     return (
@@ -52,8 +56,12 @@ export default function Inviter({ fileSystem, crud}: { fileSystem: FileNode | un
                     </div>
 
                     <div className={`display-file`}>
-            
-                        <h1>Hi im Florent Cretin</h1>
+                        <p  contentEditable={true}
+                            style={{ whiteSpace: "pre-wrap" }}
+                            onBlur={(e) => console.log(e.target.innerText)}
+                        >
+                            {fileToDisplay?.data}
+                        </p>
 
                     </div>
 
