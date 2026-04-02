@@ -1,5 +1,5 @@
 /* extern */
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import CodeMirror from '@uiw/react-codemirror';
 // import { javascript } from '@codemirror/lang-javascript';
 // import { markdown } from '@codemirror/lang-markdown';
@@ -43,6 +43,32 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         } 
         setContent(fileToDisplay?.data ?? "");
     }, [fileToDisplay]);
+
+
+
+
+
+
+
+
+
+
+//   const handleKeyPress = useCallback((event: any) => {
+//     console.log(`Key pressed: ${event.key}`);
+//   }, []);
+
+//   useEffect(() => {
+//     // attach the event listener
+//     document.addEventListener('keydown', handleKeyPress);
+
+//     // remove the event listener
+//     return () => {
+//       document.removeEventListener('keydown', handleKeyPress);
+//     };
+//   }, [handleKeyPress]);
+
+
+
 
     return (
         <div className={`Inviter-root`}>
