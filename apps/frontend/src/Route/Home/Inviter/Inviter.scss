@@ -33,22 +33,39 @@
         }
         .btc-reset{color: black; padding: 0.5rem;}
     }
-
-    .display{
+    .display {
         @include mix.full();
-        
-        .nav-bar{
+        display: flex;
+        flex-direction: column;
+
+        .nav-bar {
             @include mix.fullw();
             height: 40px;
-        }
-        
-        .display-file{
-            @include mix.fullw();
-            height: calc(100% - 40px);
             display: flex;
-            flex-direction: row;
-            justify-content: center;
             align-items: center;
+            border-bottom: 1px solid #181a1f;
+        }
+
+        .display-file {
+            flex-grow: 1;
+            overflow: hidden;
+            
+            .codemirror-container {
+                @include mix.full();
+                font-size: 0.9rem;
+                .cm-editor { 
+                    background: none;
+                    font-family: 'Press Start 2P', cursive !important;
+            
+                    .cm-scroller {
+                        font-family: inherit;
+                    }
+                    
+                    .cm-content, .cm-line {
+                        font-family: inherit;
+                    }
+                }
+            }
         }
     }
 }
