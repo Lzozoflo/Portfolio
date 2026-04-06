@@ -1,5 +1,5 @@
 /* extern */
-import { useEffect, useState } from 'react';
+import { useEffect, useState }  from 'react';
 
 /* back */
 
@@ -7,52 +7,42 @@ import { useEffect, useState } from 'react';
 import './Auth.scss'
 
 /* Components */
-import { Background } from 'COMP/Background/Background';
-import Login from './Script/Login';
-import Register from './Script/Register';
-import TwoFactorLogin from './Script/TwoFactorLogin';
-import TwoFactorSetup from './Script/TwoFactorSetup';
-
-export enum authStep {
-    CONNECTED,
-    PAGE_LOGIN,
-    PAGE_REGISTER,
-    PAGE_2FA_LOGIN,
-    PAGE_2FA_SETUP,
-}
+import { authStep, useAuth }    from 'HOOKS/useAuth';
+import { Background }           from 'COMP/Background/Background';
+import Login                    from './Script/Login';
+import Register                 from './Script/Register';
+import TwoFactorLogin           from './Script/TwoFactorLogin';
+import TwoFactorSetup           from './Script/TwoFactorSetup';
 
 export interface AuthChildrenProps {
-    setPage: (step: authStep) => void;
+    setAuthLevel: (step: authStep) => void;
 }
 
 export default function Auth() {
-    const [page, setPage] = useState<authStep>(authStep.PAGE_LOGIN);
-    const [userId, setUserId] = useState<string>('');
+    const { authLevel, setAuthLevel } = useAuth();
 
-    // useEffect(() => {
-    //     console.log("value of page: ", page);
-    // }, [page]);
+    const [userId, setUserId] = useState<string>('');
 
     const handleRequires2FA = (id: string) => {
         setUserId(id);
-        setPage(authStep.PAGE_2FA_LOGIN);
+        setAuthLevel(authStep.PAGE_2FA_LOGIN);
     };
 
     return (
         <div className={`Auth-root`}>
             <Background />
 
-            {page === authStep.PAGE_LOGIN && (
-                <Login setPage={setPage} onRequires2FA={handleRequires2FA} />
+            {authLevel === authStep.PAGE_LOGIN && (
+                <Login setAuthLevel={setAuthLevel} onRequires2FA={handleRequires2FA} />
             )}
-            {page === authStep.PAGE_REGISTER && (
-                <Register setPage={setPage} />
+            {authLevel === authStep.PAGE_REGISTER && (
+                <Register setAuthLevel={setAuthLevel} />
             )}
-            {page === authStep.PAGE_2FA_LOGIN && (
-                <TwoFactorLogin setPage={setPage} userId={userId} />
+            {authLevel === authStep.PAGE_2FA_LOGIN && (
+                <TwoFactorLogin setAuthLevel={setAuthLevel} userId={userId} />
             )}
-            {page === authStep.PAGE_2FA_SETUP && (
-                <TwoFactorSetup setPage={setPage} />
+            {authLevel === authStep.PAGE_2FA_SETUP && (
+                <TwoFactorSetup setAuthLevel={setAuthLevel} />
             )}
         </div>
     );

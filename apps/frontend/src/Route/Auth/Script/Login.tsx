@@ -8,7 +8,7 @@ import { useState } from 'react';
 /* Css */
 
 /* Components */
-import { authStep } from '../Auth';
+import { authStep }    from 'HOOKS/useAuth';
 import type { AuthChildrenProps } from '../Auth';
 import useFetch from 'HOOKS/useFetch';
 
@@ -25,7 +25,7 @@ interface LoginForm {
 
 
 
-export default function Login({ setPage, onRequires2FA }: LoginProps) {
+export default function Login({ setAuthLevel, onRequires2FA }: LoginProps) {
     const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -128,7 +128,7 @@ export default function Login({ setPage, onRequires2FA }: LoginProps) {
             </form>
             <div className={`redir-log-reg`}>
                 <p>Pas de compte ?</p>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}
+                <button onClick={(e) => {e.preventDefault(); setAuthLevel(authStep.PAGE_REGISTER)}}
                     disabled={loading}>
                     S'inscrire
                 </button>

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import type { AuthChildrenProps } from '../Auth';
-import { authStep } from '../Auth';
-import useFetch from 'HOOKS/useFetch';
+import { useState, useEffect, useRef }  from 'react';
+import type { AuthChildrenProps }       from '../Auth';
+import { authStep }                     from 'HOOKS/useAuth';
+import useFetch                         from 'HOOKS/useFetch';
 
 type SetupStep = 'loading' | 'scan' | 'confirm' | 'done' | 'error';
 
@@ -10,7 +10,7 @@ interface SetupPayload {
     accesKey: string;
 }
 
-export default function TwoFactorSetup({ setPage }: AuthChildrenProps) {
+export default function TwoFactorSetup({ setAuthLevel }: AuthChildrenProps) {
     const [step, setStep] = useState<SetupStep>('loading');
     const [payload, setPayload] = useState<SetupPayload | null>(null);
     const [digits, setDigits] = useState<string[]>(Array(6).fill(''));

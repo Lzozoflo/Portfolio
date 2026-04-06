@@ -9,7 +9,8 @@ import { SetStateAction, useEffect, useState } from "react";
 // import 'Register.scss'
 
 /* Components */
-import { authStep, AuthChildrenProps } from "FRONT/Route/Auth/Auth"
+import { authStep }    from 'HOOKS/useAuth';
+import { AuthChildrenProps } from "FRONT/Route/Auth/Auth"
 import useFetch from "FRONT/hooks/useFetch";
 
 /* Types */
@@ -20,7 +21,7 @@ interface LoginForm {
     password: string;
 }
 
-export default function Register({ setPage }: AuthChildrenProps) {
+export default function Register({ setAuthLevel }: AuthChildrenProps) {
 
     const [form, setForm] = useState<LoginForm>({ username:'', email: '', password: '' });
     const [error, setError] = useState<string>('');
@@ -68,7 +69,7 @@ export default function Register({ setPage }: AuthChildrenProps) {
 
         if (repjson.token) {
             localStorage.setItem('token', repjson.token);
-            setPage(authStep.PAGE_2FA_SETUP);
+            setAuthLevel(authStep.PAGE_2FA_SETUP);
             return;
         }
 
@@ -132,7 +133,7 @@ export default function Register({ setPage }: AuthChildrenProps) {
             
             <div className={`redir-log-reg`}>
                 <p >Deja un compte ?</p>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_LOGIN)}}
+                <button onClick={(e) => {e.preventDefault(); setAuthLevel(authStep.PAGE_LOGIN)}}
                     disabled={loading}>
                     Se connecter
                 </button>

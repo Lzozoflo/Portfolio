@@ -1,9 +1,7 @@
 /* extern */
 import { useEffect, useState, useCallback } from "react";
-import CodeMirror from '@uiw/react-codemirror';
-// import { javascript } from '@codemirror/lang-javascript';
-// import { markdown } from '@codemirror/lang-markdown';
-// import { oneDark } from '@codemirror/theme-one-dark';
+import CodeMirror                           from '@uiw/react-codemirror';
+import { useClock }                         from 'HOOKS/useClock'
 
 /* Css */
 import './Inviter.scss'
@@ -23,13 +21,15 @@ interface InviterProps {
 export default function Inviter({ fileSystem, crud }: InviterProps) {
     const [fileToDisplay, setFileToDisplay] = useState<IDBNode | undefined>(undefined);
     const [content, setContent] = useState<string | null>(null);
+    const { time } = useClock();
 
     async function handelscreen(pwd: string) {
         const resCrudCat = await crud.cat(pwd);
-        console.log("resCrudCat:",resCrudCat,"fileToDisplay:",fileToDisplay);
+
+        // console.log("resCrudCat:",resCrudCat,"fileToDisplay:",fileToDisplay);
         
         if (resCrudCat.path === fileToDisplay?.path){
-            console.log("test");
+            // console.log("test");
             setFileToDisplay(undefined);
             return;
         }
@@ -82,6 +82,7 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
                             <p>directory /user/ was not defined</p>
                         </div>
                     )}
+                    <p style={{ width: "100%", textAlign: "center"}}>{time}</p>
                     <button className={`btc-reset`} onClick={crud.resetDatabase}>reset</button>
                 </div>
 
