@@ -23,9 +23,13 @@ export default function ExplorateurItem({ statusOpenFolders, node, pwd, depth, t
         <li className={`ExplorateurItem-comp`} >
             {node?.type === "folder" ? (
                 <>
-                    <div onClick={() => toggle(`${pwd}${node.name}`)} style={{ paddingLeft: `${depth * 10}px`,  cursor: "pointer" }}
-                        onContextMenu={(e) => {handleContextMenu(e, `${pwd}${node.name}`, node?.type)}}>
+                    <div style={{ paddingLeft: `${depth * 10}px`,  cursor: "pointer" }}
+                        onClick={() => toggle(`${pwd}${node.name}`)} 
+                        onContextMenu={(e) => {handleContextMenu(e, `${pwd}`, node?.type)}}
+                        >
+
                         <span>{statusOpenFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}</span>
+
                     </div>
                     {statusOpenFolders[`${pwd}${node.name}`] && (
                         <ul>
