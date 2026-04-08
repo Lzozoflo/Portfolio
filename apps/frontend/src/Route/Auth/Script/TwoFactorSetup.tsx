@@ -1,8 +1,13 @@
-import { useState, useEffect, useRef }  from 'react';
-import type { AuthChildrenProps }       from '../Auth';
-import { authStep }                     from 'HOOKS/useAuth';
-import useFetch                         from 'HOOKS/useFetch';
 
+/* extern */
+import { useState, useEffect, useRef }  from 'react';
+
+/* Components */
+import useFetch                         from 'LIB/useFetch';
+// import { authStep }                     from 'HOOKS/useAuth';
+import { AuthChildrenProps }            from 'FRONT/Route/Auth/Auth';
+
+/* Types */
 type SetupStep = 'loading' | 'scan' | 'confirm' | 'done' | 'error';
 
 interface SetupPayload {

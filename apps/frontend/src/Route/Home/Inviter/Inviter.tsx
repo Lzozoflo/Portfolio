@@ -25,11 +25,7 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
 
     async function handelscreen(pwd: string) {
         const resCrudCat = await crud.cat(pwd);
-
-        // console.log("resCrudCat:",resCrudCat,"fileToDisplay:",fileToDisplay);
-        
         if (resCrudCat.path === fileToDisplay?.path){
-            // console.log("test");
             setFileToDisplay(undefined);
             return;
         }
@@ -43,31 +39,6 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         } 
         setContent(fileToDisplay?.data ?? "");
     }, [fileToDisplay]);
-
-
-
-
-
-
-
-
-
-
-//   const handleKeyPress = useCallback((event: any) => {
-//     console.log(`Key pressed: ${event.key}`);
-//   }, []);
-
-//   useEffect(() => {
-//     // attach the event listener
-//     document.addEventListener('keydown', handleKeyPress);
-
-//     // remove the event listener
-//     return () => {
-//       document.removeEventListener('keydown', handleKeyPress);
-//     };
-//   }, [handleKeyPress]);
-
-
 
 
     return (
@@ -95,10 +66,12 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
                         {content !== null && (
                             <CodeMirror
                                 value={content}
-                                height="100%"
+                                height={`100%`}
                                 // extensions={extensions}
-                                onChange={(value) => {setContent(value); console.log(`value:${value}`);}}
-                                className="codemirror-container"
+                                onChange={(value) => {setContent(value); 
+                                    // console.log(`value:${value}`);
+                                }}
+                                className={`codemirror-container`}
                                 basicSetup={{
                                     lineNumbers: true,
                                     foldGutter: true,
@@ -112,3 +85,19 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         </div>
     )
 }
+
+
+
+//   const handleKeyPress = useCallback((event: any) => {
+//     console.log(`Key pressed: ${event.key}`);
+//   }, []);
+
+//   useEffect(() => {
+//     // attach the event listener
+//     document.addEventListener('keydown', handleKeyPress);
+
+//     // remove the event listener
+//     return () => {
+//       document.removeEventListener('keydown', handleKeyPress);
+//     };
+//   }, [handleKeyPress]);

@@ -20,7 +20,6 @@ type UserMode = 'init' | 'inviter' | 'admin';
 
 
 function hasUser(tree: FileNode[]): FileNode | undefined {
-    // console.log("hasUser:",tree);
     return tree?.find(
         (node) => node.name === 'user/' && node.type === 'folder'
     );
@@ -65,13 +64,13 @@ export default function Home() {
                 {mode === 'inviter' && (
                     <>
                         {loading && (
-                            <div style={{ color: 'lime', fontFamily: 'monospace' }}>
+                            <div style={{ color: 'lime'}}>
                                 Chargement du filesystem...
                             </div>
                         )}
 
                         {error && (
-                            <div style={{ color: 'red', fontFamily: 'monospace' }}>
+                            <div style={{ color: 'red'}}>
                                 Erreur filesystem : {error}
                             </div>
                         )}

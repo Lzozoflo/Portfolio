@@ -1,8 +1,12 @@
+/* extern */
 import { useState, useRef, useEffect }  from 'react';
-import type { AuthChildrenProps }       from '../Auth';
-import { authStep }                     from 'HOOKS/useAuth';
-import useFetch                         from 'HOOKS/useFetch';
 
+/* Components */
+import useFetch                         from 'LIB/useFetch';
+import { authStep }                     from 'HOOKS/useAuth';
+import { AuthChildrenProps }            from 'FRONT/Route/Auth/Auth';
+
+/* Types */
 interface TwoFactorLoginProps extends AuthChildrenProps {
     userId: string;
 }

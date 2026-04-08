@@ -1,17 +1,10 @@
 /* extern */
-import { SetStateAction, useEffect, useState } from "react";
-
-
-/* back */
-
-
-/* Css */
-// import 'Register.scss'
+import { useState }             from "react";
 
 /* Components */
-import { authStep }    from 'HOOKS/useAuth';
-import { AuthChildrenProps } from "FRONT/Route/Auth/Auth"
-import useFetch from "FRONT/hooks/useFetch";
+import useFetch                 from 'LIB/useFetch';
+import { authStep }             from 'HOOKS/useAuth';
+import { AuthChildrenProps }    from 'FRONT/Route/Auth/Auth';
 
 /* Types */
 

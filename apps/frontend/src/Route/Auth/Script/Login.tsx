@@ -1,16 +1,10 @@
 /* extern */
-import { useState } from 'react';
-
-
-/* back */
-
-
-/* Css */
+import { useState }             from 'react';
 
 /* Components */
-import { authStep }    from 'HOOKS/useAuth';
-import type { AuthChildrenProps } from '../Auth';
-import useFetch from 'HOOKS/useFetch';
+import useFetch                 from 'LIB/useFetch';
+import { authStep }             from 'HOOKS/useAuth';
+import { AuthChildrenProps }    from 'FRONT/Route/Auth/Auth';
 
 /* Types */
 

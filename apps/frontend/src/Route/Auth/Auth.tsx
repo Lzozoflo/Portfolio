@@ -24,9 +24,17 @@ export default function Auth() {
     const [userId, setUserId] = useState<string>('');
 
     const handleRequires2FA = (id: string) => {
+
         setUserId(id);
         setAuthLevel(authStep.PAGE_2FA_LOGIN);
+
     };
+    useEffect(() => {
+        if (authLevel === authStep.UNDEFINED){
+            setAuthLevel(authStep.PAGE_LOGIN);// TODO FAIRE UN checkTokenAuth(token)
+        }
+    
+    }, [])
 
     return (
         <div className={`Auth-root`}>

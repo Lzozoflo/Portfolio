@@ -6,12 +6,12 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "paths": {
-      "COMP/*": ["./src/Component/*"],
-      "STYLE/*": ["./src/style/*"],
-      "FRONT/*": ["./src/*"],
-      "HOOKS/*": ["./src/hooks/*"],
-      "TOOL/*": ["./src/tool/*"],
-      "MEDIA/*": ["./src/media"],
+      "FRONT/*" : ["./src/*"],
+      "COMP/*"  : ["./src/Component/*"],
+      "HOOKS/*" : ["./src/hooks/*"],
+      "MEDIA/*" : ["./src/media"],
+      "LIB/*"   : ["./src/lib/*"],
+      "STYLE/*" : ["./src/style/*"],
       "@portfolio/shared": ["../../packages/shared/src/index.ts"]
     }
   },
