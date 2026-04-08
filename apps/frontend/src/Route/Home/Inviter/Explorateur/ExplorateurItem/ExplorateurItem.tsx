@@ -1,14 +1,5 @@
-/* extern */
-import { useEffect, useState } from "react";
-
-
-/* back */
-
-
 /* Css */
 import './ExplorateurItem.scss'
-
-/* Components */
 
 /* Types */
 import type { FileNode } from '@portfolio/shared';

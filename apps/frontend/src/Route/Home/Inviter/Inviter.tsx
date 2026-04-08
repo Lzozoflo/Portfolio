@@ -1,17 +1,17 @@
 /* extern */
 import { useEffect, useState, useCallback } from "react";
 import CodeMirror                           from '@uiw/react-codemirror';
-import { useClock }                         from 'HOOKS/useClock'
 
 /* Css */
 import './Inviter.scss'
 
 /* Components */
-import Hr from 'COMP/Hr/Hr'
-import Explorateur from "./Explorateur/Explorateur";
+import { useClock }                         from 'HOOKS/useClock'
+import Hr                                   from 'COMP/Hr/Hr'
+import Explorateur                          from "./Explorateur/Explorateur";
 
 /* Types */
-import type { FileNode, IDBNode } from '@portfolio/shared';
+import type { FileNode, IDBNode }           from '@portfolio/shared';
 
 interface InviterProps { 
     fileSystem: FileNode | undefined,

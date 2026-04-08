@@ -1,14 +1,8 @@
 /* extern */
 import React, { useEffect, useRef } from 'react';
 
-/* back */
-
-/* Css */
-// import 'Background.scss'
-
-/* Components */
-
 export const Background: React.FC = () => {
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {

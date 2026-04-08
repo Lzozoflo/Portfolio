@@ -1,18 +1,16 @@
 /* extern */
-import { useEffect, useState }  from 'react';
-
-/* back */
+import { useEffect, useState }  from    'react';
 
 /* Css */
 import './Auth.scss'
 
 /* Components */
-import { authStep, useAuth }    from 'HOOKS/useAuth';
-import { Background }           from 'COMP/Background/Background';
-import Login                    from './Script/Login';
-import Register                 from './Script/Register';
-import TwoFactorLogin           from './Script/TwoFactorLogin';
-import TwoFactorSetup           from './Script/TwoFactorSetup';
+import { authStep, useAuth }    from    'HOOKS/useAuth';
+import { Background }           from    'COMP/Background/Background';
+import Login                    from    './Script/Login';
+import Register                 from    './Script/Register';
+import TwoFactorLogin           from    './Script/TwoFactorLogin';
+import TwoFactorSetup           from    './Script/TwoFactorSetup';
 
 export interface AuthChildrenProps {
     setAuthLevel: (step: authStep) => void;

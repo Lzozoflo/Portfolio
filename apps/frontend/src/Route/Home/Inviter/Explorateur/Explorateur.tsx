@@ -1,16 +1,14 @@
 /* extern */
-import { useState, useEffect } from "react";
+import { useState, useEffect }  from "react";
 
 /* Css */
 import "./Explorateur.scss";
 
-
 /* Components */
-import ExplorateurItem from "./ExplorateurItem/ExplorateurItem";
+import ExplorateurItem          from "./ExplorateurItem/ExplorateurItem";
 
 /* Types */
-
-import type { FileNode } from '@portfolio/shared';
+import type { FileNode }        from '@portfolio/shared';
 // export type FileNode = {
 //     name: string;
 //     type: "file" | "folder";

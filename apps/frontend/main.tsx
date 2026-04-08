@@ -2,10 +2,6 @@
 import React            from    'react';
 import ReactDOM         from    'react-dom/client';
 
-/* back */
-
-/* Css */
-
 /* Components */
 import ClockProvider    from    'HOOKS/useClock';
 import AuthProvider     from    'HOOKS/useAuth';

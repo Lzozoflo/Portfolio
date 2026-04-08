@@ -7,7 +7,6 @@ import { authStep }             from 'HOOKS/useAuth';
 import { AuthChildrenProps }    from 'FRONT/Route/Auth/Auth';
 
 /* Types */
-
 interface LoginForm {
     username: string;
     email: string;

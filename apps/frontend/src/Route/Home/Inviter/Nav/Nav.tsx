@@ -1,10 +1,6 @@
 /* extern */
 import { useEffect, useState } from "react";
 
-
-/* back */
-
-
 /* Css */
 // import 'Nav.scss'
 
