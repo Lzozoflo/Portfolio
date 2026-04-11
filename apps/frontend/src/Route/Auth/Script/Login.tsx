@@ -1,18 +1,12 @@
 /* extern */
-import { useState } from 'react';
-
-
-/* back */
-
-
-/* Css */
+import { useState }             from 'react';
 
 /* Components */
-import { authStep } from '../Auth';
-import type { AuthChildrenProps } from '../Auth';
-import useFetch from 'HOOKS/useFetch';
+import useFetch                 from 'LIB/useFetch';
+import { authStep }             from 'HOOKS/useAuth';
+import { AuthChildrenProps }    from 'FRONT/Route/Auth/Auth';
 
-/* Interface */
+/* Types */
 
 interface LoginProps extends AuthChildrenProps {
     onRequires2FA: (userId: string) => void;
@@ -25,7 +19,7 @@ interface LoginForm {
 
 
 
-export default function Login({ setPage, onRequires2FA }: LoginProps) {
+export default function Login({ setAuthLevel, onRequires2FA }: LoginProps) {
     const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -128,7 +122,7 @@ export default function Login({ setPage, onRequires2FA }: LoginProps) {
             </form>
             <div className={`redir-log-reg`}>
                 <p>Pas de compte ?</p>
-                <button onClick={(e) => {e.preventDefault(); setPage(authStep.PAGE_REGISTER)}}
+                <button onClick={(e) => {e.preventDefault(); setAuthLevel(authStep.PAGE_REGISTER)}}
                     disabled={loading}>
                     S'inscrire
                 </button>

@@ -1,16 +1,10 @@
 /* extern */
 import { useEffect, useState } from "react";
 
-
-/* back */
-
-
 /* Css */
 import './Admin.scss'
 
-/* Components */
-
-/* Interface */
+/* Types */
 //interface AdminProps {
 //    children: ReactNode;
 //    className?: string;

@@ -1,16 +1,12 @@
 /* extern */
 import { useEffect, useState } from "react";
 
-
-/* back */
-
-
 /* Css */
 // import 'Nav.scss'
 
 /* Components */
 
-/* Interface */
+/* Types */
 //interface NavProps {
 //    children: ReactNode;
 //    className?: string;

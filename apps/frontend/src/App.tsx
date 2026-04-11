@@ -1,28 +1,34 @@
 /* extern */
-// import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-/* back */
+import { useEffect }                    from    'react';
+import { BrowserRouter, Routes, Route } from    'react-router-dom';
 
 /* Css */
 import 'STYLE/index.scss';
 
 /* Components */
-// import { Background } from './Route/Background/Background';
-import Auth from './Route/Auth/Auth';
-import ErrorRedir from './Route/ErrorRedir/ErrorRedir';
-import Home from './Route/Home/Home';
+import { authStep, useAuth }            from    'HOOKS/useAuth';
+import ErrorRedir                       from    './Route/ErrorRedir/ErrorRedir';
+import Auth                             from    './Route/Auth/Auth';
+import Home                             from    './Route/Home/Home';
 
 export default function App() {
     
+    const { authLevel, setAuthLevel } = useAuth();
+
+    useEffect(() => {
+        if (authLevel === authStep.UNDEFINED){
+            setAuthLevel(authStep.PAGE_LOGIN);// TODO FAIRE UN checkTokenAuth(token)
+        }
+    }, [])
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={`/`} element={<Home />} />
-                <Route path={`/auth`} element={<Auth />} />
+                <Route path={`/`}       element={<Home />} />
+                <Route path={`/auth`}   element={<Auth />} />
 
-                {/* bad path */}
-                <Route path={`/*`} element={<ErrorRedir />} />
+                {/* private root */}
+                <Route path={`/*`}      element={<ErrorRedir />} />
             </Routes>
         </BrowserRouter>
     );

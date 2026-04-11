@@ -1,16 +1,19 @@
 /* extern */
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-
-/* back */
-
-/* Css */
+import React            from    'react';
+import ReactDOM         from    'react-dom/client';
 
 /* Components */
-import App from './src/App';
+import ClockProvider    from    'HOOKS/useClock';
+import AuthProvider     from    'HOOKS/useAuth';
+import App              from    './src/App';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
+    
     <React.StrictMode>
-        <App></App>
+        <ClockProvider>
+            <AuthProvider>
+                <App/>
+            </AuthProvider>
+        </ClockProvider>
     </React.StrictMode>
 );

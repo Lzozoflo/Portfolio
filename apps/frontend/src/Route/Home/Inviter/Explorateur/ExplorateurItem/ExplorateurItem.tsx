@@ -1,47 +1,48 @@
-/* extern */
-import { useEffect, useState } from "react";
-
-
-/* back */
-
-
 /* Css */
 import './ExplorateurItem.scss'
 
-/* Components */
-
-/* Interface */
-import { FileNode } from "FRONT/Route/Home/Home";
+/* Types */
+import type { FileNode } from '@portfolio/shared';
 
 interface ExplorateurItemProps {
-    openFolders: { [key: string]: boolean };
-    toggle: (id: string)=> void ;
+    statusOpenFolders: { [key: string]: boolean };
     node: FileNode | undefined;
-    pwd: string;
-    depth: number;
+
+    pwd: string;    // path total du dir ou file
+    depth: number;  // profondeur de recursive
+
+    toggle: (id: string) => void ;
+    displayOnScreen: (pwd: string) => void ;
+    handleContextMenu: (event : React.MouseEvent<HTMLDivElement>, pwd : string, type: "folder" | "file") => void;
 }
 
-export default function ExplorateurItem({ openFolders ,toggle, node, pwd, depth }: ExplorateurItemProps) {
-    
+export default function ExplorateurItem({ statusOpenFolders, node, pwd, depth, toggle, displayOnScreen, handleContextMenu }: ExplorateurItemProps) {
+
+    if (!node ) return
     return (
         <li className={`ExplorateurItem-comp`} >
-            {node ? ( node?.type === "folder" ? (
+            {node?.type === "folder" ? (
                 <>
-                    <div onClick={() => toggle(`${pwd}${node.name}`)} style={{ paddingLeft: `${depth * 10}px` }}>
-                        <span style={{ cursor: "pointer" }}>
-                            {openFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}
-                        </span>
+                    <div style={{ paddingLeft: `${depth * 10}px`,  cursor: "pointer" }}
+                        onClick={() => toggle(`${pwd}${node.name}`)} 
+                        onContextMenu={(e) => {handleContextMenu(e, `${pwd}`, node?.type)}}
+                        >
+
+                        <span>{statusOpenFolders[`${pwd}${node.name}`] ? "📂" : "📁"} {node.name}</span>
+
                     </div>
-                    {openFolders[`${pwd}${node.name}`] && (
+                    {statusOpenFolders[`${pwd}${node.name}`] && (
                         <ul>
-                            {node?.children?.map((nodechildren) => (
+                            {node?.children?.map((nodechildren: FileNode) => (
                                 <ExplorateurItem 
                                     key={`${pwd}${nodechildren.name}`} 
-                                    pwd={`${pwd}${nodechildren.name}`}
-                                    openFolders={openFolders}
+                                    statusOpenFolders={statusOpenFolders}
                                     node={nodechildren}
+                                    pwd={`${pwd}${nodechildren.name}`}
                                     depth={depth + 1}
                                     toggle={toggle}
+                                    displayOnScreen={displayOnScreen}
+                                    handleContextMenu={handleContextMenu}
                                 />
                             ))}
                         </ul>
@@ -49,12 +50,14 @@ export default function ExplorateurItem({ openFolders ,toggle, node, pwd, depth 
                 </>
 
             ) : (
-                <div style={{ paddingLeft: `${depth * 10}px` }}>
-                    <span>📄 {node.name}</span>
+                <div style={{ paddingLeft: `${depth * 10}px`, cursor: "pointer" }} 
+                    onClick={() => {displayOnScreen(`${pwd}`)}}
+                    onContextMenu={(e) => {handleContextMenu(e, `${pwd}`, node?.type)}}>
+                    <span >📄 {node.name}</span>
                 </div>
-            )) : (
-                <span>wtf c'est pas normal si y'a ce display</span> 
             )}
         </li>
     )
 }
+
+

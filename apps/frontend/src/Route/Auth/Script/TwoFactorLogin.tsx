@@ -1,13 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
-import type { AuthChildrenProps } from '../Auth';
-import { authStep } from '../Auth';
-import useFetch from 'HOOKS/useFetch';
+/* extern */
+import { useState, useRef, useEffect }  from 'react';
 
+/* Components */
+import useFetch                         from 'LIB/useFetch';
+import { authStep }                     from 'HOOKS/useAuth';
+import { AuthChildrenProps }            from 'FRONT/Route/Auth/Auth';
+
+/* Types */
 interface TwoFactorLoginProps extends AuthChildrenProps {
     userId: string;
 }
 
-export default function TwoFactorLogin({ setPage, userId }: TwoFactorLoginProps) {
+export default function TwoFactorLogin({ setAuthLevel, userId }: TwoFactorLoginProps) {
     const [digits, setDigits] = useState<string[]>(Array(6).fill(''));
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -121,7 +125,7 @@ export default function TwoFactorLogin({ setPage, userId }: TwoFactorLoginProps)
                 {loading ? <span className={`TwoFactorLogin-spinner`} /> : 'Confirmer'}
             </button>
 
-            <button onClick={() => setPage(authStep.PAGE_LOGIN)}
+            <button onClick={() => setAuthLevel(authStep.PAGE_LOGIN)}
                 disabled={loading} >
                 ← Retour à la connexion
             </button>

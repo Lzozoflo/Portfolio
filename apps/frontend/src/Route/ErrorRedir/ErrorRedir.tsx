@@ -1,11 +1,5 @@
-/* extern */
-
-/* back */
-
 /* Css */
 import './ErrorRedir.scss';
-
-/* Components */
 
 export default function ErrorRedir() {
     return (

@@ -12,11 +12,12 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            'FRONT': path.resolve(__dirname, './src'),
-            'COMP':  path.resolve(__dirname, './src/Component'),
-            'HOOKS': path.resolve(__dirname, './src/hooks'),
-            'STYLE': path.resolve(__dirname, './src/style'),
-            'MEDIA': path.resolve(__dirname, './src/media'),
+            'FRONT' : path.resolve(__dirname, './src'),
+            'COMP'  : path.resolve(__dirname, './src/Component'),
+            'HOOKS' : path.resolve(__dirname, './src/hooks'),
+            'MEDIA' : path.resolve(__dirname, './src/media'),
+            'LIB'   : path.resolve(__dirname, './src/lib'),
+            'STYLE' : path.resolve(__dirname, './src/style'),
         },
     },
 })
