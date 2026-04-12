@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 /* Css */
-// import 'NavVsCode.scss'
+import './NavVsCode.scss'
 
 /* Components */
 
@@ -16,13 +16,21 @@ interface NavVsCodeProps {
 
 export default function NavVsCode({ eraseByPath, allSelectFile }: NavVsCodeProps) {
 
+    // function qui regarder si il y a des doublon dans allSelectFile et cho
+
     return (
-        <div className={`NavVsCode-root`}>
-            {allSelectFile?.map((file: IDBNode) => {
+        <ul className={`NavVsCode-root`}>
+
+            {allSelectFile?.map((file: IDBNode, index:number) => {
                 return (
-                    <button onClick={() => eraseByPath(file.path)}>{file.name}</button>
+                    <li key={index} className="one-file border-1">
+                        <span className="file-name">{file.name}</span>
+                        <button className="close-btn" onClick={() => eraseByPath(file.path)}>X</button>
+                    </li>
                 )
-            }) || <div>chaussure</div> }
-        </div>
+            })}
+
+
+        </ul>
     )
 }
