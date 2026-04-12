@@ -332,7 +332,7 @@ export function useIDB_tree(){
     }, []); // [] = exécuté une seule fois au montage
 
 
-    const resetDatabase = useCallback(async () => {
+    const resetDatabase: () => Promise<void> = useCallback(async () => {
         const request = indexedDB.deleteDatabase(DB_NAME);
 
         request.onsuccess = () => {
@@ -354,7 +354,7 @@ export function useIDB_tree(){
     // Relit TOUS les nœuds IDB et reconstruit l'arbre en mémoire.
     // Appelé automatiquement après chaque opération d'écriture (mkdir, touch, write, rm).
     //
-    const refresh = useCallback(async () => {
+    const refresh: () => Promise<void> = useCallback(async () => {
         if (!db) return;
         const allNodes = await getAllNodes(db);
         setTree(buildTree(allNodes));
@@ -368,7 +368,7 @@ export function useIDB_tree(){
     // Exemple :
     //   const items = await ls('/user/');
     //   // → [{ path: '/user/ReadMe.md', name: 'ReadMe.md', type: 'file', ... }, ...]
-    const ls = useCallback(
+    const ls: (folderPath: string) => Promise<IDBNode[]> = useCallback(
         async (folderPath: string): Promise<IDBNode[]> => {
             if (!db) return [];
             return getByParent(db, folderPath);
@@ -386,7 +386,7 @@ export function useIDB_tree(){
     //   await mkdir('/user/', 'nouveau');
     //   // → crée { path: '/user/nouveau/', name: 'nouveau/', type: 'folder', ... }
     //
-    const mkdir = useCallback(
+    const mkdir: (parentPath: string, name: string) => Promise<void> = useCallback(
         async (parentPath: string, name: string): Promise<void> => {
             if (!db) return;
 
@@ -418,7 +418,7 @@ export function useIDB_tree(){
     // Exemple :
     //   await touch('/user/', 'notes.txt');
     //   // → crée { path: '/user/notes.txt', name: 'notes.txt', type: 'file', data: '', ... }
-    const touch = useCallback(
+    const touch: (parentPath: string, name: string) => Promise<void> = useCallback(
         async (parentPath: string, name: string): Promise<void> => {
             if (!db) return;
 
@@ -447,7 +447,7 @@ export function useIDB_tree(){
     //
     // Exemple :
     //   await write('/user/notes.txt', '# Mes notes\n\nContenu...');
-    const write = useCallback(
+    const write: (filePath: string, data: string) => Promise<void> = useCallback(
         async (filePath: string, data: string): Promise<void> => {
             if (!db) return;
 
@@ -472,7 +472,7 @@ export function useIDB_tree(){
     // Exemple :
     //   const file = await cat('/user/ReadMe.md');
     //   console.log(file?.data); // "# Bienvenue..."
-    const cat = useCallback(
+    const cat: (filePath: string) => Promise<IDBNode | undefined> = useCallback(
         async (filePath: string): Promise<IDBNode | undefined> => {
             if (!db) return undefined;
             return getNode(db, filePath);
@@ -488,7 +488,7 @@ export function useIDB_tree(){
     // Exemple :
     //   await rm('/user/notes.txt');      // supprime le fichier
     //   await rm('/user/Sandbox/');       // supprime le dossier et tout son contenu
-    const rm = useCallback(
+    const rm: (path: string) => Promise<void> = useCallback(
         async (path: string): Promise<void> => {
             if (!db) return;
             await removeRecursive(db, path);

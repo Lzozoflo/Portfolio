@@ -63,7 +63,7 @@ export default function Hr({ children, mode = 'row', min1 = 100, min2 = 100, ini
             <div style={{ [dimensionKey]: `${size1}px` }}>
                 {children[0]}
             </div>
-            <hr 
+            <hr className={`Hr`}
                 onPointerDown={() => { isDragging.current = true; }}
                 style={{ 
                     [dimensionKey]: thickness,

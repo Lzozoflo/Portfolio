@@ -29,7 +29,7 @@ export default function Explorateur({ dir, pwd , displayOnScreen }: ExplorateurP
 
     function toggle(id: string) {
         setStatusOpenFolders(prev => ({...prev,
-            [id]: !prev[id],
+            [id]: !prev[id],// undefined -> true -> false -> true
         }));
     };
 

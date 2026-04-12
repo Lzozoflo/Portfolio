@@ -1,9 +1,0 @@
-@use 'STYLE/mixin' as mix;
-@use 'STYLE/_variable' as *;
-
-.Nav-root{
-   @include mix.full();
-   @include mix.center();
-
-
-}

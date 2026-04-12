@@ -9,7 +9,7 @@
     @include mix.full;
     overflow: hidden;
 
-    hr {
+    .Hr {
         transition: opacity 0.2s;
         &:hover { opacity: 0.5; }
     }

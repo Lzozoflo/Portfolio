@@ -1,0 +1,10 @@
+@use 'STYLE/mixin' as mix;
+@use 'STYLE/_variable' as *;
+
+.NavVsCode-root {
+	@include mix.fullw();
+	height: 40px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid #181a1f;
+}
