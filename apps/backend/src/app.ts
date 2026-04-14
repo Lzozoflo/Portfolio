@@ -23,7 +23,7 @@ app.use(express.json());
 
 // ─── Routes publiques ────────────────────────────────────────────────────────
 
-app.get('/api/health', ((req: Request, res: Response) =>{console.log("Called api/health"); res.json({ ok: true });}) as RequestHandler);
+app.get('/api/health', ((req: Request, res: Response) => {console.log("Called api/health"); res.json({ ok: true });}) as RequestHandler);
 
 app.use('/api/auth', authRouter);
 

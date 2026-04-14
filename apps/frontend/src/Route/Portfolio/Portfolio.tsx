@@ -39,8 +39,7 @@ export default function Home() {
     // ── Rendu ────────────────────────────────────────────────────────────────
 
     return (
-        <div className='Home-root'>
-            <BackgroundHomeInit focus={getFocus()} />
+        <div className='Home-root'> ;
 
             <main className='Home-content'>
 

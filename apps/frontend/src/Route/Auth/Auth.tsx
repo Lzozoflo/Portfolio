@@ -17,12 +17,13 @@ export interface AuthChildrenProps {
 }
 
 export default function Auth() {
+
     const { authLevel, setAuthLevel } = useAuth();
 
     const [userId, setUserId] = useState<string>('');
 
     const handleRequires2FA = (id: string) => {
-
+        
         setUserId(id);
         setAuthLevel(authStep.PAGE_2FA_LOGIN);
 
@@ -33,7 +34,7 @@ export default function Auth() {
             <Background />
 
             {authLevel === authStep.PAGE_LOGIN && (
-                <Login setAuthLevel={setAuthLevel} onRequires2FA={handleRequires2FA} />
+                <Login setAuthLevel={setAuthLevel} onRequires2FA={handleRequires2FA}/>
             )}
             {authLevel === authStep.PAGE_REGISTER && (
                 <Register setAuthLevel={setAuthLevel} />

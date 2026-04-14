@@ -1,7 +1,9 @@
 services:
+
   certbot:
     image: certbot/certbot
     init: true
+
   postgres:
     container_name: postgres
     image: postgres:17-alpine
