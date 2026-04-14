@@ -8,7 +8,6 @@ import AuthProvider     from    'HOOKS/useAuth';
 import App              from    './src/App';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    
     <React.StrictMode>
         <ClockProvider>
             <AuthProvider>
