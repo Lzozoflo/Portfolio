@@ -6,6 +6,16 @@ type Action =
     | { type: 'UPDATE'; path: string; data: string }
     | { type: 'CLOSE'; path: string };
 
+export type focusIDBNode = {
+    file: IDBNode,
+    focus: boolean,
+}
+
+export type State = {
+    files: focusIDBNode[],
+    current: IDBNode | undefined;
+};
+
 export default function fileReducer(state: State, action: Action): State {
     switch (action.type) {
 
@@ -22,6 +32,19 @@ export default function fileReducer(state: State, action: Action): State {
             return { files: [...resetFiles, newNode], current: action.file };
         }
 
+
+        // case 'UPDATE': {
+        //     const updatedFiles = state.files.map(f => f.file.path === action.path ? 
+        //         { ...f, data: action.data, updatedAt: Date.now() }
+        //         : 
+        //         f
+        //     );
+        //     return {
+        //         files: updatedFiles,
+        //         current: updatedFiles.find(f => f.file.path === action.path)
+        //     };
+        // }
+        
         // case 'CLOSE': {
         //     const newList = state.files.filter(f => f.path !== action.path);
         //     let nextCurrent = state.current;
@@ -36,16 +59,6 @@ export default function fileReducer(state: State, action: Action): State {
         //     };
         // }
 
-        // case 'UPDATE': {
-        //     const updatedFiles = state.files.map(f => 
-        //         f.path === action.path ? { ...f, data: action.data, updatedAt: Date.now() } : f
-        //     );
-        //     return {
-        //         files: updatedFiles,
-        //         current: updatedFiles.find(f => f.path === action.path)
-        //     };
-        // }
-        
         default: return state;
     }
 }

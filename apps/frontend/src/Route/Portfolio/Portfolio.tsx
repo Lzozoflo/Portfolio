@@ -6,7 +6,7 @@ import './Portfolio.scss';
 
 /* Components */
 import { useIDB_tree }              from 'HOOKS/useIDB_tree';
-import BackgroundHomeInit           from 'COMP/Background/BackgroundHomeInit';
+import BackgroundPortfolioInit      from 'COMP/Background/BackgroundPortfolioInit';
 import Admin                        from './Admin/Admin';
 import Inviter                      from './Inviter/Inviter';
 
@@ -39,19 +39,19 @@ export default function Portfolio() {
     // ── Rendu ────────────────────────────────────────────────────────────────
 
     return (
-        <div className='Home-root'>
-            <BackgroundHomeInit focus={getFocus()} />
+        <div className='Portfolio-root'>
+            <BackgroundPortfolioInit focus={getFocus()} />
 
-            <main className='Home-content'>
+            <main className='Portfolio-content'>
 
 {/* ─── INIT ───────────────────────────────────────────────── */}
                 {mode === 'init' && (
-                    <div className='Home-init-card'>
+                    <div className='Portfolio-init-card'>
                         <header>
                             <h1>Bienvenu sur mon site..</h1>
                             <p>Choisissez un mode pour continuer</p>
                         </header>
-                        <div className='Home-init-change-mode'>
+                        <div className='Portfolio-init-change-mode'>
                             <button onClick={() => setMode('inviter')}>inviter</button>
                             <button onClick={() => setMode('admin')}>admin</button>
                         </div>
@@ -61,18 +61,18 @@ export default function Portfolio() {
 {/* ─── INVITER ────────────────────────────────────────────── */}
                 {mode === 'inviter' && (
                     <>
-                        {loading && (
-                            <div style={{ color: 'lime'}}>
-                                Chargement du filesystem...
-                            </div>
-                        )}
-
                         {error && (
                             <div style={{ color: 'red'}}>
                                 Erreur filesystem : {error}
                             </div>
                         )}
 
+                        {loading && (
+                            <div style={{ color: 'lime'}}>
+                                Chargement du filesystem...
+                            </div>
+                        )}
+                        
                         {!loading && !error && (
                             <Inviter fileSystem={hasUser(tree)} crud={crud}/>
                         )}

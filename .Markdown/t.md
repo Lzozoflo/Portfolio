@@ -67,8 +67,8 @@ Portfolio/
 │           ├── Component/
 │           │   ├── Background/
 │           │   │   ├── Background.tsx          ← animation matrix canvas
-│           │   │   ├── BackgroundHomeInit.tsx  ← split bg static|matrix avec focus prop
-│           │   │   └── BackgroundHomeInit.scss
+│           │   │   ├── BackgroundPortfolioInit.tsx  ← split bg static|matrix avec focus prop
+│           │   │   └── BackgroundPortfolioInit.scss
 │           │   └── Hr/
 │           │       ├── Hr.tsx                  ← splitter resizable (row/column)
 │           │       └── Hr.scss
@@ -84,9 +84,9 @@ Portfolio/
 │           │   ├── ErrorRedir/
 │           │   │   ├── ErrorRedir.tsx
 │           │   │   └── ErrorRedir.scss
-│           │   └── Home/
-│           │       ├── Home.tsx
-│           │       ├── Home.scss
+│           │   └── Portfolio/
+│           │       ├── Portfolio.tsx
+│           │       ├── Portfolio.scss
 │           │       ├── Admin/
 │           │       │   ├── Admin.tsx           ← stub (futur terminal)
 │           │       │   └── Admin.scss
@@ -350,7 +350,7 @@ authRouter.post('/2fa/enable', authMiddleware, validate(TwoFactorCodeSchema), as
 
 ### Routing React Router v7
 ```
-/       → Home
+/       → Portfolio
 /auth   → Auth
 /*      → ErrorRedir
 ```
@@ -383,16 +383,16 @@ export interface AuthChildrenProps { setPage: (step: authStep) => void; }
 ```
 Accepte exactement 2 enfants, gère le drag avec ResizeObserver.
 
-### BackgroundHomeInit
+### BackgroundPortfolioInit
 ```tsx
-<BackgroundHomeInit focus="both" />  // 50/50 static|matrix
-<BackgroundHomeInit focus="left" />  // 100% static (mode Inviter)
-<BackgroundHomeInit focus="right" /> // 100% matrix (mode Admin)
+<BackgroundPortfolioInit focus="both" />  // 50/50 static|matrix
+<BackgroundPortfolioInit focus="left" />  // 100% static (mode Inviter)
+<BackgroundPortfolioInit focus="right" /> // 100% matrix (mode Admin)
 ```
 
 ---
 
-## Frontend — Mode Home
+## Frontend — Mode Portfolio
 
 ### Trois modes utilisateur
 ```ts
@@ -425,11 +425,11 @@ export type FileNode = {
 
 // Stockage plat IDB — une entrée par nœud
 export type IDBNode = {
-    path: string;        // clé primaire  ex: "/home/user/ReadMe.md"
+    path: string;        // clé primaire  ex: "/Portfolio/user/ReadMe.md"
     name: string;        // nom seul      ex: "ReadMe.md"
     type: 'file' | 'folder';
     data?: string;       // contenu texte (fichiers seulement)
-    parentPath: string;  // ex: "/home/user/"  → index IDB by_parent
+    parentPath: string;  // ex: "/Portfolio/user/"  → index IDB by_parent
     createdAt: number;
     updatedAt: number;
 };
@@ -445,14 +445,14 @@ export type IDBNode = {
 **Seed au premier chargement** :
 - Si IDB vide → fetch GitHub API :
   `GET https://api.github.com/repos/Lzozoflo/Portfolio/git/trees/site_file?recursive=1`
-- Filtre les entrées dont `item.path` commence par `'home/'`
+- Filtre les entrées dont `item.path` commence par `'Portfolio/'`
 - Convertit chaque blob en texte via `atob()` (base64 decode)
 - Construit les `IDBNode` : `path = '/' + item.path + (dossier ? '/' : '')`
 - `parentPath` = chemin parent calculé à partir du path
-- Les nœuds racines de l'arbre graphique ont `parentPath === '/home/'`
+- Les nœuds racines de l'arbre graphique ont `parentPath === '/Portfolio/'`
 
 **buildTree** : reconstruit `FileNode[]` depuis tous les `IDBNode[]`
-- Nœuds dont `parentPath === '/home/'` → racines (premier niveau affiché)
+- Nœuds dont `parentPath === '/Portfolio/'` → racines (premier niveau affiché)
 - Connexion parent→enfant via `map.get(n.parentPath)?.children?.push(...)`
 
 **API exposée** :
@@ -472,9 +472,9 @@ const {
 } = useIDB_tree();
 ```
 
-**Flux Home → Inviter** :
+**Flux Portfolio → Inviter** :
 ```ts
-// Home.tsx
+// Portfolio.tsx
 const { tree, loading, error, ...crud } = useIDB_tree();
 
 function hasUser(tree: FileNode[]): FileNode | undefined {
@@ -487,12 +487,12 @@ function hasUser(tree: FileNode[]): FileNode | undefined {
 
 ### Schéma de chemins (convention)
 ```
-/home/                        ← racine GitHub (invisible dans l'UI)
-/home/user/                   ← dossier affiché comme racine dans l'Explorateur
-/home/user/ReadMe.md          ← fichier
-/home/user/Experience pro/    ← dossier
+/Portfolio/                        ← racine GitHub (invisible dans l'UI)
+/Portfolio/user/                   ← dossier affiché comme racine dans l'Explorateur
+/Portfolio/user/ReadMe.md          ← fichier
+/Portfolio/user/Experience pro/    ← dossier
 ```
-L'Explorateur est monté avec `pwd="/home/user/"`.
+L'Explorateur est monté avec `pwd="/Portfolio/user/"`.
 
 ---
 
@@ -503,7 +503,7 @@ L'Explorateur est monté avec `pwd="/home/user/"`.
 Inviter
 └── Hr (initial=335, min2=230)
     ├── [gauche] div.Explorateur-root
-    │       ├── <Explorateur dir={fileSystem} pwd="/home/user/" displayOnScreen={...} />
+    │       ├── <Explorateur dir={fileSystem} pwd="/Portfolio/user/" displayOnScreen={...} />
     │       ├── fallback si fileSystem undefined
     │       └── <button> reset IDB
     └── [droite] div.display
@@ -516,7 +516,7 @@ Inviter
 ```tsx
 <Explorateur
     dir={fileSystem}       // FileNode (le dossier user/)
-    pwd="/home/user/"      // chemin courant (pour construire les clés)
+    pwd="/Portfolio/user/"      // chemin courant (pour construire les clés)
     displayOnScreen={fn}   // callback quand un fichier est cliqué
 />
 ```
@@ -527,7 +527,7 @@ Récursif. Props :
 ```ts
 { openFolders, toggle, node, pwd, depth, displayOnScreen }
 ```
-> ⚠️ **BUG** : importe `FileNode` depuis `"FRONT/Route/Home/Home"` au lieu de
+> ⚠️ **BUG** : importe `FileNode` depuis `"FRONT/Route/Portfolio/Portfolio"` au lieu de
 > `'@portfolio/shared'`. À corriger.
 
 ---
@@ -561,14 +561,14 @@ CORS_ORIGIN=http://localhost:8080
 - SCSS configuré (sass, alias Vite + tsconfig paths)
 - Prisma Studio via `make studio`
 - Frontend routing React Router v7 (`/`, `/auth`, `/*`)
-- Pages : Home, Auth (Login + Register + TwoFactorLogin + TwoFactorSetup), ErrorRedir
-- Composants : `Background` (matrix canvas), `BackgroundHomeInit` (split bg), `Hr` (splitter)
+- Pages : Portfolio, Auth (Login + Register + TwoFactorLogin + TwoFactorSetup), ErrorRedir
+- Composants : `Background` (matrix canvas), `BackgroundPortfolioInit` (split bg), `Hr` (splitter)
 - Hooks : `useFetch`, `useClock`
-- Home : 3 modes (init, inviter, admin) + focus background selon mode
+- Portfolio : 3 modes (init, inviter, admin) + focus background selon mode
 - Mode Inviter : `Explorateur` + `ExplorateurItem` (arbre avec toggle)
 - `useIDB_tree` ✅ — hook complet (openDatabase, seed GitHub, buildTree, ls/cat/mkdir/touch/write/rm/resetDatabase)
 - `packages/shared/src/index.ts` ✅ — `FileNode` + `IDBNode` définis et exportés
-- Seed depuis GitHub API (`Lzozoflo/Portfolio`, branche `site_file`, dossier `home/`)
+- Seed depuis GitHub API (`Lzozoflo/Portfolio`, branche `site_file`, dossier `Portfolio/`)
 
 ### ⚠️ Bugs connus
 - `autoFormatter` et `errorHandler` dupliqués dans `authRouter` (à supprimer du router)
@@ -584,10 +584,10 @@ CORS_ORIGIN=http://localhost:8080
 4. **Fix bug authRouter** : supprimer `autoFormatter` et `errorHandler` du router auth
 5. **Fix bug ExplorateurItem** : corriger l'import `FileNode` → `@portfolio/shared`
 6. **Fix alias MEDIA** : ajouter `"MEDIA/*": ["./src/media/*"]` dans `tsconfig.json paths`
-7. **Contenu portfolio** : peupler les fichiers du filesystem GitHub (`home/user/`) avec le vrai contenu CV/portfolio (texte, markdown)
+7. **Contenu portfolio** : peupler les fichiers du filesystem GitHub (`Portfolio/user/`) avec le vrai contenu CV/portfolio (texte, markdown)
 8. Tests unitaires / intégration
 9. Backup codes 2FA (prévu, non implémenté)
 
 ### ✋ Volontairement ignoré
 - Husky + Commitlint + lint-staged (plus tard)
-- `buildTree` : les nœuds racines sont détectés via `parentPath === '/home/'` — si la structure GitHub change, adapter ce critère
+- `buildTree` : les nœuds racines sont détectés via `parentPath === '/Portfolio/'` — si la structure GitHub change, adapter ce critère

@@ -85,6 +85,7 @@ async function convert64(item: any){
 async function fetchGithubRepo(): Promise<IDBNode[]> {
     const response = await fetch("https://api.github.com/repos/Lzozoflo/Portfolio/git/trees/site_file?recursive=1");
     const data = await response.json();
+    console.log("fetchGithubRepo data: ",data);
   
     const date = Date.now();
 
@@ -295,7 +296,10 @@ export function useIDB_tree(){
                 
                 if (await countNodes(database) !== 0){
                     const allNodes = await getAllNodes(database);
-                    if (cancelled || allNodes.length === 0) return;
+                    if (cancelled || allNodes.length === 0){
+                        console.error('allNodes.length !== 0')
+                        return;
+                    }
                     
                     setDb(database);
                     setTree(buildTree(allNodes));
@@ -312,7 +316,10 @@ export function useIDB_tree(){
                 if (cancelled) return;
 
                 const allNodes = await getAllNodes(database);
-                if (cancelled || allNodes.length === 0) return
+                if (cancelled || allNodes.length === 0){
+                    console.error('allNodes.length === 0')
+                    return
+                }
 
                 setDb(database);
                 setTree(buildTree(allNodes));
