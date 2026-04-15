@@ -1,5 +1,5 @@
 /* extern */
-import { useState }      from 'react';
+import { useState }                 from 'react';
 
 /* Css */
 import './Portfolio.scss';
@@ -23,7 +23,7 @@ function hasUser(tree: FileNode[]): FileNode | undefined {
     );
 }
 
-export default function Home() {
+export default function Portfolio() {
 
     const [mode, setMode] = useState<UserMode>('init');
 
@@ -39,7 +39,8 @@ export default function Home() {
     // ── Rendu ────────────────────────────────────────────────────────────────
 
     return (
-        <div className='Home-root'> ;
+        <div className='Home-root'>
+            <BackgroundHomeInit focus={getFocus()} />
 
             <main className='Home-content'>
 

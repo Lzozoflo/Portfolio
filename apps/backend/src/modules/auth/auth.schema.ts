@@ -4,10 +4,7 @@ import { z } from 'zod';
 export const RegisterSchema = z.object({
     username: z.string().min(3).max(32).regex(/^\w+$/, 'Alphanumeric and underscores only'),
     email: z.string().email(),
-    password: z
-       .string()
-       .min(8)
-       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Must contain upper, lower and digit')
+    password: z.string().min(8).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Must contain upper, lower and digit')
 });
 
 // Schéma de connexion (Étape 1 : Email/Password)

@@ -72,3 +72,14 @@ export type IDBNode = {
     createdAt: number;      // Date.now() — timestamp en ms
     updatedAt: number;      // Date.now() — mis à jour à chaque write()
 };
+
+
+export type focusIDBNode = {
+    file: IDBNode,
+    focus: boolean,
+}
+
+export type State = {
+    files: focusIDBNode[],
+    current: IDBNode | undefined;
+};

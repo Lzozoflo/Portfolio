@@ -1,5 +1,5 @@
 /* extern */
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useReducer } from "react";
 import CodeMirror                           from '@uiw/react-codemirror';
 
 /* Css */
@@ -14,45 +14,50 @@ import NavVsCode                            from "./NavVsCode/NavVsCode";
 /* Types */
 import type { FileNode, IDBNode }           from '@portfolio/shared';
 
-interface InviterProps { 
+
+interface InviterProps {
     fileSystem: FileNode | undefined,
     crud: {
-        ls: (folderPath: string) => Promise<IDBNode[]>;
-        cat: (filePath: string) => Promise<IDBNode | undefined>;
-        mkdir: (parentPath: string, name: string) => Promise<void>;
-        touch: (parentPath: string, name: string) => Promise<void>;
-        write: (filePath: string, data: string) => Promise<void>;
-        rm: (path: string) => Promise<void>;
-        resetDatabase: () => Promise<void>;
+        ls:             (folderPath: string)                => Promise<IDBNode[]>;
+        cat:            (filePath: string)                  => Promise<IDBNode | undefined>;
+        mkdir:          (parentPath: string, name: string)  => Promise<void>;
+        touch:          (parentPath: string, name: string)  => Promise<void>;
+        write:          (filePath: string, data: string)    => Promise<void>;
+        rm:             (path: string)                      => Promise<void>;
+        resetDatabase:  ()                                  => Promise<void>;
     }
 }
 
 export default function Inviter({ fileSystem, crud }: InviterProps) {
     const { time } = useClock();
 
+
+    // const [allSelectFile, setAllSelectFile] = useState<IDBNode[] | undefined>(undefined);
     const [allSelectFile, setAllSelectFile] = useState<IDBNode[] | undefined>(undefined);
-    const [displayContent, setDisplayContent] = useState<string | null>(null);
+    const [displayContent, setDisplayContent] = useState<IDBNode | undefined>(undefined);
 
-    async function handelScreen(pwd: string) {
-        // console.log("pwd ",pwd)
+    async function handelScreen(path: string) {
 
-        const resCrudCat: IDBNode | undefined = await crud.cat(pwd);
-
+        const alreadyExists = allSelectFile?.some(f => f.path === path);
+        if (alreadyExists){
+            // ici il faudrais savoir l'ancien displayContent.data dans le allSelectFile
+            setDisplayContent(allSelectFile?.find(f => f.path === path));
+            return;
+        }
+            
+        const resCrudCat: IDBNode | undefined = await crud.cat(path);
+        
         setAllSelectFile(prev => {
             const list = prev ?? [];
-
-            if (!resCrudCat) return list;
-
-            const alreadyExists = list.some(f => f.path === resCrudCat.path);
-
-            if (alreadyExists) {
+            
+            if (!resCrudCat){
                 return list;
             }
-
+            
             return [...list, resCrudCat];
         });
-
-        setDisplayContent(resCrudCat?.data ?? "");
+            
+        setDisplayContent(resCrudCat);
     }
 
     function eraseByPath(path: string) {
@@ -61,7 +66,10 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         setAllSelectFile(prev =>
             prev?.filter(file => file.path !== path)
         );
-        
+        if (path === displayContent?.path){
+            // save
+            setDisplayContent(undefined);
+        }
         // console.log("allSelectFile after ",allSelectFile);
     }
 
@@ -86,17 +94,33 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
 
                 <div className={`display`}>
 
-                    <NavVsCode eraseByPath={eraseByPath} allSelectFile={allSelectFile}/>
+                    <NavVsCode eraseByPath={eraseByPath} allSelectFile={allSelectFile} handelScreen={handelScreen}/>
                     
                     <hr />
 
                     <div className={`display-file`}>
-                        {displayContent !== null && (
+                        {displayContent !== undefined && (
                             <CodeMirror
-                                value={displayContent}
+                                value={displayContent?.data ?? ""}
                                 height={`100%`}
                                 // extensions={extensions}
-                                onChange={(value : string) => {setDisplayContent(value); 
+                                onChange={(value : string) => {
+                                    setDisplayContent(prev => {
+                                        if (!prev || prev.type !== "file") return prev;
+                                            const updated = {
+                                                ...prev,
+                                                data: value,
+                                                updatedAt: Date.now()
+                                            };
+
+                                            setAllSelectFile(files =>
+                                                files?.map(f =>
+                                                    f.path === updated.path ? updated : f
+                                                )
+                                            );
+
+                                            return updated;
+                                    }); 
                                     // console.log(`value:${value}`);
                                 }}
                                 className={`codemirror-container`}
