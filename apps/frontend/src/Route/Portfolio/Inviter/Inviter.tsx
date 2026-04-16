@@ -1,18 +1,19 @@
 /* extern */
-import { useEffect, useState, useReducer } from "react";
-import CodeMirror                           from '@uiw/react-codemirror';
+import { useEffect, useState, useReducer }  from    'react';
+import CodeMirror                           from    '@uiw/react-codemirror';
 
 /* Css */
 import './Inviter.scss'
 
 /* Components */
-import { useClock }                         from 'HOOKS/useClock'
-import Hr                                   from 'COMP/Hr/Hr'
-import Explorateur                          from "./Explorateur/Explorateur";
-import NavVsCode                            from "./NavVsCode/NavVsCode";
+import fileReducer                          from    'FRONT/lib/AllselectFileReducer'
+import { useClock }                         from    'HOOKS/useClock'
+import Hr                                   from    'COMP/Hr/Hr'
+import Explorateur                          from    './Explorateur/Explorateur';
+import NavVsCode                            from    './NavVsCode/NavVsCode';
 
 /* Types */
-import type { FileNode, IDBNode }           from '@portfolio/shared';
+import type { FileNode, IDBNode }           from    '@portfolio/shared';
 
 
 interface InviterProps {
@@ -32,45 +33,26 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
     const { time } = useClock();
 
 
+    const [state, dispatch] = useReducer(fileReducer, undefined);
     // const [allSelectFile, setAllSelectFile] = useState<IDBNode[] | undefined>(undefined);
-    const [allSelectFile, setAllSelectFile] = useState<IDBNode[] | undefined>(undefined);
-    const [displayContent, setDisplayContent] = useState<IDBNode | undefined>(undefined);
+    // const [displayContent, setDisplayContent] = useState<IDBNode | undefined>(undefined);
 
     async function handelScreen(path: string) {
 
-        const alreadyExists = allSelectFile?.some(f => f.path === path);
+        const alreadyExists = state?.files?.some(f => f.file.path === path);
         if (alreadyExists){
-            // ici il faudrais savoir l'ancien displayContent.data dans le allSelectFile
-            setDisplayContent(allSelectFile?.find(f => f.path === path));
+            // ici il faudras save l'ancien state.current dans idb
+            dispatch({type: 'NEWFOCUS', path})
             return;
         }
             
         const resCrudCat: IDBNode | undefined = await crud.cat(path);
-        
-        setAllSelectFile(prev => {
-            const list = prev ?? [];
-            
-            if (!resCrudCat){
-                return list;
-            }
-            
-            return [...list, resCrudCat];
-        });
-            
-        setDisplayContent(resCrudCat);
+
+        dispatch({type: 'OPEN', file: resCrudCat })
     }
 
     function eraseByPath(path: string) {
-        // console.log("allSelectFile before",allSelectFile);
-        
-        setAllSelectFile(prev =>
-            prev?.filter(file => file.path !== path)
-        );
-        if (path === displayContent?.path){
-            // save
-            setDisplayContent(undefined);
-        }
-        // console.log("allSelectFile after ",allSelectFile);
+        dispatch({type: 'CLOSE', path })
     }
 
     return (
@@ -94,34 +76,19 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
 
                 <div className={`display`}>
 
-                    <NavVsCode eraseByPath={eraseByPath} allSelectFile={allSelectFile} handelScreen={handelScreen}/>
+                    <NavVsCode eraseByPath={eraseByPath} allSelectFile={state?.files} handelScreen={handelScreen}/>
                     
                     <hr />
 
                     <div className={`display-file`}>
-                        {displayContent !== undefined && (
+
+                        {state?.current !== undefined && (
                             <CodeMirror
-                                value={displayContent?.data ?? ""}
+                                value={state?.current?.data ?? ""}
                                 height={`100%`}
                                 // extensions={extensions}
                                 onChange={(value : string) => {
-                                    setDisplayContent(prev => {
-                                        if (!prev || prev.type !== "file") return prev;
-                                            const updated = {
-                                                ...prev,
-                                                data: value,
-                                                updatedAt: Date.now()
-                                            };
-
-                                            setAllSelectFile(files =>
-                                                files?.map(f =>
-                                                    f.path === updated.path ? updated : f
-                                                )
-                                            );
-
-                                            return updated;
-                                    }); 
-                                    // console.log(`value:${value}`);
+                                    dispatch({type: 'UPDATE', data: value})
                                 }}
                                 className={`codemirror-container`}
                                 basicSetup={{

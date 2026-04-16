@@ -82,4 +82,4 @@ export type focusIDBNode = {
 export type State = {
     files: focusIDBNode[],
     current: IDBNode | undefined;
-};
+} | undefined ;
