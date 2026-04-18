@@ -13,7 +13,7 @@ import Explorateur                          from    './Explorateur/Explorateur';
 import NavVsCode                            from    './NavVsCode/NavVsCode';
 
 /* Types */
-import type { FileNode, IDBNode }           from    '@portfolio/shared';
+import type { FileNode, focusIDBNode, IDBNode }           from    '@portfolio/shared';
 
 
 interface InviterProps {
@@ -39,9 +39,12 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
 
     async function handelScreen(path: string) {
 
-        const alreadyExists = state?.files?.some(f => f.file.path === path);
+        const alreadyExists:focusIDBNode | undefined = state?.files?.find(f => f.file.path === path);
         if (alreadyExists){
-            // ici il faudras save l'ancien state.current dans idb
+            const data = alreadyExists.file.data;
+            if (data)
+                crud.write(path, data)
+            
             dispatch({type: 'NEWFOCUS', path})
             return;
         }
@@ -52,6 +55,12 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
     }
 
     function eraseByPath(path: string) {
+        const alreadyExists:focusIDBNode | undefined = state?.files?.find(f => f.file.path === path);
+        if (alreadyExists){
+            const data = alreadyExists.file.data;
+            if (data)
+                crud.write(path, data)
+        }
         dispatch({type: 'CLOSE', path })
     }
 

@@ -511,7 +511,7 @@ export function useIDB_tree(){
         loading,    // true pendant l'ouverture IDB + seed
         error,      // string | null — message d'erreur si IDB échoue
 
-        // ── CRUD (pour le terminal principalement) ──
+        // ── CMD (pour le terminal principalement) ──
         ls,             // (folderPath)         → IDBNode[]             liste les enfants
         cat,            // (filePath)           → IDBNode | undefined   lit un fichier
         mkdir,          // (parentPath, name)   → void                  crée un dossier
