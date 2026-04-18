@@ -20,6 +20,25 @@ type Action =
 export default function fileReducer(state: State, action: Action): State {
     switch (action.type) {
 
+        case 'OPEN': {
+            const file = action.file;
+            if (!file) return state;
+
+            const files = state?.files ?? [];
+            
+            const alreadyOpen = files.find(f => f.file.path === file.path);
+            if (alreadyOpen?.focus) return state
+            if (alreadyOpen) {
+                const updatedFiles = files.map(f => ({ ...f, focus: f.file.path === file.path }));
+                return { files: updatedFiles, current: file };
+            }
+
+            const newNode: focusIDBNode = { file: file, focus: true };
+            const resetFiles: focusIDBNode[] = files.map(f => ({ ...f, focus: false }));
+            return { files: [...resetFiles, newNode], current: file };
+        }
+
+
         case 'NEWFOCUS': {
             // 1. Si pas d'état ou pas de chemin, on ne fait rien
             if (!state || !action.path) return state;
@@ -40,39 +59,24 @@ export default function fileReducer(state: State, action: Action): State {
             };
         }
 
-        case 'OPEN': {
-            const file = action.file;
-            if (!file) return state;
-
-            const files = state?.files ?? [];
-            
-            const alreadyOpen = files.find(f => f.file.path === file.path);
-            if (alreadyOpen?.focus) return state
-            if (alreadyOpen) {
-                const updatedFiles = files.map(f => ({ ...f, focus: f.file.path === file.path }));
-                return { files: updatedFiles, current: file };
-            }
-
-            const newNode: focusIDBNode = { file: file, focus: true };
-            const resetFiles: focusIDBNode[] = files.map(f => ({ ...f, focus: false }));
-            return { files: [...resetFiles, newNode], current: file };
-        }
-
 
         case 'UPDATE': {
             
             if (!state) return state;
 
             const updatedFiles: focusIDBNode[] = state.files.map(f => f.focus ? 
-                { ...f, 
+                { 
+                    ...f, 
                     file: {
                         ...f.file,
                         data: action.data,
                         updatedAt: Date.now()
-                }}
-                : 
+                    }
+                }
+                :
                 f
             );
+
             return {
                 files: updatedFiles,
                 current: updatedFiles.find(f => f.file.path === state.current?.path)?.file
