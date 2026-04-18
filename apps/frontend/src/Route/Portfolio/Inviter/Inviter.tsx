@@ -78,7 +78,16 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
                         </div>
                     )}
                     <p style={{ width: "100%", textAlign: "center"}}>{time}</p>
-                    <button className={`btc-reset`} onClick={crud.resetDatabase}>reset</button>
+                    <button className={`btc-reset`} onClick={async () => {
+                        try {
+                            await crud.resetDatabase();
+                            window.location.reload();
+                        } catch (error) {
+                            console.error("Échec du reset:", error);
+                        }
+                    }}>
+                        reset
+                    </button>
                 </div>
 
 
