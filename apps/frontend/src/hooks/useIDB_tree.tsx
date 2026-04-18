@@ -2,38 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 
 import type { IDBNode, FileNode } from '@portfolio/shared';
 
-// type IDBNode = {
-//     // ── Identité ──────────────────────────────────────────────────────────
-//     path: string;           // CLEF PRIMAIRE. Chemin absolu complet.
-//                             // ex: "/user/Experience pro/"
-//                             // ex: "/user/ReadMe.md"
-//                             // ex: "/"  (racine)
-
-//     name: string;           // Nom seul (sans le chemin parent).
-//                             // ex: "Experience pro/"
-//                             // ex: "ReadMe.md"
-//                             // Note : les dossiers ont un "/" de fin par convention.
-
-//     type: 'file' | 'folder';
-
-//     // ── Contenu ───────────────────────────────────────────────────────────
-//     data?: string;          // Contenu texte. Uniquement si type === "file".
-//                             // undefined pour les dossiers.
-
-//     // ── Navigation ────────────────────────────────────────────────────────
-//     parentPath: string;     // Chemin du dossier parent.
-//                             // ex: "/user/" pour "/user/ReadMe.md"
-//                             // ex: "/"      pour "/user/"
-//                             // ex: ""       pour "/" (la racine n'a pas de parent)
-//                             //
-//                             // C'est sur ce champ qu'on crée l'INDEX IDB,
-//                             // ce qui permet ls() en O(1) :
-//                             //   db.getAllFromIndex('by_parent', '/user/')
-
-//     // ── Métadonnées ───────────────────────────────────────────────────────
-//     createdAt: number;      // Date.now() — timestamp en ms
-//     updatedAt: number;      // Date.now() — mis à jour à chaque write()
-// };
 
 
 const DB_NAME = 'IDB_tree';         // Nom de la base IDB (visible dans DevTools → Application → IndexedDB)

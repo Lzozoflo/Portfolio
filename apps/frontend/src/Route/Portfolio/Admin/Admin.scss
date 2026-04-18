@@ -2,11 +2,61 @@
 @use 'STYLE/_variable' as *;
 
 .Admin-root{
-   @include mix.full();
+    padding: 1rem;
+    @include mix.full();
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
     @include mix.text(rgb(0, 255, 0));
+    .error {color: rgb(255, 0, 0);}
 
+    .AdminChat-root{
+        
+        padding: 0.5rem;
+        @include mix.full();
+        
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        overflow-y: scroll;
+        background-color: rgba(63, 63, 63, 0.4);
+
+        li {
+            border:none;border-top: dashed rgb(0, 121, 0) 2px;
+            padding: 0.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            .content{
+                font-size: 1rem;
+            }
+        }
+    }
+
+
+    .input-chat {
+        @include mix.fullw();
+        display: flex;
+        flex-direction: row;
+        background-color: rgb(63, 63, 63);
+
+        input {
+            padding: 0.5rem;
+            @include mix.fullw();
+            border: solid rgb(0, 255, 0) 2px;
+            background-color: inherit;
+        }
+        button {
+            padding: 0.5rem;
+            background-color: inherit;
+            border: solid rgb(0, 255, 0) 2px;
+
+            &:hover {background-color: rgb(83, 83, 83);}
+            &:active {background-color: rgb(128, 128, 128);}
+        }
+    }
+    
 }
