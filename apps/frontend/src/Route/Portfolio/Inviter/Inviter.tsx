@@ -54,12 +54,12 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         dispatch({type: 'OPEN', file: resCrudCat })
     }
 
-    function eraseByPath(path: string) {
+    async function eraseByPath(path: string) {
         const alreadyExists:focusIDBNode | undefined = state?.files?.find(f => f.file.path === path);
         if (alreadyExists){
             const data = alreadyExists.file.data;
             if (data)
-                crud.write(path, data)
+                await crud.write(path, data);
         }
         dispatch({type: 'CLOSE', path })
     }
@@ -77,7 +77,9 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
                             <p>directory /user/ was not defined</p>
                         </div>
                     )}
+
                     <p style={{ width: "100%", textAlign: "center"}}>{time}</p>
+                    
                     <button className={`btc-reset`} onClick={async () => {
                         try {
                             await crud.resetDatabase();
