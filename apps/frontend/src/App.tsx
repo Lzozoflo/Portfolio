@@ -22,6 +22,22 @@ export default function App() {
             setAuthLevel(authStep.PAGE_LOGIN); // TODO FAIRE UN checkTokenAuth(token)
         }
 
+        const handleResize = () => {
+            // On calcule 1% de la hauteur réelle visible
+            const vh = window.innerHeight * 0.01;
+            const wh = window.innerWidth * 0.01;
+            // On l'injecte dans le style de l'élément racine
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.documentElement.style.setProperty('--wh', `${wh}px`);
+        };
+
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, [])
 
     return (
