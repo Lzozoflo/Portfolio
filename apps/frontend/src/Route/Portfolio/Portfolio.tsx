@@ -11,14 +11,14 @@ import Admin                        from './Admin/Admin';
 import Inviter                      from './Inviter/Inviter';
 
 /* Types */
-import type { FileNode }            from '@portfolio/shared';
+import type { FileNode, IDBNode }            from '@portfolio/shared';
 
 
 type UserMode = 'init' | 'inviter' | 'admin';
 
 
-function hasUser(tree: FileNode[]): FileNode | undefined {
-    return tree?.find(
+function hasUser(tree: {fileNode: FileNode[],idbNode: IDBNode[]}): FileNode | undefined {
+    return tree?.fileNode.find(
         (node) => node.name === 'user/' && node.type === 'folder'
     );
 }
@@ -81,7 +81,7 @@ export default function Portfolio() {
 
 
 {/* ─── ADMIN ──────────────────────────────────────────────── */}
-                {mode === 'admin' && <Admin />}
+                {mode === 'admin' && <Admin idbNode={tree.idbNode}/>}
 
             </main>
         </div>

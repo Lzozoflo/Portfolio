@@ -58,7 +58,7 @@ async function fetchGithubRepo(): Promise<IDBNode[]> {
     const date = Date.now();
 
     // 1. Créer un tableau de promesses
-    const promises = data.tree
+    let promises = data.tree
         .filter((item: any) => item.path.startsWith('home/'))
         .map(async (item: any) => { 
 
@@ -81,7 +81,16 @@ async function fetchGithubRepo(): Promise<IDBNode[]> {
                 updatedAt: date
             };
         });
-
+    promises.push({
+        path: "/home/",
+        name: "home/",
+        type: 'folder',
+        parentPath: undefined,
+        data: null,
+        url: null,
+        createdAt: date,
+        updatedAt: date
+    })
     return Promise.all(promises);
 }
 
@@ -188,7 +197,7 @@ function countNodes(db: IDBDatabase): Promise<number> {
 }
 
 
-function buildTree(nodes: IDBNode[]): FileNode[] {
+function buildTree(nodes: IDBNode[]): {fileNode:FileNode[], idbNode:IDBNode[]} {
     const map = new Map<string, FileNode>();
 
     for (const n of nodes) {
@@ -215,7 +224,7 @@ function buildTree(nodes: IDBNode[]): FileNode[] {
         }
     }
     console.log('buildTree' ,roots);
-    return roots;
+    return {fileNode: roots, idbNode: nodes};
 }
 
 async function removeRecursive(db: IDBDatabase, path: string): Promise<void> {
@@ -245,7 +254,7 @@ export function useIDB_tree(){
 
     // Arbre FileNode[] reconstruit pour le mode graphique.
     // Mis à jour après chaque opération CRUD via refresh().
-    const [tree, setTree] = useState<FileNode[]>([]);
+    const [tree, setTree] = useState<{fileNode:FileNode[], idbNode: IDBNode[]}>({fileNode:[],idbNode:[]});
 
     // États de chargement — évitent de render avant que la base soit prête.
     const [loading, setLoading] = useState<boolean>(true);
@@ -265,7 +274,6 @@ export function useIDB_tree(){
                 if (await countNodes(database) !== 0){
                     const allNodes = await getAllNodes(database);
                     if (cancelled || allNodes.length === 0){
-                        console.error('allNodes.length !== 0')
                         return;
                     }
                     
@@ -285,7 +293,6 @@ export function useIDB_tree(){
 
                 const allNodes = await getAllNodes(database);
                 if (cancelled || allNodes.length === 0){
-                    console.error('allNodes.length === 0')
                     return
                 }
 
@@ -304,7 +311,8 @@ export function useIDB_tree(){
         return () => {
             cancelled = true;
         };
-    }, []); // [] = exécuté une seule fois au montage
+
+    }, []);
 
 
     const resetDatabase: () => Promise<void> = useCallback(async () => {
@@ -320,7 +328,7 @@ export function useIDB_tree(){
         };
 
         request.onblocked = () => {
-            alert("Suppression bloquée : Veuillez fermer les autres onglets ouverts.");
+            alert("Suppression en cours : Veuillez fermer les autres onglets ouverts.");
         };
     }, []);
 
@@ -335,21 +343,6 @@ export function useIDB_tree(){
         setTree(buildTree(allNodes));
     }, [db]);
 
-
-    // ── ls ───────────────────────────────────────────────────────────────────
-    //
-    // Liste les enfants DIRECTS d'un dossier.
-    //
-    // Exemple :
-    //   const items = await ls('/user/');
-    //   // → [{ path: '/user/ReadMe.md', name: 'ReadMe.md', type: 'file', ... }, ...]
-    const ls: (folderPath: string) => Promise<IDBNode[]> = useCallback(
-        async (folderPath: string): Promise<IDBNode[]> => {
-            if (!db) return [];
-            return getByParent(db, folderPath);
-        },
-        [db]
-    );
 
 
     // ── mkdir ─────────────────────────────────────────────────────────────────
@@ -480,7 +473,6 @@ export function useIDB_tree(){
         error,      // string | null — message d'erreur si IDB échoue
 
         // ── CMD (pour le terminal principalement) ──
-        ls,             // (folderPath)         → IDBNode[]             liste les enfants
         cat,            // (filePath)           → IDBNode | undefined   lit un fichier
         mkdir,          // (parentPath, name)   → void                  crée un dossier
         touch,          // (parentPath, name)   → void                  crée un fichier vide

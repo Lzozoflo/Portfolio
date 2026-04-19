@@ -11,14 +11,12 @@ import { useEffect, useState } from "react";
 /* Components */
 
 /* Types */
-//interface AdminChatProps {
-//    children: ReactNode;
-//    className?: string;
-//}
+interface AdminChatProps {
+   code: number;
+}
 
-export default function AdminChat() {
-
-    const code = 128;
+export default function AdminChat({code}: AdminChatProps) {
+    
     const content = "oui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le caca"
 
     return (
