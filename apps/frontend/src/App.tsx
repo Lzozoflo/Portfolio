@@ -14,7 +14,6 @@ import Portfolio                            from    './Route/Portfolio/Portfolio
 
 export default function App() {
 
-
     const { authLevel, setAuthLevel } = useAuth();
 
     useEffect(() => {

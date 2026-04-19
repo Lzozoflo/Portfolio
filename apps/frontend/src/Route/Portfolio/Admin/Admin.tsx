@@ -31,6 +31,7 @@ type TerminalState = {
     //     },
     //     [db]
     // );
+
 const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
 
 export default function Admin({idbNode}:AdminProps) {
@@ -47,7 +48,7 @@ export default function Admin({idbNode}:AdminProps) {
             ...prev,
             history: JSON.parse(item || '[]')
         }));
-        
+
     }, [])
     
     useEffect(() => {
@@ -59,7 +60,7 @@ export default function Admin({idbNode}:AdminProps) {
     }, [terminalState.history])
 
 
-    function handelClick () {
+    function handelCmd () {
         if (inputValue === "") return
 
         console.log("inputValue:",inputValue);
@@ -76,10 +77,38 @@ export default function Admin({idbNode}:AdminProps) {
 
         setTerminalState(prev => ({
             ...prev,
-            history: [...prev.history, inputValue]
+            history: [...prev.history, inputValue],
+            index: terminalState.history.length + 1,
         }));
 
         setInputValue(""); // Réinitialise l'input
+    }
+
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (terminalState.history.length === 0) return;
+
+        let newIndex = terminalState.index;
+
+        switch (e.key) {
+            case "ArrowUp":{
+                e.preventDefault();
+                // On remonte dans le temps (vers l'index 0 si le plus ancien est à 0)
+                newIndex = Math.max(0, terminalState.index - 1);
+                break;
+            }
+            case "ArrowDown":{
+                e.preventDefault();
+                newIndex = Math.min(terminalState.history.length, terminalState.index + 1);
+                break;
+            }
+            default:
+                break;
+        }
+
+        if (newIndex !== terminalState.index) {
+            setTerminalState(prev => ({ ...prev, index: newIndex }));
+            setInputValue(terminalState.history[newIndex] || "");
+        }
     }
 
     return (
@@ -87,13 +116,18 @@ export default function Admin({idbNode}:AdminProps) {
             <AdminChat code={terminalState.currentCode}/>
 
 
-            <form className={`input-chat`} onSubmit={(e) => {e.preventDefault();handelClick();}}>
 
+
+
+
+
+            <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
                 {/* onChange for tabulation auto complet */}
-                <input id={`CMDInput`} type={`text`} value={inputValue} onChange={(e) => {setInputValue(e.target.value)}}/>
-
+                <input  id={`CMDInput`} type={`text`}  value={inputValue} 
+                        onKeyDown={(e) => { handleKeyDown(e) } }
+                        onChange={(e) => { setInputValue(e.target.value); setTerminalState(prev => ({...prev,index: terminalState.history.length})); } }
+                    />
                 <button type={`submit`}>{">"}</button>
-
             </form>
         </div>
     )
