@@ -158,11 +158,25 @@ export default function Admin({idbNode}:AdminProps) {
                 case "C": case "c": {
                     if (input.control !== true) return;
 
+                    console.log("Ctrl + C");
+                    setTerminalState(prev => ({
+                        ...prev,
+                        currentCode: 130,
+                        chat: [
+                            ...prev.chat, 
+                            {
+                                code: 130,
+                                pwd: prev.pwd,
+                                cmd: input.value
+                                // rep est optionnel selon votre type
+                            }
+                        ]
+                    }));
+
                     setInput(prev => ({
                         ...prev,
                         value: ''
                     }));
-
 
                     break;
                 }
@@ -209,7 +223,7 @@ export default function Admin({idbNode}:AdminProps) {
                 {isOpen && <p>oui oui chaussure</p>}
                 <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
 
-                    <p>{`{${terminalState.currentCode}}${terminalState.pwd}->`}</p>
+                    <p>{`{${terminalState.currentCode}}${terminalState.pwd} ->`}</p>
 
                     {/* onChange for tabulation auto complet with the onKeyDown*/}
                     <input  ref={inputRef}
