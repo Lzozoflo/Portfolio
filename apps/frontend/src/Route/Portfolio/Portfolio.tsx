@@ -53,15 +53,15 @@ export default function Portfolio() {
                             <p>Choisissez un mode pour continuer</p>
                         </header>
                         <div className='Portfolio-init-change-mode'>
-                            <div className={`change-mode`}>
-                                <button onClick={() => setMode('inviter')}>inviter</button>
+                            <div className={`change-mode`} onClick={() => setMode('inviter')}>
+                                <button>inviter</button>
                             </div>
-                            <div className={`change-mode`}>
-                                <button onClick={() => setMode('admin')}>admin</button>
+                            <div className={`change-mode`} onClick={() => setMode('admin')}>
+                                <button>admin</button>
                             </div>
                         </div>
-                        <div className={`change-mode`}>
-                            <button onClick={() => setMode('chaussure')}> oui</button>
+                        <div className={`change-mode`} onClick={() => setMode('chaussure')}>
+                            <button>oui</button>
                         </div>
                     </div>
                 )}

@@ -99,6 +99,15 @@ export default function Admin({idbNode}:AdminProps) {
             ...prev,
             history: [...prev.history, input.value],
             index: terminalState.history.length + 1,
+            chat: [
+                ...prev.chat, 
+                {
+                    code: terminalState.currentCode,// code rep 
+                    pwd: terminalState.pwd,
+                    cmd: input.value
+                    // rep est optionnel selon votre type
+                }
+            ]
         }));
 
         setInput(prev => ({
@@ -166,9 +175,9 @@ export default function Admin({idbNode}:AdminProps) {
                             ...prev.chat, 
                             {
                                 code: 130,
-                                pwd: prev.pwd,
+                                pwd: terminalState.pwd,
                                 cmd: input.value
-                                // rep est optionnel selon votre type
+                                // rep est optionnel
                             }
                         ]
                     }));
@@ -223,7 +232,7 @@ export default function Admin({idbNode}:AdminProps) {
                 {isOpen && <p>oui oui chaussure</p>}
                 <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
 
-                    <p>{`{${terminalState.currentCode}}${terminalState.pwd} ->`}</p>
+                    <p>{`{`}<span className={`${terminalState.currentCode > 0 ? "error": "default"}`}>{terminalState.currentCode}</span>{`}${terminalState.pwd} ->`}</p>
 
                     {/* onChange for tabulation auto complet with the onKeyDown*/}
                     <input  ref={inputRef}
@@ -233,7 +242,7 @@ export default function Admin({idbNode}:AdminProps) {
                                 value: e.target.value
                             }));
                             setTerminalState(prev => ({...prev,index: terminalState.history.length})); } }
-                            />
+                        />
                     <button type={`submit`}>{">"}</button>
 
                 </form>
