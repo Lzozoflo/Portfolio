@@ -9,26 +9,23 @@ import { useEffect, useState } from "react";
 // import './AdminChat.scss'
 
 /* Components */
+import AdminMessage from "./AdminMessage";
 
 /* Types */
+import { TerminalState } from "../Admin";
+
 interface AdminChatProps {
-   code: number;
+   terminalState: TerminalState;
 }
 
-export default function AdminChat({code}: AdminChatProps) {
-    
-    const content = "oui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le cacaoui oui le caca"
-
+export default function AdminChat({terminalState}: AdminChatProps) {
     return (
         <ul className={`AdminChat-root`}>
-            <li>
-                <p>{"{"}<span className={`${code > 0 ? "error": "default"}`}>{code}</span>{"}"} /Home/user{" ->"}</p>
-                <p className={`content`}>{content}</p>
-            </li>
-            <li>
-                <p>{"{"}<span className={`${code > 0 ? "error": "default"}`}>{code}</span>{"}"} /Home/user{" ->"}</p>
-                <p className={`content`}>{content}</p>
-            </li>
+            {terminalState.chat.map((msg)=> {
+                return (
+                    <AdminMessage code={msg.code} pwd={msg.pwd} cmd={msg.cmd} rep={msg.rep} />
+                )
+            })}
         </ul>
     );
 }

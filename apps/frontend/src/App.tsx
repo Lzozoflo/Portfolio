@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route }     from    'react-router-dom';
 import 'STYLE/index.scss';
 
 /* Components */
+import { useKeyboardStore }                 from    'HOOKS/useKeyboardStore';
 import { authStep, useAuth }                from    'HOOKS/useAuth';
 import ErrorRedir                           from    './Route/ErrorRedir/ErrorRedir';
 import Auth                                 from    './Route/Auth/Auth';
@@ -15,6 +16,8 @@ import Portfolio                            from    './Route/Portfolio/Portfolio
 export default function App() {
 
     const { authLevel, setAuthLevel } = useAuth();
+    const open   = useKeyboardStore((state) => state.open);
+    const close  = useKeyboardStore((state) => state.close);
 
     useEffect(() => {
         
@@ -26,9 +29,14 @@ export default function App() {
             // On calcule 1% de la hauteur réelle visible
             const vh = window.innerHeight * 0.01;
             const wh = window.innerWidth * 0.01;
+
             // On l'injecte dans le style de l'élément racine
             document.documentElement.style.setProperty('--vh', `${vh}px`);
             document.documentElement.style.setProperty('--wh', `${wh}px`);
+            if (window.innerHeight < 450)
+                 open();
+            else
+                close();
         };
 
         handleResize();

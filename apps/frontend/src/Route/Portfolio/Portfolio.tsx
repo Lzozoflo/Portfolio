@@ -14,7 +14,7 @@ import Inviter                      from './Inviter/Inviter';
 import type { FileNode, IDBNode }            from '@portfolio/shared';
 
 
-type UserMode = 'init' | 'inviter' | 'admin';
+type UserMode = 'init' | 'inviter' | 'admin' | 'chaussure';
 
 
 function hasUser(tree: {fileNode: FileNode[],idbNode: IDBNode[]}): FileNode | undefined {
@@ -48,12 +48,20 @@ export default function Portfolio() {
                 {mode === 'init' && (
                     <div className='Portfolio-init-card'>
                         <header>
-                            <h1>Bienvenu sur mon site..</h1>
+                            <h1>Portfolio Florent Cretin</h1>
+                            <br />
                             <p>Choisissez un mode pour continuer</p>
                         </header>
                         <div className='Portfolio-init-change-mode'>
-                            <button onClick={() => setMode('inviter')}>inviter</button>
-                            <button onClick={() => setMode('admin')}>admin</button>
+                            <div className={`change-mode`}>
+                                <button onClick={() => setMode('inviter')}>inviter</button>
+                            </div>
+                            <div className={`change-mode`}>
+                                <button onClick={() => setMode('admin')}>admin</button>
+                            </div>
+                        </div>
+                        <div className={`change-mode`}>
+                            <button onClick={() => setMode('chaussure')}> oui</button>
                         </div>
                     </div>
                 )}
@@ -82,6 +90,9 @@ export default function Portfolio() {
 
 {/* ─── ADMIN ──────────────────────────────────────────────── */}
                 {mode === 'admin' && <Admin idbNode={tree.idbNode}/>}
+
+{/* ─── chaussure ──────────────────────────────────────────────── */}
+                {mode === 'chaussure' && <Admin idbNode={tree.idbNode}/>}
 
             </main>
         </div>

@@ -3,7 +3,7 @@
 
 
 :root{
-    @include mix.text();
+    @include mix.text(yellow);
     background-color: #000000;
 	font-size: 16px;
 	@media (width <= 1000px) {font-size: 13px;}

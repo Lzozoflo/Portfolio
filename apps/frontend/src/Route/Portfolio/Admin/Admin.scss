@@ -4,11 +4,16 @@
 .Admin-root{
     padding: 1rem;
     @include mix.full();
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
+    > div{
+        @include mix.full();
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: solid rgb(0, 255, 0) 2px;
+        background-color: rgba(63, 63, 63, 0.4);
+
+    }
     @include mix.text(rgb(0, 255, 0));
     .error {color: rgb(255, 0, 0);}
 
@@ -22,14 +27,15 @@
         gap: 1rem;
 
         overflow-y: scroll;
-        background-color: rgba(63, 63, 63, 0.4);
 
         li {
-            border:none;border-top: dashed rgb(0, 121, 0) 2px;
             padding: 0.4rem;
             display: flex;
             flex-direction: column;
             gap: 0.3rem;
+
+            border:none;
+            border-top: dashed rgb(0, 121, 0) 2px;
             .content{
                 font-size: 1rem;
             }
@@ -41,21 +47,25 @@
         @include mix.fullw();
         display: flex;
         flex-direction: row;
-        background-color: rgb(63, 63, 63);
-
-        input {
+        align-items: center;
+        
+        background-color: rgba(0, 0, 0, 0);
+        border-top: dashed rgb(0, 121, 0) 2px;
+        
+        p, button, input{
             padding: 0.5rem;
-            @include mix.fullw();
-            border: solid rgb(0, 255, 0) 2px;
             background-color: inherit;
         }
-        button {
-            padding: 0.5rem;
-            background-color: inherit;
-            border: solid rgb(0, 255, 0) 2px;
-
-            &:hover {background-color: rgb(83, 83, 83);}
-            &:active {background-color: rgb(128, 128, 128);}
+        p{
+            padding-right: 0;
+            border-right: none;
+            text-wrap: nowrap;
+        }
+        input {
+            @include mix.fullw();
+            padding-left: 1ch;
+            border-left: none;
+            &:focus-visible {outline:none}
         }
     }
     

@@ -19,7 +19,6 @@ import type { FileNode, focusIDBNode, IDBNode }           from    '@portfolio/sh
 interface InviterProps {
     fileSystem: FileNode | undefined,
     crud: {
-        ls:             (folderPath: string)                => Promise<IDBNode[]>;
         cat:            (filePath: string)                  => Promise<IDBNode | undefined>;
         mkdir:          (parentPath: string, name: string)  => Promise<void>;
         touch:          (parentPath: string, name: string)  => Promise<void>;

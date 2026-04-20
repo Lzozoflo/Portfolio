@@ -12,7 +12,7 @@
         align-items: center;
 
         .Portfolio-init-card{
-            width: 50%;
+            width: 65%;
             padding: 2rem;
 
             display: flex;
@@ -41,16 +41,20 @@
                 flex-direction: row;
                 justify-content: space-around;
                 align-items: center;
-
-                button {
-                    padding: 0.5rem;
-                    background: inherit;
-                    border: solid saddlebrown 2px;
-                    background-color: rgba(0, 0, 0, 0.250);
-                    &:hover{
-                        border: solid white 2px;
-                    }
+            }
+            .change-mode{
+                width: 40%;
+                border: solid saddlebrown 2px;
+                background-color: rgba(0, 0, 0, 0.250);
+                text-align: center;
+                &:hover{
+                    border: solid white 2px;
                 }
+            }
+            button {
+                color: red;
+                padding: 0.5rem;
+                background: none;
             }
         }
     }

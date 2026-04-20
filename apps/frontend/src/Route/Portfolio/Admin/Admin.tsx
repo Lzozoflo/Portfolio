@@ -1,22 +1,37 @@
 /* extern */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef }  from    'react';
 
 /* Css */
 import './Admin.scss'
 
 /* Component */
-import AdminChat from "./AdminChat/AdminChat";
+import { useKeyboardStore }                 from    'HOOKS/useKeyboardStore';
+import AdminChat                        from    './AdminChat/AdminChat';
 
 /* Types */
-import type { FileNode, IDBNode }           from    '@portfolio/shared';
+import type { FileNode, IDBNode }       from    '@portfolio/shared';
 interface AdminProps {
    idbNode: IDBNode[];
 }
-type TerminalState = {
-    history: string[];
-    index: number;
-    currentCode: number;
+export type terminalChat = {
+    code: number;
+    pwd: string;
+    cmd: string;
+    rep?: string;
 }
+export type TerminalState = {
+    history:        string[];
+    index:          number;
+    currentCode:    number;
+    pwd:            string;
+    chat:           terminalChat[];
+}
+
+export type InputValue = {
+    value:          string;
+    control:        boolean;
+}
+
     // // ── ls ───────────────────────────────────────────────────────────────────
     // //
     // // Liste les enfants DIRECTS d'un dossier.
@@ -36,8 +51,10 @@ const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
 
 export default function Admin({idbNode}:AdminProps) {
 
-    const [terminalState, setTerminalState] = useState<TerminalState>({ history:[], index: 0, currentCode:0 });
-    const [inputValue, setInputValue] = useState<string>("");
+    const [terminalState, setTerminalState] = useState<TerminalState>({ history:[], index: 0, currentCode:0, pwd: '/home/', chat: [{code: 0, pwd:"/home/", cmd: "test"},{code: 1, pwd:"/home/", cmd: "test", rep:"chaussure"}]});
+    const [input, setInput] = useState<InputValue>({value: "", control: false});
+    const isOpen   = useKeyboardStore((state) => state.isOpen);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (terminalState.history.length !== 0) return
@@ -61,74 +78,153 @@ export default function Admin({idbNode}:AdminProps) {
 
 
     function handelCmd () {
-        if (inputValue === "") return
+        if (input.value === "") return
 
-        console.log("inputValue:",inputValue);
+        console.log("input.value:",input.value);
         
-
-        switch (inputValue) {
-            case "clearhistory":
+        switch (input.value) {
+            case "clearhistory":{
                 localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
                 break;
-        
+            }
+            case "help":{
+
+                break
+            }
             default:
                 break;
         }
 
         setTerminalState(prev => ({
             ...prev,
-            history: [...prev.history, inputValue],
+            history: [...prev.history, input.value],
             index: terminalState.history.length + 1,
         }));
 
-        setInputValue(""); // Réinitialise l'input
+        setInput(prev => ({
+            ...prev,
+            value: ''
+        })); // Réinitialise l'input
     }
 
-    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (terminalState.history.length === 0) return;
+
+    function keyPress(type: 'Up'| 'Down', e: React.KeyboardEvent<HTMLDivElement>) {
+
+        function canWeContinue(){
+            e.preventDefault();
+            return (terminalState.history.length === 0)
+        }
+        
+        function toggelKey() : boolean{
+            switch (e.key) {
+                case "Control": {
+                    console.log("ouais j'ai control:", !input.control);
+
+                    setInput(prev => ({
+                        ...prev,
+                        control: !prev.control
+                    }));
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+            return false
+        }
+
+        function handleKeyDown() {
+
+            toggelKey();
+
+            switch (e.key) {
+                case "ArrowUp":{
+                    if (canWeContinue()) return;
+                    newIndex = Math.max(0, terminalState.index - 1);
+                    break;
+                }
+                case "ArrowDown":{
+                    if (canWeContinue()) return;
+                    
+                    newIndex = Math.min(terminalState.history.length, terminalState.index + 1);
+                    break;
+                }
+                case "Tab": {
+                    if (canWeContinue()) return;
+                    
+                    console.log("ouais j'ai taber");
+                    break;
+                }
+                case "C": case "c": {
+                    if (input.control !== true) return;
+
+                    setInput(prev => ({
+                        ...prev,
+                        value: ''
+                    }));
+
+
+                    break;
+                }
+                default:{
+                    
+                    console.log("voila la touche Down:",e.key);
+                    break;
+                }
+            }
+            
+        }
+
+        function handleKeyUp() {
+            toggelKey();
+        }
 
         let newIndex = terminalState.index;
 
-        switch (e.key) {
-            case "ArrowUp":{
-                e.preventDefault();
-                // On remonte dans le temps (vers l'index 0 si le plus ancien est à 0)
-                newIndex = Math.max(0, terminalState.index - 1);
-                break;
-            }
-            case "ArrowDown":{
-                e.preventDefault();
-                newIndex = Math.min(terminalState.history.length, terminalState.index + 1);
-                break;
-            }
-            default:
-                break;
+        if (type === 'Down'){
+            handleKeyDown();
+        }else{
+            handleKeyUp();
         }
 
         if (newIndex !== terminalState.index) {
             setTerminalState(prev => ({ ...prev, index: newIndex }));
-            setInputValue(terminalState.history[newIndex] || "");
+            setInput(prev => ({
+                ...prev,
+                value: terminalState.history[newIndex] || ""
+            }))
         }
     }
-
+        
     return (
-        <div className={`Admin-root`}>
-            <AdminChat code={terminalState.currentCode}/>
+        <div className={`Admin-root`} 
+            onKeyDown={(e) => { keyPress('Down', e) } }
+            onKeyUp={(e) => { keyPress('Up', e) } }
+            onClick={() => (inputRef?.current?.focus())}
+            >
+            <div>
 
+                <AdminChat terminalState={terminalState}/>
 
+                {isOpen && <p>oui oui chaussure</p>}
+                <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
 
+                    <p>{`{${terminalState.currentCode}}${terminalState.pwd}->`}</p>
 
+                    {/* onChange for tabulation auto complet with the onKeyDown*/}
+                    <input  ref={inputRef}
+                            id={`CMDInput`} type={`text`}  value={input.value}
+                            onChange={(e) => {  setInput(prev => ({
+                                ...prev,
+                                value: e.target.value
+                            }));
+                            setTerminalState(prev => ({...prev,index: terminalState.history.length})); } }
+                            />
+                    <button type={`submit`}>{">"}</button>
 
+                </form>
 
-
-            <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
-                {/* onChange for tabulation auto complet */}
-                <input  id={`CMDInput`} type={`text`}  value={inputValue} 
-                        onKeyDown={(e) => { handleKeyDown(e) } }
-                        onChange={(e) => { setInputValue(e.target.value); setTerminalState(prev => ({...prev,index: terminalState.history.length})); } }
-                    />
-                <button type={`submit`}>{">"}</button>
-            </form>
+            </div>
         </div>
     )
 }
