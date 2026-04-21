@@ -6,13 +6,16 @@ import ReactDOM         from    'react-dom/client';
 import ClockProvider    from    'HOOKS/useClock';
 import AuthProvider     from    'HOOKS/useAuth';
 import App              from    './src/App';
+import ViewportProvider from 'HOOKS/useViewport';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <ClockProvider>
-            <AuthProvider>
-                <App/>
-            </AuthProvider>
-        </ClockProvider>
+        <ViewportProvider>
+            <ClockProvider>
+                <AuthProvider>
+                    <App/>
+                </AuthProvider>
+            </ClockProvider>
+        </ViewportProvider>
     </React.StrictMode>
 );

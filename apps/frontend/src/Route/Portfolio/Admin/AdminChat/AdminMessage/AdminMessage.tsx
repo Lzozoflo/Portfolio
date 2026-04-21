@@ -21,8 +21,9 @@ import { terminalChat } from "../../Admin";
 export default function AdminMessage({code, pwd, cmd, rep}: terminalChat) {
     return (
         <li className={`AdminMessage-root`}>
-            <p className={`cmd`}>{`{`}<span className={`${code > 0 ? "error": ""}`}>{code}</span>{`}${pwd} -> ${cmd}`}</p>
-            {rep && <p className={`content ${code > 0 ? "error": ""}`}>{rep}</p>}
+                <p className={`cmd`}>{`{`}<span className={`${code > 0 ? "error": ""}`}>{code}</span>{`}${pwd} -> ${cmd}`}</p>
+                {rep && <p className={`content ${code > 0 ? "error": ""}`}>{rep}</p>}
+
         </li>
     )
 }

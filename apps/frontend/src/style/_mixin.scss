@@ -26,9 +26,10 @@
         border: none;
         margin: 0;
     }
-    p, span, strong, a, button, li, label, input, textarea{
+    p, span, strong, a, button, li, label, textarea{
         font-size: 1.3rem;
     }
+    input{font-size: max(1.3rem, 16px);}
 }
 
 

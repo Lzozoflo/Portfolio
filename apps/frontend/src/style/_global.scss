@@ -22,17 +22,25 @@
 }
 
 
-:root, body, #root {
+li{
+    list-style: none;
+    list-style-type: none;
 
+}
+
+
+:root, body, #root {
+    
     width: 100vw;
     width: 100svw;
     width: 100dvw;
-    // width: calc(var(--wh, 1wh) * 100);
-
+    width: calc(var(--wh, 1dvw) * 100);
+    
     height: 100vh;
     height: 100svh;          // fallback
-    height: 100dvh;          // modern — se recalcule avec le clavier
-    // height: calc(var(--vh, 1vh) * 100);
+    height: 100dvh;          
+    height: calc(var(--vh, 1dvh) * 100); // --vh pour ios / dvh modern — se recalcule avec le clavier
+    
 }
 
 
@@ -40,7 +48,7 @@
 .visible {display: block;}
 
 .center {
-	justify-content: center;
+    justify-content: center;
     align-items: center;
     text-align: center;
 }

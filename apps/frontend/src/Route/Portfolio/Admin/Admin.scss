@@ -29,6 +29,8 @@
         @include mix.fullw();
         display: flex;
         flex-direction: row;
+        justify-content: center;
+        align-items: center;
 
         background-color: rgba(0, 0, 0, 0);
         border-top: dashed rgb(0, 121, 0) 2px;
