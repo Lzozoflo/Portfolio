@@ -232,7 +232,7 @@ export default function Admin({idbNode}:AdminProps) {
                 {isOpen && <p>oui oui chaussure</p>}
                 <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
 
-                    <p>{`{`}<span className={`${terminalState.currentCode > 0 ? "error": "default"}`}>{terminalState.currentCode}</span>{`}${terminalState.pwd} ->`}</p>
+                    <p>{`{`}<span className={`${terminalState.currentCode > 0 ? "error": ""}`}>{terminalState.currentCode}</span>{`}${terminalState.pwd} ->`}</p>
 
                     {/* onChange for tabulation auto complet with the onKeyDown*/}
                     <input  ref={inputRef}

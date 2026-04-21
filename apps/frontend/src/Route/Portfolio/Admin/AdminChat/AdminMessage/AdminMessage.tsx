@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 /* Components */
 
 /* Types */
-import { terminalChat } from "../Admin";
+import { terminalChat } from "../../Admin";
 
 //interface AdminMessageProps {
 //    children: ReactNode;
@@ -21,8 +21,8 @@ import { terminalChat } from "../Admin";
 export default function AdminMessage({code, pwd, cmd, rep}: terminalChat) {
     return (
         <li className={`AdminMessage-root`}>
-            <p>{`{`}<span className={`${code > 0 ? "error": "default"}`}>{code}</span>{`}${pwd} -> ${cmd}`}</p>
-            {rep && <p className={`${code > 0 ? "error": "default"}`}>{rep}</p>}
+            <p className={`cmd`}>{`{`}<span className={`${code > 0 ? "error": ""}`}>{code}</span>{`}${pwd} -> ${cmd}`}</p>
+            {rep && <p className={`content ${code > 0 ? "error": ""}`}>{rep}</p>}
         </li>
     )
 }

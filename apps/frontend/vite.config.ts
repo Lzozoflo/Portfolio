@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [react()],
     server: {
         port: 5173,
-        host: '0.0.0.0', allowedHosts: ['fcretin.ddns.net','miracle-para-current-heating.trycloudflare.com']  // autorise ton DDNS
+        host: '0.0.0.0', allowedHosts: ['fcretin.ddns.net','undergraduate-volvo-gtk-spaces.trycloudflare.com']  // autorise ton DDNS
     },
     resolve: {
         alias: {

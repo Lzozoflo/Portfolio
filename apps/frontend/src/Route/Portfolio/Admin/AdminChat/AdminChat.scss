@@ -1,0 +1,30 @@
+
+.AdminChat-root{
+    
+    padding: 0.5rem;
+    flex: 1;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .AdminMessage-root {
+        padding: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+
+        border:none;
+        border-top: dashed rgb(0, 121, 0) 2px;
+        .cmd, .content{
+            width: 100%;
+            font-size: 1rem;
+            overflow-wrap: break-word; // Casse les mots longs
+            word-break: break-all;     // Force la coupure (style terminal)
+        }
+    }
+}

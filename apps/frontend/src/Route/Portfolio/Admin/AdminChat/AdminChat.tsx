@@ -1,15 +1,11 @@
 /* Extern */
 import { useEffect, useState } from "react";
 
-
-/* Back */
-
-
 /* Css */
-// import './AdminChat.scss'
+import './AdminChat.scss'
 
 /* Components */
-import AdminMessage from "./AdminMessage";
+import AdminMessage from "./AdminMessage/AdminMessage";
 
 /* Types */
 import { TerminalState } from "../Admin";
