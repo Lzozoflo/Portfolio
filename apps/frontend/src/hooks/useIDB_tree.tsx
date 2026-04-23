@@ -359,7 +359,21 @@ export function useIDB_tree(){
         setTree(buildTree(allNodes));
     }, [db]);
 
-
+    // ── ls ──────────────────────────────────────────────────────────────────
+    //
+    // Lit un fichier par son chemin absolu.
+    // Retourne undefined si le fichier n'existe pas.
+    //
+    // Exemple :
+    //   const file = await ls('/user/ReadMe.md');
+    //   console.log(file?.data); // "# Bienvenue..."
+    const ls: (filePath: string) => Promise<IDBNode | undefined> = useCallback(
+        async (filePath: string): Promise<IDBNode | undefined> => {
+            if (!db) return undefined;
+            return getNode(db, filePath);
+        },
+        [db]
+    );
 
     // ── mkdir ─────────────────────────────────────────────────────────────────
     //
@@ -491,12 +505,13 @@ export function useIDB_tree(){
         error,      // string | null — message d'erreur si IDB échoue
 
         // ── CMD (pour le terminal principalement) ──
-        cat,            // (filePath)           → IDBNode | undefined   lit un fichier
-        mkdir,          // (parentPath, name)   → void                  crée un dossier
-        touch,          // (parentPath, name)   → void                  crée un fichier vide
-        write,          // (filePath, data)     → void                  écrit dans un fichier
-        rm,             // (path)               → void                  supprime (récursif)
-        resetDatabase,  // (void)               → void                  supprime la databases et refresh la page
+        ls,             // (filePath)           → string[]  | undefined     return un tab des differant dossier a pwd
+        cat,            // (filePath)           → IDBNode   | undefined     lit un fichier
+        mkdir,          // (parentPath, name)   → void                      crée un dossier
+        touch,          // (parentPath, name)   → void                      crée un fichier vide
+        write,          // (filePath, data)     → void                      écrit dans un fichier
+        rm,             // (path)               → void                      supprime (récursif)
+        resetDatabase,  // (void)               → void                      supprime la databases et refresh la page
     };
 
 }

@@ -57,11 +57,11 @@ export default function Portfolio({mode = 'init'}: PortfolioProps) {
                         </header>
                         
                         <div className='Portfolio-init-change-mode'>
-                            <Link className={`change-mode button`} to={'Portfolio/Inviter'}>inviter</Link>
-                            <Link className={`change-mode button`} to={'Portfolio/Admin'}>admin</Link>
+                            <Link className={`change-mode button`} to={'/Portfolio/Inviter'}>inviter</Link>
+                            <Link className={`change-mode button`} to={'/Portfolio/Admin'}>admin</Link>
                         </div>
                         
-                        <Link className={`change-mode button`} to={'Portfolio/Oui'}>oui</Link>
+                        <Link className={`change-mode button`} to={'/Portfolio/Chaussure'}>oui</Link>
                     </div>
                 )}
 
@@ -88,7 +88,26 @@ export default function Portfolio({mode = 'init'}: PortfolioProps) {
 
 
 {/* ─── ADMIN ──────────────────────────────────────────────── */}
-                {mode === 'admin' && <Admin idbNode={tree.idbNode}/>}
+                {mode === 'admin' && (
+                    <>
+                        {error && (
+                            <div style={{ color: 'red'}}>
+                                Erreur filesystem : {error}
+                            </div>
+                        )}
+
+                        {loading && (
+                            <div style={{ color: 'lime'}}>
+                                Chargement du filesystem...
+                            </div>
+                        )}
+                    
+                        {!loading && !error && (
+                            <Admin idbNode={tree.idbNode} crud={crud}/>
+                        )}
+                    </>
+                
+                )}
 
 {/* ─── chaussure ──────────────────────────────────────────────── */}
                 {mode === 'chaussure' && <Admin idbNode={tree.idbNode}/>}

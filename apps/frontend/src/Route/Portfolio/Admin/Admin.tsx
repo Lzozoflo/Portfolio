@@ -11,8 +11,20 @@ import AdminChat                        from    './AdminChat/AdminChat';
 /* Types */
 import type { FileNode, IDBNode }       from    '@portfolio/shared';
 import { BrowserRouter } from 'react-router-dom';
+
+type t_crud = {
+    ls: (filePath: string) => Promise<IDBNode | undefined>;
+    cat: (filePath: string) => Promise<IDBNode | undefined>;
+    mkdir: (parentPath: string, name: string) => Promise<void>;
+    touch: (parentPath: string, name: string) => Promise<void>;
+    write: (filePath: string, data: string) => Promise<void>;
+    rm: (path: string) => Promise<void>;
+    resetDatabase: () => Promise<void>;
+}
+
 interface AdminProps {
    idbNode: IDBNode[];
+   crud:t_crud;
 }
 export type terminalChat = {
     code: number;
@@ -47,9 +59,8 @@ historyclear  :  delete your current local history cmd
 clear         :  delete your chat
 `
 
-
-export default function Admin({idbNode}:AdminProps) {
-
+export default function Admin({idbNode, crud}:AdminProps) {
+    
     const [terminalState, setTerminalState] = useState<TerminalState>({ 
         history:[],
         index: 0,
@@ -87,7 +98,7 @@ export default function Admin({idbNode}:AdminProps) {
     }, [terminalState.history])
 
 
-    function handelCmd () {
+    async function handelCmd () {
         let responce = ''
         let statusCode = terminalState.currentCode;
         const cmd = input.value.toLowerCase().trim()
@@ -135,7 +146,23 @@ export default function Admin({idbNode}:AdminProps) {
                 break
             }
             case "ls":{
-                responce = `doit rechercher ${terminalState.pwd} children`;
+                if (cmdSplit.length > 2){
+                    responce = `pwd: too many arguments`;
+                    statusCode = 1;
+                    break
+                }
+                
+                const path = `${cmdSplit.length === 2 ? `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/') + '/'}`: terminalState.pwd}`;
+                const node: IDBNode | undefined = await crud.ls(path);
+                const children = node?.childrenPath.map((str) => {
+
+                    if (str[str.length - 1] === '/'){
+                        const tmp = str.split('/')
+                        return `${tmp[tmp.length - 2]}/ `
+                    }
+                    return `${str.split('/').pop()} `
+                })?.join(' ')
+                responce = `${children?? `ls: cannot access '${cmdSplit[1]}': No such file or directory`}`;
                 statusCode = 0;
                 break
             }

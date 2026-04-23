@@ -45,7 +45,8 @@ export default function App() {
         <BrowserRouter>
             <Routes>
 
-                <Route path={`/`}                       element={ <Portfolio mode={'init'}           />} />
+                <Route path={`/`}              element={ <Portfolio mode={'init'}       />} />
+                <Route path={`/Portfolio`}              element={ <Portfolio mode={'init'}       />} />
                 <Route path={`/Portfolio/Inviter`}      element={ <Portfolio mode={'inviter'}    />} />
                 <Route path={`/Portfolio/Admin`}        element={ <Portfolio mode={'admin'}      />} />
                 <Route path={`/auth`}                   element={ <Auth                              />} />
