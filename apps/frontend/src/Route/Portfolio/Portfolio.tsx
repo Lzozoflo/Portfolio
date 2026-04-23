@@ -1,5 +1,6 @@
 /* extern */
-import { useState }                 from 'react';
+import { useState }                 from    'react';
+import { Link }                     from    'react-router-dom';
 
 /* Css */
 import './Portfolio.scss';
@@ -11,7 +12,11 @@ import Admin                        from './Admin/Admin';
 import Inviter                      from './Inviter/Inviter';
 
 /* Types */
+interface PortfolioProps {
+    mode: UserMode ;
+}
 import type { FileNode, IDBNode }            from '@portfolio/shared';
+
 
 
 type UserMode = 'init' | 'inviter' | 'admin' | 'chaussure';
@@ -23,9 +28,7 @@ function hasUser(tree: {fileNode: FileNode[],idbNode: IDBNode[]}): FileNode | un
     );
 }
 
-export default function Portfolio() {
-
-    const [mode, setMode] = useState<UserMode>('init');
+export default function Portfolio({mode = 'init'}: PortfolioProps) {
 
     const { tree, loading, error, ...crud } = useIDB_tree();
 
@@ -52,17 +55,13 @@ export default function Portfolio() {
                             <br />
                             <p>Choisissez un mode pour continuer</p>
                         </header>
+                        
                         <div className='Portfolio-init-change-mode'>
-                            <div className={`change-mode`} onClick={() => setMode('inviter')}>
-                                <button>inviter</button>
-                            </div>
-                            <div className={`change-mode`} onClick={() => setMode('admin')}>
-                                <button>admin</button>
-                            </div>
+                            <Link className={`change-mode button`} to={'Portfolio/Inviter'}>inviter</Link>
+                            <Link className={`change-mode button`} to={'Portfolio/Admin'}>admin</Link>
                         </div>
-                        <div className={`change-mode`} onClick={() => setMode('chaussure')}>
-                            <button>oui</button>
-                        </div>
+                        
+                        <Link className={`change-mode button`} to={'Portfolio/Oui'}>oui</Link>
                     </div>
                 )}
 

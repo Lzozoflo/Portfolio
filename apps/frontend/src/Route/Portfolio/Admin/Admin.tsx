@@ -35,12 +35,17 @@ export type InputValue = {
 
 const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
 const ALL_CMD_ADD: string = `
-    help: print all command available
-    historyclear: delete your current local history cmd
-    pwd: print working directory
-    ls:
-    cd:
-    `
+help          : print all command available
+pwd           :  print working directory
+ls            :  wip
+touch         :  wip
+cd            :  wip
+mdkir         :  wip
+cat           :  wip
+echo          :  wip .... watch -> help echo
+historyclear  :  delete your current local history cmd
+clear         :  delete your chat
+`
 
 
 export default function Admin({idbNode}:AdminProps) {
@@ -114,11 +119,10 @@ export default function Admin({idbNode}:AdminProps) {
                 statusCode = 0;
                 break;
             }
-            case "historyclear":{
-                localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
-                responce = "History cleared.";
+            case "help":{
+                responce = `Available commands: ${ALL_CMD_ADD}`;
                 statusCode = 0;
-                break;
+                break
             }
             case "pwd":{
                 if (cmdSplit.length > 1){
@@ -130,10 +134,51 @@ export default function Admin({idbNode}:AdminProps) {
                 statusCode = 0;
                 break
             }
-            case "help":{
-                responce = `Available commands: ${ALL_CMD_ADD}`;
+            case "ls":{
+                responce = `doit rechercher ${terminalState.pwd} children`;
                 statusCode = 0;
                 break
+            }
+            case "touch":{
+                responce = `wip`;
+                statusCode = 42;
+                break
+            }
+            case "cd":{
+                responce = `wip`;
+                statusCode = 42;
+                break
+            }
+            case "mdkir":{
+                responce = `wip`;
+                statusCode = 42;
+                break
+            }
+            case "cat":{
+                responce = `wip`;
+                statusCode = 42;
+                break
+            }
+            case "echo":{
+                responce = `wip`;
+                statusCode = 42;
+                break
+            }
+            case "c":
+            case "clear":{
+                setTerminalState(prev => ({
+                    ...prev,
+                    currentCode: 0,
+                    chat: []
+                }));    
+                setInput(prev => ({ ...prev, value: '' })); // Réinitialise l'input
+                return
+            }
+            case "historyclear":{
+                localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
+                responce = "History cleared.";
+                statusCode = 0;
+                break;
             }
             default:{
                 responce = `command not found: ${cmd}`;
@@ -267,7 +312,7 @@ export default function Admin({idbNode}:AdminProps) {
                     <p>{`${terminalState.pwd} ->`}</p>
 
                     {/* onChange for tabulation auto complet with the onKeyDown*/}
-                    <input  ref={inputRef}
+                    <input  ref={inputRef} autoComplete="off"
                             id={`CMDInput`} type={`text`}  value={input.value}
                             onChange={(e) => {  setInput(prev => ({
                                 ...prev,

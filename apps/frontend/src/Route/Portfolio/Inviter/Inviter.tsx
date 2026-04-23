@@ -76,7 +76,7 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
                             <p>directory /user/ was not defined</p>
                         </div>
                     )}
-
+                    
                     <p style={{ width: "100%", textAlign: "center"}}>{time}</p>
                     
                     <button className={`btc-reset`} onClick={async () => {

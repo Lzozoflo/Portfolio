@@ -12,7 +12,8 @@
     .Explorateur-root {
         @include mix.full();
         display: flex;
-        flex-direction: column;        
+        flex-direction: column;
+        gap: 0.5rem;   
         padding: 0.5rem;
         background-color: rgb(58, 58, 58);
         @include mix.text(white);

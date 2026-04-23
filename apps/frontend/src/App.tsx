@@ -45,11 +45,13 @@ export default function App() {
         <BrowserRouter>
             <Routes>
 
-                <Route path={`/`}               element={<Portfolio />} />
-                <Route path={`/auth`}           element={<Auth />} />
+                <Route path={`/`}                       element={ <Portfolio mode={'init'}           />} />
+                <Route path={`/Portfolio/Inviter`}      element={ <Portfolio mode={'inviter'}    />} />
+                <Route path={`/Portfolio/Admin`}        element={ <Portfolio mode={'admin'}      />} />
+                <Route path={`/auth`}                   element={ <Auth                              />} />
 
                 {/* private root */}
-                <Route path={`/*`}              element={<ErrorRedir />} />
+                <Route path={`/*`}                      element={ <ErrorRedir                        />} />
                 
             </Routes>
         </BrowserRouter>
