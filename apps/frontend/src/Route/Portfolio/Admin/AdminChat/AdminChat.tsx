@@ -8,7 +8,7 @@ import './AdminChat.scss'
 import AdminMessage from "./AdminMessage/AdminMessage";
 
 /* Types */
-import { TerminalState } from "../Admin";
+import { TerminalState, terminalChat } from "../Admin";
 
 interface AdminChatProps {
    terminalState: TerminalState;
@@ -17,9 +17,9 @@ interface AdminChatProps {
 export default function AdminChat({terminalState}: AdminChatProps) {
     return (
         <ul className={`AdminChat-root`}>
-            {terminalState.chat.map((msg)=> {
+            {terminalState.chat.slice().reverse().map((msg: terminalChat, index)=> {
                 return (
-                    <AdminMessage code={msg.code} pwd={msg.pwd} cmd={msg.cmd} rep={msg.rep} />
+                    <AdminMessage key={index} code={msg.code} pwd={msg.pwd} cmd={msg.cmd} rep={msg.rep} />
                 )
             })}
         </ul>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Children } from 'react';
 
 import type { IDBNode, FileNode } from '@portfolio/shared';
 
@@ -36,7 +36,19 @@ function openDatabase(): Promise<IDBDatabase> {
 
 // ── Recuperation de la data depuis le repo github ────────────────────────────────────────────────────────────────
 
-async function convert64(item: any){
+type objectGithub = {
+    sha         :   string,
+    url         :   string,
+    path?       :   string,
+    mode?       :   string,
+    type?       :   string,
+    node_id?    :   string,
+    size?       :   number,
+    content?    :   string,
+    encoding?   :   string,
+}
+
+async function convert64(item: objectGithub){
 
     const response = await fetch(item.url);
     const repjson = await response.json();
@@ -51,47 +63,51 @@ async function convert64(item: any){
 }
 
 async function fetchGithubRepo(): Promise<IDBNode[]> {
+    const date = Date.now();
     const response = await fetch("https://api.github.com/repos/Lzozoflo/Portfolio/git/trees/site_file?recursive=1");
     const data = await response.json();
-    console.log("fetchGithubRepo data: ",data);
-  
-    const date = Date.now();
 
-    // 1. Créer un tableau de promesses
-    let promises = data.tree
-        .filter((item: any) => item.path.startsWith('home/'))
-        .map(async (item: any) => { 
+    const rawItems: objectGithub[] = data.tree;
 
-            const fullPath = '/' + item.path + (item.type === 'tree' ? '/' : '');
-            const pathParts = fullPath.split('/').filter(Boolean);
-            pathParts.pop(); 
-            
-            const parentPath = pathParts.length === 0 ? '/' : '/' + pathParts.join('/') + '/';
-            
-            const content = item.type === 'blob' ? await convert64(item) : null;
+    let nodes: IDBNode[] = await Promise.all(rawItems.map(async (item) => {
+        const isFolder = item.type === 'tree';
+        
+        const fullPath = '/' + item.path + (isFolder ? '/' : '');
+        
+        const segments = item.path?.split('/').filter(Boolean);
+        segments?.pop();
+        const parentPath = segments?.length === 0 ? '/' : '/' + segments?.join('/') + '/';
 
-            return {
-                path: fullPath,
-                name: item.path.split('/').pop() + (item.type === 'tree' ? '/' : ''),
-                type: item.type === 'tree' ? 'folder' : 'file',
-                parentPath: parentPath,
-                data: content,
-                url: item.url,
-                createdAt: date,
-                updatedAt: date
-            };
-        });
-    promises.push({
-        path: "/home/",
-        name: "home/",
+        return {
+            path: fullPath,
+            name: item.path?.split('/').pop() + (item.type === 'tree' ? '/' : '') || '',
+            type: isFolder ? 'folder' : 'file',
+            parentPath: parentPath,
+            childrenPath: [],
+            data: item.type === 'blob' ? await convert64(item) : undefined,
+            createdAt: date,
+            updatedAt: date
+        };
+    }));
+    
+    nodes.push({
+        path: '/',
+        name: '/',
         type: 'folder',
         parentPath: undefined,
-        data: null,
-        url: null,
+        childrenPath: [],
+        data: undefined,
         createdAt: date,
         updatedAt: date
-    })
-    return Promise.all(promises);
+    });
+    nodes.forEach(node => {
+        const parent = nodes.find(n => n.path === node.parentPath);
+        if (parent) {
+            parent.childrenPath.push(node.path);
+        }
+    });
+
+    return nodes;
 }
 
 // ── Recuperation de la data depuis le repo github ────────────────────────────────────────────────────────────────
@@ -216,7 +232,7 @@ function buildTree(nodes: IDBNode[]): {fileNode:FileNode[], idbNode:IDBNode[]} {
         if (n.parentPath === '/home/') {
             // Pas de parent → c'est un nœud racine (ex: "/")
             roots.push(node);
-        } else {
+        } else if (n.parentPath) {
             const parent = map.get(n.parentPath);
             if (parent?.children) {
                 parent.children.push(node);
@@ -368,6 +384,7 @@ export function useIDB_tree(){
                 name: normalizedName,
                 type: 'folder',
                 parentPath,
+                childrenPath: [],
                 createdAt: now,
                 updatedAt: now
             });
@@ -399,6 +416,7 @@ export function useIDB_tree(){
                 type: 'file',
                 data: '',
                 parentPath,
+                childrenPath: [],
                 createdAt: now,
                 updatedAt: now
             });

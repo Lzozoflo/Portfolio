@@ -59,7 +59,7 @@ export type IDBNode = {
                             // undefined pour les dossiers.
 
     // ── Navigation ────────────────────────────────────────────────────────
-    parentPath: string;     // Chemin du dossier parent.
+    parentPath: string | undefined;     // Chemin du dossier parent.
                             // ex: "/user/" pour "/user/ReadMe.md"
                             // ex: "/"      pour "/user/"
                             // ex: ""       pour "/" (la racine n'a pas de parent)
@@ -67,7 +67,7 @@ export type IDBNode = {
                             // C'est sur ce champ qu'on crée l'INDEX IDB,
                             // ce qui permet ls() en O(1) :
                             //   db.getAllFromIndex('by_parent', '/user/')
-
+    childrenPath: string[];
     // ── Métadonnées ───────────────────────────────────────────────────────
     createdAt: number;      // Date.now() — timestamp en ms
     updatedAt: number;      // Date.now() — mis à jour à chaque write()

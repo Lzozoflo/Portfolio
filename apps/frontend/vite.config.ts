@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         port: 5173,
         host: '0.0.0.0', allowedHosts: ['fcretin.ddns.net',
-            'shepherd-nail-types-insulin.trycloudflare.com'
+            'lending-soonest-pierre-answer.trycloudflare.com'
         ]  // autorise ton DDNS
     },
     resolve: {

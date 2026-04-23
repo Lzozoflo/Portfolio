@@ -5,11 +5,12 @@ import { useEffect, useState, useRef }  from    'react';
 import './Admin.scss'
 
 /* Component */
-import { useKeyboardStore }                 from    'HOOKS/useKeyboardStore';
+import { useKeyboardStore }             from    'HOOKS/useKeyboardStore';
 import AdminChat                        from    './AdminChat/AdminChat';
 
 /* Types */
 import type { FileNode, IDBNode }       from    '@portfolio/shared';
+import { BrowserRouter } from 'react-router-dom';
 interface AdminProps {
    idbNode: IDBNode[];
 }
@@ -32,45 +33,49 @@ export type InputValue = {
     control:        boolean;
 }
 
-    // // ── ls ───────────────────────────────────────────────────────────────────
-    // //
-    // // Liste les enfants DIRECTS d'un dossier.
-    // //
-    // // Exemple :
-    // //   const items = await ls('/user/');
-    // //   // → [{ path: '/user/ReadMe.md', name: 'ReadMe.md', type: 'file', ... }, ...]
-    // const ls: (folderPath: string) => Promise<IDBNode[]> = useCallback(
-    //     async (folderPath: string): Promise<IDBNode[]> => {
-    //         if (!db) return [];
-    //         return getByParent(db, folderPath);
-    //     },
-    //     [db]
-    // );
-
 const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
+const ALL_CMD_ADD: string = `
+    help: print all command available
+    historyclear: delete your current local history cmd
+    pwd: print working directory
+    ls:
+    cd:
+    `
+
 
 export default function Admin({idbNode}:AdminProps) {
 
-    const [terminalState, setTerminalState] = useState<TerminalState>({ history:[], index: 0, currentCode:0, pwd: '/home/', chat: [{code: 0, pwd:"/home/", cmd: "test"},{code: 1, pwd:"/home/", cmd: "test", rep:"chaussure"}]});
-    const [input, setInput] = useState<InputValue>({value: "", control: false});
-    const isOpen   = useKeyboardStore((state) => state.isOpen);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const [terminalState, setTerminalState] = useState<TerminalState>({ 
+        history:[],
+        index: 0,
+        currentCode:0,
+        pwd: '/home/',
+        chat: [
+            {code: 0, pwd:"/home/", cmd: "help", rep:`Available commands: ${ALL_CMD_ADD}`},
+            // {code: 1, pwd:"/home/", cmd: "test", rep:"chaussure"}
+        ]});
+        const [input, setInput] = useState<InputValue>({value: "", control: false});
+        const isOpen   = useKeyboardStore((state) => state.isOpen);
+        const inputRef = useRef<HTMLInputElement>(null);
+        const [isVisibleGif, setIsVisibleGif] = useState(false);
+        useEffect(() => {
+            if (!isVisibleGif) return;
 
-    useEffect(() => {
-        if (terminalState.history.length !== 0) return
-        console.log("Admin pannel idbNode:",idbNode);
+            const timer = setTimeout(() => {
+                setIsVisibleGif(false);
+            }, 5000); // Disparaît après 5 secondes
 
-        const item = localStorage.getItem(LABEL_HISTORY_SESSION_STORAGE)
-        setTerminalState(prev => ({
-            ...prev,
-            history: JSON.parse(item || '[]')
-        }));
-
-    }, [])
+            return () => clearTimeout(timer);
+        }, [isVisibleGif]);
     
     useEffect(() => {
 
         if (terminalState.history.length === 0) return
+        
+        setTerminalState(prev => ({
+            ...prev,
+            index: terminalState.history.length,
+        }));
         console.log("terminalState:",terminalState);
 
         localStorage.setItem(LABEL_HISTORY_SESSION_STORAGE, JSON.stringify(terminalState.history));
@@ -78,42 +83,82 @@ export default function Admin({idbNode}:AdminProps) {
 
 
     function handelCmd () {
-        if (input.value === "") return
-
-        console.log("input.value:",input.value);
+        let responce = ''
+        let statusCode = terminalState.currentCode;
+        const cmd = input.value.toLowerCase().trim()
+        if (cmd === "") {
+            setTerminalState(prev => ({
+                ...prev,
+                chat: [
+                    ...prev.chat,
+                    {
+                        code: statusCode,
+                        pwd: terminalState.pwd,
+                        cmd: cmd,
+                        ...(responce !== '' && { rep: responce })
+                    }
+                ]
+            }));
+            setInput(prev => ({ ...prev, value: '' })); // Réinitialise l'input
+            return
+        }
+        const cmdSplit = cmd.split(' ');
         
-        switch (input.value) {
-            case "clearhistory":{
-                localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
+        // console.log("cmdSplit", cmdSplit);
+        
+        switch (cmdSplit[0]) {
+            case "sossu":
+            case "chaussure":{
+                setIsVisibleGif(true);
+                responce = "Affichage de la chaussure...";
+                statusCode = 0;
                 break;
             }
-            case "help":{
-
+            case "historyclear":{
+                localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
+                responce = "History cleared.";
+                statusCode = 0;
+                break;
+            }
+            case "pwd":{
+                if (cmdSplit.length > 1){
+                    responce = `pwd: too many arguments`;
+                    statusCode = 1;
+                    break
+                }
+                responce = terminalState.pwd;
+                statusCode = 0;
                 break
             }
-            default:
+            case "help":{
+                responce = `Available commands: ${ALL_CMD_ADD}`;
+                statusCode = 0;
+                break
+            }
+            default:{
+                responce = `command not found: ${cmd}`;
+                statusCode = 127;
                 break;
+            }
         }
 
         setTerminalState(prev => ({
             ...prev,
             history: [...prev.history, input.value],
             index: terminalState.history.length + 1,
+            currentCode: statusCode,
             chat: [
                 ...prev.chat, 
                 {
-                    code: terminalState.currentCode,// code rep 
+                    code: statusCode,
                     pwd: terminalState.pwd,
-                    cmd: input.value
-                    // rep est optionnel selon votre type
+                    cmd: cmd,
+                    ...(responce !== '' && { rep: responce })
                 }
             ]
         }));
 
-        setInput(prev => ({
-            ...prev,
-            value: ''
-        })); // Réinitialise l'input
+        setInput(prev => ({ ...prev, value: '' })); // Réinitialise l'input
     }
 
 
@@ -124,29 +169,13 @@ export default function Admin({idbNode}:AdminProps) {
             return (terminalState.history.length === 0)
         }
         
-        function toggelKey() : boolean{
-            switch (e.key) {
-                case "Control": {
-                    console.log("ouais j'ai control:", !input.control);
-
-                    setInput(prev => ({
-                        ...prev,
-                        control: !prev.control
-                    }));
-                    break;
-                }
-                default:{
-                    break;
-                }
-            }
-            return false
-        }
-
         function handleKeyDown() {
 
-            toggelKey();
-
             switch (e.key) {
+                case "Control": {
+                    setInput(prev => ({...prev, control: true }));
+                    break;
+                }
                 case "ArrowUp":{
                     if (canWeContinue()) return;
                     newIndex = Math.max(0, terminalState.index - 1);
@@ -154,7 +183,6 @@ export default function Admin({idbNode}:AdminProps) {
                 }
                 case "ArrowDown":{
                     if (canWeContinue()) return;
-                    
                     newIndex = Math.min(terminalState.history.length, terminalState.index + 1);
                     break;
                 }
@@ -189,17 +217,21 @@ export default function Admin({idbNode}:AdminProps) {
 
                     break;
                 }
-                default:{
-                    
-                    console.log("voila la touche Down:",e.key);
-                    break;
-                }
+                // console.log("voila la touche Down:",e.key)
+                default:{break;}
             }
             
         }
 
         function handleKeyUp() {
-            toggelKey();
+
+            switch (e.key) {
+                case "Control": {
+                    setInput(prev => ({...prev, control: false }));
+                    break;
+                }
+                default:{break;}
+            }
         }
 
         let newIndex = terminalState.index;
@@ -227,12 +259,12 @@ export default function Admin({idbNode}:AdminProps) {
             >
             <div>
 
+                {isVisibleGif && <video src="https://images-ext-1.discordapp.net/external/FA_kKmTzrABI4oY6j6e1Fs7tuD4dbj3qiJroa6t3bFo/https/media.tenor.com/RIs4DDU51W0AAAPo/%25EB%25B0%2598%25EC%258A%25A4-vans.mp4" autoPlay loop></video>}
                 <AdminChat terminalState={terminalState}/>
-
                 {isOpen && <p>oui oui chaussure</p>}
                 <form className={`input-chat`} onSubmit={(e) => { e.preventDefault(); handelCmd(); }}>
 
-                    <p>{`{`}<span className={`${terminalState.currentCode > 0 ? "error": ""}`}>{terminalState.currentCode}</span>{`}${terminalState.pwd} ->`}</p>
+                    <p>{`${terminalState.pwd} ->`}</p>
 
                     {/* onChange for tabulation auto complet with the onKeyDown*/}
                     <input  ref={inputRef}
