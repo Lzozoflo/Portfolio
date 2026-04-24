@@ -1,6 +1,0 @@
-# # .dockerignore
-# infra/certbot/conf
-# infra/certbot/www
-# node_modules
-# .git
-# .env
