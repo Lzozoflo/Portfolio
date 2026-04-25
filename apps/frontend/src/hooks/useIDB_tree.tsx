@@ -176,7 +176,8 @@ function putNode(db: IDBDatabase, node: IDBNode): Promise<void> {
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
         const request = store.put(node); // put = insert or replace (contrairement à add qui échoue si existe)
-
+        console.log("request",request);
+        
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
     });
@@ -457,9 +458,12 @@ export function useIDB_tree(){
 
             // On préserve toutes les métadonnées existantes (path, name, parentPath, createdAt)
             // et on met à jour uniquement data et updatedAt.
+            const tmpNode = { ...existing, data, updatedAt: Date.now() };
+            console.log(tmpNode);
             await putNode(db, { ...existing, data, updatedAt: Date.now() });
+            const existing2 = await getNode(db, filePath);
 
-            await refresh();
+            console.log("existing2:",existing2);
         },
         [db, refresh]
     );

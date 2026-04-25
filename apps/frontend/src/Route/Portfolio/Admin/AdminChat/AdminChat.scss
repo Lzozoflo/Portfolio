@@ -22,7 +22,7 @@
         
         border:none;
         border-top: dashed rgb(0, 121, 0) 2px;
-        .cmd, .content{
+        .cmd, .content, span{
             width: 100%;
             font-size: 1rem;
             overflow-wrap: break-word; // Casse les mots longs

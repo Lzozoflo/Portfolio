@@ -48,16 +48,18 @@ export type InputValue = {
 
 const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
 const ALL_CMD_ADD: string = `
-help          :  print all command available
-pwd           :  Print Working Directory
-ls            :  List information about the FILEs 
-cd            :  wip
-touch         :  wip
-mdkir         :  wip
-cat           :  wip
-echo          :  wip alter echo -h for more information
-historyclear  :  delete your current local history cmd
-clear         :  delete your chat
+help              :  print all command available
+pwd               :  Print Working Directory
+ls                :  List information about the FILEs 
+cd                :  Change the working Directory
+cat               :  Print a file
+touch             :  wip
+mdkir             :  wip
+echo              :  wip alter echo -h for more information
+historyclear / hc :  delete your current local history cmd
+clear / c         :  delete your chat
+
+And more... 😏​
 `
 function resolveManual(pathStr:string) {
     const segments = pathStr.split('/');
@@ -92,7 +94,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
         index: 0,
         currentCode:0,
         pwd: '/',
-        chat: [{code: 0, pwd:"/", cmd: "help", rep:`Available commands: ${ALL_CMD_ADD}`}]
+        chat: [{code: 0, pwd:"/", cmd: "help", rep:`\tWelcome in Admin mode..\nAvailable commands: ${ALL_CMD_ADD}`}]
     });
 
     const [input, setInput] = useState<InputValue>({value: "", control: false});
@@ -148,7 +150,18 @@ export default function Admin({idbNode, crud}:AdminProps) {
             return
         }
         const cmdSplit = cmd.split(' ');
-        
+        function generatePath(defaultPath:string): string {
+
+            return `${cmdSplit.length === 2 ? (
+                cmdSplit[1][0] === "/" ? (cmdSplit[1].length === 1 ? 
+                    `/`
+                    :
+                    `/${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+                )
+                :
+                `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+            ) : defaultPath}`;
+        }
         // console.log("cmdSplit", cmdSplit);
         
         switch (cmdSplit[0]) {
@@ -180,17 +193,11 @@ export default function Admin({idbNode, crud}:AdminProps) {
                     statusCode = 1;
                     break
                 }
-                const path = `${cmdSplit.length === 2 ? (
-                    cmdSplit[1][0] === "/" ? (cmdSplit[1].length === 1 ? 
-                        `/`
-                        :
-                        `/${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
-                    )
-                    :
-                    `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
-                ) : terminalState.pwd}`;
+                const path = generatePath(terminalState.pwd);
+                const resovePath = resolveManual(path);
+                const finalPath = `${resovePath.length === 1 ? '/' :  `${resovePath}/`}`;
 
-                const node: IDBNode | undefined = await crud.ls(path);
+                const node: IDBNode | undefined = await crud.ls(finalPath);
                 const children = node?.childrenPath.map((str) => {
 
                     if (str[str.length - 1] === '/'){
@@ -210,19 +217,9 @@ export default function Admin({idbNode, crud}:AdminProps) {
                     statusCode = 1;
                     break
                 }
-                const path = `${cmdSplit.length === 2 ? (
-                    cmdSplit[1][0] === "/" ? (cmdSplit[1].length === 1 ? 
-                        `/`
-                        :
-                        `/${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
-                    )
-                    :
-                    `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
-                ) : '/'}`;
-                console.log("path:",path);
-                const finalPath = `${resolveManual(path).length === 1 ? '/' :  `${resolveManual(path)}/`}`;
-                console.log("finalPath:",finalPath);
-
+                const path = generatePath('/');
+                const resovePath = resolveManual(path);
+                const finalPath = `${resovePath.length === 1 ? '/' :  `${resovePath}/`}`;
                 const existe: boolean = await crud.test(finalPath)
                 if (!existe) {
                     responce = `cd: cannot access '${cmdSplit[1]}': No such file or directory`;
@@ -233,7 +230,32 @@ export default function Admin({idbNode, crud}:AdminProps) {
                     ...prev,
                     pwd: finalPath
                 }));
-                responce = `cd: move too ${cmdSplit[1] ?? '/'}`;
+                // responce = `cd: move too ${cmdSplit[1] ?? '/'}`;
+                statusCode = 0;
+                break
+            }
+            case "cat":{
+                if (cmdSplit.length === 1 || cmdSplit[1][cmdSplit[1].length - 1] === '/'){
+                    responce = `cat: need a file as arguments`;
+                    statusCode = 1;
+                    break
+                }
+                const path = generatePath('/');
+                const resovePath = resolveManual(path);
+                const finalPath = `${resovePath.length === 1 ? '' :  `${resovePath}`}`;
+                if (finalPath.length === 0){
+                    responce = `cat: need a file as arguments`;
+                    statusCode = 1;
+                    break
+                }
+                const node:IDBNode | undefined = await crud.cat(finalPath);
+
+                if (!node) {
+                    responce = `cat: cannot access '${cmdSplit[1]}': No such file or directory`;
+                    statusCode = 1;
+                    break;
+                }
+                responce = `${node?.data?? ""}`;
                 statusCode = 0;
                 break
             }
@@ -243,11 +265,6 @@ export default function Admin({idbNode, crud}:AdminProps) {
                 break
             }
             case "mdkir":{
-                responce = `wip`;
-                statusCode = 42;
-                break
-            }
-            case "cat":{
                 responce = `wip`;
                 statusCode = 42;
                 break
@@ -267,6 +284,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
                 setInput(prev => ({ ...prev, value: '' })); // Réinitialise l'input
                 return
             }
+            case "hc":
             case "historyclear":{
                 localStorage.removeItem(LABEL_HISTORY_SESSION_STORAGE)
                 responce = "History cleared.";

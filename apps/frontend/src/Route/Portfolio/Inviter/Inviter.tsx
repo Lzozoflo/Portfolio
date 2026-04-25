@@ -57,8 +57,12 @@ export default function Inviter({ fileSystem, crud }: InviterProps) {
         const alreadyExists:focusIDBNode | undefined = state?.files?.find(f => f.file.path === path);
         if (alreadyExists){
             const data = alreadyExists.file.data;
-            if (data)
+            if (data){
+                console.log("save path:",path);
+                console.log("save data:",data);
+                
                 await crud.write(path, data);
+            }
         }
         dispatch({type: 'CLOSE', path })
     }
