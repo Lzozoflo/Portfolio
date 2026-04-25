@@ -497,6 +497,18 @@ export function useIDB_tree(){
         [db, refresh]
     );
 
+    // ── test ──────────────────────────────────────────────────────────────────
+    // Exemple :
+    //   await rm('/user/notes.txt');      // supprime le fichier
+    //   await rm('/user/Sandbox/');       // supprime le dossier et tout son contenu
+    const test: (path: string) => Promise<boolean> = useCallback(
+        async (path: string): Promise<boolean> => {
+            if (!db) return false;
+            const existing = await getNode(db, path);
+            return existing ? true : false
+        },
+        [db, refresh]
+    );
     // ── Valeurs exposées ─────────────────────────────────────────────────────
     return {
         // ── État ──
@@ -505,7 +517,8 @@ export function useIDB_tree(){
         error,      // string | null — message d'erreur si IDB échoue
 
         // ── CMD (pour le terminal principalement) ──
-        ls,             // (filePath)           → string[]  | undefined     return un tab des differant dossier a pwd
+        test,           // (path)               → boolean                   return true = existe / false = existe pas
+        ls,             // (dirPath)            → string[]  | undefined     return un tab des differant dossier a pwd
         cat,            // (filePath)           → IDBNode   | undefined     lit un fichier
         mkdir,          // (parentPath, name)   → void                      crée un dossier
         touch,          // (parentPath, name)   → void                      crée un fichier vide

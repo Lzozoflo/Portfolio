@@ -10,16 +10,17 @@ import { useIDB_tree }              from 'HOOKS/useIDB_tree';
 import BackgroundPortfolioInit      from 'COMP/Background/BackgroundPortfolioInit';
 import Admin                        from './Admin/Admin';
 import Inviter                      from './Inviter/Inviter';
+import BasicPortfolio               from './BasicPortfolio/BasicPortfolio';
 
 /* Types */
 interface PortfolioProps {
     mode: UserMode ;
 }
-import type { FileNode, IDBNode }            from '@portfolio/shared';
+import type { FileNode, IDBNode }   from '@portfolio/shared';
 
 
 
-type UserMode = 'init' | 'inviter' | 'admin' | 'chaussure';
+type UserMode = 'init' | 'inviter' | 'admin' | 'Portfolio';
 
 
 function hasUser(tree: {fileNode: FileNode[],idbNode: IDBNode[]}): FileNode | undefined {
@@ -57,11 +58,10 @@ export default function Portfolio({mode = 'init'}: PortfolioProps) {
                         </header>
                         
                         <div className='Portfolio-init-change-mode'>
-                            <Link className={`change-mode button`} to={'/Portfolio/Inviter'}>inviter</Link>
-                            <Link className={`change-mode button`} to={'/Portfolio/Admin'}>admin</Link>
+                            <Link className={`change-mode button`} style={{color: 'black'}} to={'/Portfolio/Inviter'}>inviter</Link>
+                            <Link className={`change-mode button`} style={{color: 'white'}} to={'/Portfolio/Admin'}>admin</Link>
                         </div>
-                        
-                        <Link className={`change-mode button`} to={'/Portfolio/Chaussure'}>oui</Link>
+                        <Link className={`change-mode button`}  to={'/Portfolio/Portfolio'}>oui</Link>
                     </div>
                 )}
 
@@ -110,7 +110,7 @@ export default function Portfolio({mode = 'init'}: PortfolioProps) {
                 )}
 
 {/* ─── chaussure ──────────────────────────────────────────────── */}
-                {mode === 'chaussure' && <Admin idbNode={tree.idbNode}/>}
+                {mode === 'Portfolio' && <BasicPortfolio/>}
 
             </main>
         </div>

@@ -13,6 +13,7 @@ import type { FileNode, IDBNode }       from    '@portfolio/shared';
 import { BrowserRouter } from 'react-router-dom';
 
 type t_crud = {
+    test: (path: string) => Promise<boolean>;
     ls: (filePath: string) => Promise<IDBNode | undefined>;
     cat: (filePath: string) => Promise<IDBNode | undefined>;
     mkdir: (parentPath: string, name: string) => Promise<void>;
@@ -47,43 +48,71 @@ export type InputValue = {
 
 const LABEL_HISTORY_SESSION_STORAGE: string = 'cmd_history';
 const ALL_CMD_ADD: string = `
-help          : print all command available
-pwd           :  print working directory
-ls            :  wip
-touch         :  wip
+help          :  print all command available
+pwd           :  Print Working Directory
+ls            :  List information about the FILEs 
 cd            :  wip
+touch         :  wip
 mdkir         :  wip
 cat           :  wip
-echo          :  wip .... watch -> help echo
+echo          :  wip alter echo -h for more information
 historyclear  :  delete your current local history cmd
 clear         :  delete your chat
 `
+function resolveManual(pathStr:string) {
+    const segments = pathStr.split('/');
+    const stack = [];
+
+    for (const seg of segments) {
+        if (seg === '..') {
+            stack.pop();
+        } else if (seg !== '.' && seg !== '') {
+            stack.push(seg);
+        }
+    }
+    return `/${stack.join('/')}`;
+}
+
 
 export default function Admin({idbNode, crud}:AdminProps) {
     
+    const [isVisibleGif, setIsVisibleGif] = useState(false);
+    useEffect(() => {
+        if (!isVisibleGif) return;
+
+        const timer = setTimeout(() => {
+            setIsVisibleGif(false);
+        }, 5000); // Disparaît après 5 secondes
+
+        return () => clearTimeout(timer);
+    }, [isVisibleGif]);
+
     const [terminalState, setTerminalState] = useState<TerminalState>({ 
         history:[],
         index: 0,
         currentCode:0,
-        pwd: '/home/',
-        chat: [
-            {code: 0, pwd:"/home/", cmd: "help", rep:`Available commands: ${ALL_CMD_ADD}`},
-            // {code: 1, pwd:"/home/", cmd: "test", rep:"chaussure"}
-        ]});
-        const [input, setInput] = useState<InputValue>({value: "", control: false});
-        const isOpen   = useKeyboardStore((state) => state.isOpen);
-        const inputRef = useRef<HTMLInputElement>(null);
-        const [isVisibleGif, setIsVisibleGif] = useState(false);
-        useEffect(() => {
-            if (!isVisibleGif) return;
+        pwd: '/',
+        chat: [{code: 0, pwd:"/", cmd: "help", rep:`Available commands: ${ALL_CMD_ADD}`}]
+    });
 
-            const timer = setTimeout(() => {
-                setIsVisibleGif(false);
-            }, 5000); // Disparaît après 5 secondes
-
-            return () => clearTimeout(timer);
-        }, [isVisibleGif]);
+    const [input, setInput] = useState<InputValue>({value: "", control: false});
+    const isOpen   = useKeyboardStore((state) => state.isOpen);
+    const inputRef = useRef<HTMLInputElement>(null);
     
+
+    useEffect(() => {
+        if (terminalState.history.length !== 0) return
+        console.log("Admin pannel idbNode:",idbNode);
+
+        const item = localStorage.getItem(LABEL_HISTORY_SESSION_STORAGE)
+        setTerminalState(prev => ({
+            ...prev,
+            history: JSON.parse(item || '[]')
+        }));
+
+    }, [])
+    
+
     useEffect(() => {
 
         if (terminalState.history.length === 0) return
@@ -101,7 +130,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
     async function handelCmd () {
         let responce = ''
         let statusCode = terminalState.currentCode;
-        const cmd = input.value.toLowerCase().trim()
+        const cmd = input.value.trim()
         if (cmd === "") {
             setTerminalState(prev => ({
                 ...prev,
@@ -147,12 +176,20 @@ export default function Admin({idbNode, crud}:AdminProps) {
             }
             case "ls":{
                 if (cmdSplit.length > 2){
-                    responce = `pwd: too many arguments`;
+                    responce = `ls: too many arguments`;
                     statusCode = 1;
                     break
                 }
-                
-                const path = `${cmdSplit.length === 2 ? `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/') + '/'}`: terminalState.pwd}`;
+                const path = `${cmdSplit.length === 2 ? (
+                    cmdSplit[1][0] === "/" ? (cmdSplit[1].length === 1 ? 
+                        `/`
+                        :
+                        `/${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+                    )
+                    :
+                    `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+                ) : terminalState.pwd}`;
+
                 const node: IDBNode | undefined = await crud.ls(path);
                 const children = node?.childrenPath.map((str) => {
 
@@ -163,15 +200,44 @@ export default function Admin({idbNode, crud}:AdminProps) {
                     return `${str.split('/').pop()} `
                 })?.join(' ')
                 responce = `${children?? `ls: cannot access '${cmdSplit[1]}': No such file or directory`}`;
+                statusCode = children ? 0 : 1;
+                break
+            }
+            case "cd":{
+
+                if (cmdSplit.length > 2){
+                    responce = `cd: too many arguments`;
+                    statusCode = 1;
+                    break
+                }
+                const path = `${cmdSplit.length === 2 ? (
+                    cmdSplit[1][0] === "/" ? (cmdSplit[1].length === 1 ? 
+                        `/`
+                        :
+                        `/${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+                    )
+                    :
+                    `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
+                ) : '/'}`;
+                console.log("path:",path);
+                const finalPath = `${resolveManual(path).length === 1 ? '/' :  `${resolveManual(path)}/`}`;
+                console.log("finalPath:",finalPath);
+
+                const existe: boolean = await crud.test(finalPath)
+                if (!existe) {
+                    responce = `cd: cannot access '${cmdSplit[1]}': No such file or directory`;
+                    statusCode = 1;
+                    break;
+                }
+                setTerminalState(prev => ({
+                    ...prev,
+                    pwd: finalPath
+                }));
+                responce = `cd: move too ${cmdSplit[1] ?? '/'}`;
                 statusCode = 0;
                 break
             }
             case "touch":{
-                responce = `wip`;
-                statusCode = 42;
-                break
-            }
-            case "cd":{
                 responce = `wip`;
                 statusCode = 42;
                 break
@@ -187,7 +253,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
                 break
             }
             case "echo":{
-                responce = `wip`;
+                responce = ``;
                 statusCode = 42;
                 break
             }

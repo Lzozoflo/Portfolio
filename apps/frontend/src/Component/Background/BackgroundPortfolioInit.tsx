@@ -9,7 +9,7 @@ interface BackgroundPortfolioInitProps {
 export default function BackgroundPortfolioInit({ focus = 'both' }: BackgroundPortfolioInitProps) {
     return (
         <div className={`BackgroundPortfolioInit-root focus-${focus}`}>
-            <div className="bg-static" />
+            <div className={"bg-static"}/>
             <div className="bg-matrix">
                 <Background />
             </div>
