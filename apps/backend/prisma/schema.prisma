@@ -27,3 +27,18 @@ model User {
 
   @@map("users")
 }
+
+model SpacyGameTool{
+    id        String   @id @default(cuid())
+
+    galaxie   Int     // one off the 10 galaxie in his univers
+    system    Int     // one system in his galaxie
+    planete   Int     // one planete in his system
+
+    ressource Int     // the modificator off the planete
+    energie   Int     // the modificator off the planete
+    lancement Int     // the modificator off the planete
+
+    owner     String?
+    @@unique([galaxie, system, planete])
+}
