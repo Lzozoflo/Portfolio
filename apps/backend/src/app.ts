@@ -4,11 +4,12 @@ import type { Request, Response, RequestHandler, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
-import { authMiddleware } from './middlewares/auth.middleware';
-import { autoFormatter } from './middlewares/auto_formatter.middleware';
-import { errorHandler } from './middlewares/error_handler.middleware';
+import { authMiddleware }           from './middlewares/auth.middleware';
+import { autoFormatter }            from './middlewares/auto_formatter.middleware';
+import { errorHandler }             from './middlewares/error_handler.middleware';
 
-import { authRouter } from './modules/auth/auth.routes';
+import { authRouter }               from './modules/auth/auth.routes';
+import { spacyGameToolRouter }      from './modules/spacyGameTool/spacyGameTool.routes';
 // import { postsRouter } from './modules/posts/post.routes';
 // import { usersRouter } from './modules/users/user.routes';
 
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.get('/api/health', ((req: Request, res: Response) => {console.log("Called api/health"); res.json({ ok: true });}) as RequestHandler);
 
+app.use('/api/spacyGameTool', spacyGameToolRouter);
 app.use('/api/auth', authRouter);
 
 // ─── Routes protégées ────────────────────────────────────────────────────────

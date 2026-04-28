@@ -130,6 +130,30 @@ export default function Admin({idbNode, crud}:AdminProps) {
 
 
     async function handelCmd () {
+        
+        function shellParse() {
+            const args = [];
+            let current = "";
+            let inQuotes = false;
+
+            for (let i = 0; i < cmd.length; i++) {
+                const char = cmd[i];
+
+                if (char === '"') {
+                    inQuotes = !inQuotes; // Bascule l'état
+                    // On ne stocke pas le guillemet lui-même
+                } else if (char === ' ' && !inQuotes) {
+                    if (current !== "") {
+                        args.push(current);
+                        current = "";
+                    }
+                } else {
+                    current += char;
+                }
+            }
+            if (current !== "") args.push(current);
+            return args;
+        }
         let responce = ''
         let statusCode = terminalState.currentCode;
         const cmd = input.value.trim()
@@ -149,7 +173,8 @@ export default function Admin({idbNode, crud}:AdminProps) {
             setInput(prev => ({ ...prev, value: '' })); // Réinitialise l'input
             return
         }
-        const cmdSplit = cmd.split(' ');
+
+        const cmdSplit = shellParse();
         function generatePath(defaultPath:string): string {
 
             return `${cmdSplit.length === 2 ? (
@@ -162,7 +187,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
                 `${terminalState.pwd}${cmdSplit[1].split('/').filter(p => p !== '.' && p !== '').join('/')}/`
             ) : defaultPath}`;
         }
-        // console.log("cmdSplit", cmdSplit);
+        console.log("cmdSplit", cmdSplit);
         
         switch (cmdSplit[0]) {
             case "sossu":
@@ -270,7 +295,7 @@ export default function Admin({idbNode, crud}:AdminProps) {
                 break
             }
             case "echo":{
-                responce = ``;
+                responce = cmdSplit.slice(1).join("");
                 statusCode = 42;
                 break
             }

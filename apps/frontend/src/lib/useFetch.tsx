@@ -24,27 +24,27 @@ export default async function useFetch({ url, type_request } : UseFetchProps) {
         //     return {status: 401, message: "not CONNECTED" }
         // }
         
-        console.log(`"${url}(1) call`);
+        console.log(`${url}(1) call`);
 
         const response = await fetch(url, type_request);
 
-        console.log(`"${url}(2) response: ${response}`);
+        console.log(`${url}(2) response: ${response}`);
 
         if (response.status >= 400) {
-            console.log(`"${url}(3) response.status: ${response.status}`);
+            console.log(`${url}(3) response.status: ${response.status}`);
         }
 
         const repjson = await response.json();
         repjson.status = response.status;
 
-        console.log(`"${url}(4) repjson: ${repjson}`);
+        console.log(`${url}(4) repjson: ${repjson}`);
         
 
         return repjson;
 
     } catch(error) {
 
-        console.log(`"${url}(4) error front catch: ${error}`);
+        console.log(`${url}(4) error front catch: ${error}`);
         return null;
     
     }

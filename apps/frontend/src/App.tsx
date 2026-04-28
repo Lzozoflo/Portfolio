@@ -11,6 +11,7 @@ import { authStep, useAuth }                from    'HOOKS/useAuth';
 import ErrorRedir                           from    './Route/ErrorRedir/ErrorRedir';
 import Auth                                 from    './Route/Auth/Auth';
 import Portfolio                            from    './Route/Portfolio/Portfolio';
+import SpacyGamesTool                       from    './Route/SpacyGamesTool/SpacyGamesTool';
 
 
 export default function App() {
@@ -45,15 +46,16 @@ export default function App() {
         <BrowserRouter>
             <Routes>
 
-                <Route path={`/`}              element={ <Portfolio mode={'init'}       />} />
-                <Route path={`/Portfolio`}              element={ <Portfolio mode={'init'}       />} />
-                <Route path={`/Portfolio/Inviter`}      element={ <Portfolio mode={'inviter'}    />} />
-                <Route path={`/Portfolio/Admin`}        element={ <Portfolio mode={'admin'}      />} />
-                <Route path={`/Portfolio/Portfolio`}    element={ <Portfolio mode={'Portfolio'}      />} />
-                <Route path={`/auth`}                   element={ <Auth                              />} />
+                <Route path={`/`}              element={ <Portfolio mode={'init'}                   />} />
+                <Route path={`/Portfolio`}              element={ <Portfolio mode={'init'}          />} />
+                <Route path={`/Portfolio/Inviter`}      element={ <Portfolio mode={'inviter'}       />} />
+                <Route path={`/Portfolio/Admin`}        element={ <Portfolio mode={'admin'}         />} />
+                <Route path={`/Portfolio/Portfolio`}    element={ <Portfolio mode={'Portfolio'}     />} />
+                <Route path={`/auth`}                   element={ <Auth                             />} />
+                <Route path={`/SpacyGamesTool`}         element={ <SpacyGamesTool                   />} />
 
                 {/* private root */}
-                <Route path={`/*`}                      element={ <ErrorRedir                        />} />
+                <Route path={`/*`}                      element={ <ErrorRedir                       />} />
                 
             </Routes>
         </BrowserRouter>
